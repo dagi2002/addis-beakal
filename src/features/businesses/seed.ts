@@ -1,0 +1,282 @@
+import { syncAllBusinessMetrics } from "@/features/businesses/logic";
+import type { AppDatabase } from "@/features/businesses/types";
+
+function baseDatabase(): AppDatabase {
+  return {
+    categories: [
+      { id: "cat-coffee", name: "Coffee", slug: "coffee" },
+      { id: "cat-dining", name: "Dining", slug: "dining" },
+      { id: "cat-culture", name: "Culture", slug: "culture" },
+      { id: "cat-bakery", name: "Bakery", slug: "bakery" }
+    ],
+    neighborhoods: [
+      { id: "hood-bole", name: "Bole", slug: "bole" },
+      { id: "hood-kazanchis", name: "Kazanchis", slug: "kazanchis" },
+      { id: "hood-piassa", name: "Piassa", slug: "piassa" },
+      { id: "hood-mexico", name: "Mexico", slug: "mexico" }
+    ],
+    businesses: [
+      {
+        id: "biz-tomoca-atlas",
+        slug: "tomoca-bole-atlas",
+        name: "Tomoca Bole Atlas",
+        shortDescription: "Classic Addis coffee energy with a fast-moving neighborhood crowd.",
+        longDescription:
+          "A reliable stop for macchiatos, roasted beans, and that familiar standing-counter rhythm that locals move through every day.",
+        address: "Bole Atlas, Addis Ababa",
+        priceTier: "$",
+        categoryId: "cat-coffee",
+        neighborhoodId: "hood-bole",
+        tags: ["Macchiato", "Quick stop", "Local staple"],
+        coverFrom: "#d86e39",
+        coverTo: "#f2c078",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
+      },
+      {
+        id: "biz-yod",
+        slug: "yod-abyssinia",
+        name: "Yod Abyssinia",
+        shortDescription: "Dinner, performance, and a polished big-night-out atmosphere.",
+        longDescription:
+          "Known for Ethiopian dining paired with dance and music programming, with a menu that works for groups and visitors.",
+        address: "Bole Medhanialem, Addis Ababa",
+        priceTier: "$$$",
+        categoryId: "cat-dining",
+        neighborhoodId: "hood-bole",
+        tags: ["Dinner", "Live music", "Groups"],
+        coverFrom: "#1f6d5f",
+        coverTo: "#8dd2b6",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
+      },
+      {
+        id: "biz-sishu",
+        slug: "sishu-mexico",
+        name: "Sishu Mexico",
+        shortDescription: "Stylish all-day dining with a menu broad enough for mixed groups.",
+        longDescription:
+          "A contemporary restaurant-cafe hybrid that is popular for lunch meetings, relaxed dinners, and dependable coffee service.",
+        address: "Mexico Square, Addis Ababa",
+        priceTier: "$$",
+        categoryId: "cat-dining",
+        neighborhoodId: "hood-mexico",
+        tags: ["Brunch", "Work-friendly", "Contemporary"],
+        coverFrom: "#4a5568",
+        coverTo: "#b9c2cf",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
+      },
+      {
+        id: "biz-fendika",
+        slug: "fendika-cultural-center",
+        name: "Fendika Cultural Center",
+        shortDescription: "One of the city's most memorable places for art, music, and movement.",
+        longDescription:
+          "An iconic cultural venue with live performances and a strong sense of local creative identity.",
+        address: "Kazanchis, Addis Ababa",
+        priceTier: "$$",
+        categoryId: "cat-culture",
+        neighborhoodId: "hood-kazanchis",
+        tags: ["Art", "Performance", "Night out"],
+        coverFrom: "#6f3f8f",
+        coverTo: "#d7b0f1",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
+      },
+      {
+        id: "biz-bilos",
+        slug: "bilos-piassa",
+        name: "Bilo's Piassa",
+        shortDescription: "A dependable pastry and coffee stop that locals recommend often.",
+        longDescription:
+          "A bakery-led neighborhood favorite for quick meetings, takeaway pastries, and an easy everyday routine.",
+        address: "Piassa, Addis Ababa",
+        priceTier: "$",
+        categoryId: "cat-bakery",
+        neighborhoodId: "hood-piassa",
+        tags: ["Pastries", "Takeaway", "Everyday"],
+        coverFrom: "#d4a947",
+        coverTo: "#f6dc8a",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
+      }
+    ],
+    reviews: [
+      {
+        id: "rev-1",
+        businessId: "biz-tomoca-atlas",
+        authorName: "Sara M.",
+        rating: 5,
+        title: "The pace feels very Addis",
+        body: "Fast service, great macchiato, and the kind of place that still feels anchored in the city.",
+        visitDate: "2026-02-12",
+        createdAt: "2026-02-13T10:00:00.000Z",
+        status: "published",
+        reportCount: 0
+      },
+      {
+        id: "rev-2",
+        businessId: "biz-tomoca-atlas",
+        authorName: "Eden T.",
+        rating: 4,
+        title: "Reliable stop before meetings",
+        body: "Easy coffee run with the usual crowd. Beans were fresh and the service moved quickly.",
+        visitDate: "2026-01-29",
+        createdAt: "2026-01-30T08:30:00.000Z",
+        status: "published",
+        reportCount: 0
+      },
+      {
+        id: "rev-3",
+        businessId: "biz-yod",
+        authorName: "Samuel D.",
+        rating: 5,
+        title: "Best for hosting visitors",
+        body: "The performance element makes it memorable, and the whole experience feels polished.",
+        visitDate: "2026-02-20",
+        createdAt: "2026-02-21T18:10:00.000Z",
+        status: "published",
+        reportCount: 0
+      },
+      {
+        id: "rev-4",
+        businessId: "biz-yod",
+        authorName: "Helen K.",
+        rating: 4,
+        title: "Big energy, a little loud",
+        body: "Great for a celebratory dinner. Expect a lively room and plan ahead for peak time.",
+        visitDate: "2026-02-08",
+        createdAt: "2026-02-09T20:45:00.000Z",
+        status: "published",
+        reportCount: 1
+      },
+      {
+        id: "rev-5",
+        businessId: "biz-sishu",
+        authorName: "Abel N.",
+        rating: 4,
+        title: "Solid lunch meeting choice",
+        body: "The menu works for mixed preferences and the setting feels current without trying too hard.",
+        visitDate: "2026-02-18",
+        createdAt: "2026-02-19T12:00:00.000Z",
+        status: "published",
+        reportCount: 0
+      },
+      {
+        id: "rev-6",
+        businessId: "biz-sishu",
+        authorName: "Mimi A.",
+        rating: 3,
+        title: "Good, but timing slipped",
+        body: "Nice room and friendly team, though service slowed down during the lunch rush.",
+        visitDate: "2026-01-17",
+        createdAt: "2026-01-17T14:00:00.000Z",
+        status: "published",
+        reportCount: 0
+      },
+      {
+        id: "rev-7",
+        businessId: "biz-fendika",
+        authorName: "Noah G.",
+        rating: 5,
+        title: "A real city highlight",
+        body: "If you want something specific to Addis rather than generic nightlife, this is the kind of place to start.",
+        visitDate: "2026-02-01",
+        createdAt: "2026-02-02T19:05:00.000Z",
+        status: "published",
+        reportCount: 0
+      },
+      {
+        id: "rev-8",
+        businessId: "biz-bilos",
+        authorName: "Rahel B.",
+        rating: 4,
+        title: "Pastries worth repeating",
+        body: "Simple, easy, and consistently good for a quick catch-up or coffee break.",
+        visitDate: "2026-02-10",
+        createdAt: "2026-02-10T09:20:00.000Z",
+        status: "published",
+        reportCount: 0
+      },
+      {
+        id: "rev-9",
+        businessId: "biz-bilos",
+        authorName: "Henok W.",
+        rating: 5,
+        title: "Morning favorite",
+        body: "Friendly staff and the kind of bakery that gets recommended by locals for a reason.",
+        visitDate: "2026-02-11",
+        createdAt: "2026-02-11T07:40:00.000Z",
+        status: "published",
+        reportCount: 0
+      },
+      {
+        id: "rev-10",
+        businessId: "biz-tomoca-atlas",
+        authorName: "Moderation Queue",
+        rating: 1,
+        title: "Should not count yet",
+        body: "This review is pending and intentionally excluded from the public score.",
+        visitDate: "2026-02-04",
+        createdAt: "2026-02-05T06:10:00.000Z",
+        status: "pending",
+        reportCount: 0
+      },
+      {
+        id: "rev-11",
+        businessId: "biz-sishu",
+        authorName: "Removed Review",
+        rating: 1,
+        title: "Removed review",
+        body: "This review exists to prove removed content does not affect ratings.",
+        visitDate: "2026-01-12",
+        createdAt: "2026-01-13T10:00:00.000Z",
+        status: "removed",
+        reportCount: 2
+      }
+    ],
+    saves: [
+      {
+        id: "save-1",
+        businessId: "biz-yod",
+        viewerId: "seed_viewer_1",
+        createdAt: "2026-02-21T18:20:00.000Z"
+      },
+      {
+        id: "save-2",
+        businessId: "biz-yod",
+        viewerId: "seed_viewer_2",
+        createdAt: "2026-02-21T18:30:00.000Z"
+      },
+      {
+        id: "save-3",
+        businessId: "biz-tomoca-atlas",
+        viewerId: "seed_viewer_3",
+        createdAt: "2026-02-14T09:00:00.000Z"
+      },
+      {
+        id: "save-4",
+        businessId: "biz-fendika",
+        viewerId: "seed_viewer_4",
+        createdAt: "2026-02-02T19:40:00.000Z"
+      },
+      {
+        id: "save-5",
+        businessId: "biz-bilos",
+        viewerId: "seed_viewer_5",
+        createdAt: "2026-02-11T07:50:00.000Z"
+      }
+    ],
+    reports: []
+  };
+}
+
+export function buildSeedDatabase() {
+  return syncAllBusinessMetrics(baseDatabase());
+}

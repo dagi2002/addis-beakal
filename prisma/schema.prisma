@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+  OWNER
+}
+
+enum ReviewStatus {
+  PUBLISHED
+  PENDING
+  REJECTED
+  REMOVED
+}
+
+enum ReportStatus {
+  OPEN
+  TRIAGED
+  RESOLVED
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  displayName   String
+  role          UserRole @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  reviews       Review[]
+  savedBusinesses BusinessSave[]
+  reports       Report[]
+}
+
+model Category {
+  id         String     @id @default(cuid())
+  name       String     @unique
+  businesses Business[]
+}
+
+model Neighborhood {
+  id         String     @id @default(cuid())
+  name       String     @unique
+  businesses Business[]
+}
+
+model Business {
+  id            String          @id @default(cuid())
+  slug          String          @unique
+  name          String
+  shortDescription String
+  longDescription  String
+  address       String
+  priceTier     String
+  tags          String[]
+  rating        Float           @default(0)
+  reviewCount   Int             @default(0)
+  saveCount     Int             @default(0)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  categoryId    String
+  neighborhoodId String
+  category      Category        @relation(fields: [categoryId], references: [id])
+  neighborhood  Neighborhood    @relation(fields: [neighborhoodId], references: [id])
+  reviews       Review[]
+  saves         BusinessSave[]
+  reports       Report[]
+}
+
+model Review {
+  id          String       @id @default(cuid())
+  rating      Int
+  title       String
+  body        String
+  visitDate   DateTime
+  status      ReviewStatus @default(PENDING)
+  reportCount Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  businessId  String
+  authorId    String
+  business    Business     @relation(fields: [businessId], references: [id])
+  author      User         @relation(fields: [authorId], references: [id])
+  reports     Report[]
+}
+
+model BusinessSave {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  businessId String
+  userId     String
+  business   Business @relation(fields: [businessId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@unique([businessId, userId])
+}
+
+model Report {
+  id          String       @id @default(cuid())
+  reason      String
+  details     String
+  contactEmail String?
+  status      ReportStatus @default(OPEN)
+  createdAt   DateTime     @default(now())
+  businessId  String
+  reviewId    String?
+  userId      String?
+  business    Business     @relation(fields: [businessId], references: [id])
+  review      Review?      @relation(fields: [reviewId], references: [id])
+  user        User?        @relation(fields: [userId], references: [id])
+}

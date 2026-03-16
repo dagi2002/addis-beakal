@@ -1,0 +1,76 @@
+import type { AppDatabase, Business, Review, Save } from "@/features/businesses/types";
+
+export function isPublicReview(review: Review) {
+  return review.status === "published";
+}
+
+export function recalculateBusinessMetrics(
+  business: Business,
+  reviews: Review[],
+  saves: Save[]
+): Business {
+  const publicReviews = reviews.filter((review) => review.businessId === business.id && isPublicReview(review));
+  const businessSaves = saves.filter((save) => save.businessId === business.id);
+  const reviewCount = publicReviews.length;
+  const rating =
+    reviewCount === 0
+      ? 0
+      : publicReviews.reduce((sum, review) => sum + review.rating, 0) / reviewCount;
+
+  return {
+    ...business,
+    rating: Number(rating.toFixed(1)),
+    reviewCount,
+    saveCount: businessSaves.length
+  };
+}
+
+export function syncBusinessMetrics(database: AppDatabase, businessId: string) {
+  database.businesses = database.businesses.map((business) =>
+    business.id === businessId
+      ? recalculateBusinessMetrics(business, database.reviews, database.saves)
+      : business
+  );
+
+  return database;
+}
+
+export function syncAllBusinessMetrics(database: AppDatabase) {
+  database.businesses = database.businesses.map((business) =>
+    recalculateBusinessMetrics(business, database.reviews, database.saves)
+  );
+
+  return database;
+}
+
+export function toggleBusinessSave(database: AppDatabase, businessId: string, viewerId: string) {
+  const existingSave = database.saves.find(
+    (save) => save.businessId === businessId && save.viewerId === viewerId
+  );
+
+  if (existingSave) {
+    database.saves = database.saves.filter((save) => save.id !== existingSave.id);
+    syncBusinessMetrics(database, businessId);
+
+    return {
+      database,
+      saved: false,
+      saveCount: database.businesses.find((business) => business.id === businessId)?.saveCount ?? 0
+    };
+  }
+
+  database.saves.push({
+    id: `save_${crypto.randomUUID()}`,
+    businessId,
+    viewerId,
+    createdAt: new Date().toISOString()
+  });
+
+  syncBusinessMetrics(database, businessId);
+
+  return {
+    database,
+    saved: true,
+    saveCount: database.businesses.find((business) => business.id === businessId)?.saveCount ?? 0
+  };
+}
