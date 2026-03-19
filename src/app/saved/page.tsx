@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { BusinessCard } from "@/components/business/business-card";
 import { SiteShell } from "@/components/layout/site-shell";
 import { getProfilePageData } from "@/features/profile/service";
@@ -30,7 +32,15 @@ export default async function SavedPage() {
 
       {data.savedBusinesses.length === 0 ? (
         <div className="glass-panel rounded-[32px] border-dashed p-10 text-center text-[color:var(--ink-soft)]">
-          No saved businesses yet. Save a place from discovery or a business page to keep it here.
+          <p>No saved businesses yet. Save a place from discovery or a business page to keep it here.</p>
+          <div className="mt-6">
+            <Link
+              className="inline-flex items-center justify-center rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent-strong)]"
+              href="/discover"
+            >
+              Explore businesses
+            </Link>
+          </div>
         </div>
       ) : null}
     </SiteShell>

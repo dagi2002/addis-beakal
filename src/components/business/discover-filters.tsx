@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, SlidersHorizontal } from "lucide-react";
+import { MapPin, Search, SlidersHorizontal } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -14,9 +14,33 @@ type DiscoverFiltersProps = {
     query: string;
     category: string;
     neighborhood: string;
+    minRating?: number;
+    priceTiers: string[];
+    features: string[];
     sort: DiscoverSort;
   };
 };
+
+const MIN_RATING_OPTIONS = [3, 3.5, 4, 4.5] as const;
+const PRICE_OPTIONS = [
+  { value: "$", label: "Under 100 ETB" },
+  { value: "$$", label: "100-300 ETB" },
+  { value: "$$$", label: "300-600 ETB" },
+  { value: "$$$$", label: "600+ ETB" }
+] as const;
+const FEATURE_OPTIONS = [
+  "great coffee",
+  "fasting friendly",
+  "halal",
+  "live music",
+  "rooftop",
+  "parking",
+  "delivery",
+  "strong wifi",
+  "outdoor seating",
+  "family friendly",
+  "affordable"
+] as const;
 
 export function DiscoverFilters({
   categories,
@@ -29,8 +53,19 @@ export function DiscoverFilters({
   const [query, setQuery] = useState(defaults.query);
   const [category, setCategory] = useState(defaults.category);
   const [neighborhood, setNeighborhood] = useState(defaults.neighborhood);
+  const [minRating, setMinRating] = useState<number | undefined>(defaults.minRating);
+  const [priceTiers, setPriceTiers] = useState<string[]>(defaults.priceTiers);
+  const [features, setFeatures] = useState<string[]>(defaults.features);
   const [sort, setSort] = useState<DiscoverSort>(defaults.sort);
-  const activeFilterCount = [query, category, neighborhood].filter(Boolean).length + (sort !== "recommended" ? 1 : 0);
+  const activeFilterCount =
+    [query, category, neighborhood, minRating ? String(minRating) : ""].filter(Boolean).length +
+    priceTiers.length +
+    features.length +
+    (sort !== "recommended" ? 1 : 0);
+
+  function toggleArrayValue(values: string[], value: string) {
+    return values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
+  }
 
   function applyFilters() {
     const nextParams = new URLSearchParams(searchParams.toString());
@@ -44,6 +79,15 @@ export function DiscoverFilters({
     if (neighborhood) nextParams.set("neighborhood", neighborhood);
     else nextParams.delete("neighborhood");
 
+    if (minRating) nextParams.set("minRating", String(minRating));
+    else nextParams.delete("minRating");
+
+    nextParams.delete("price");
+    priceTiers.forEach((priceTier) => nextParams.append("price", priceTier));
+
+    nextParams.delete("feature");
+    features.forEach((feature) => nextParams.append("feature", feature));
+
     if (sort) nextParams.set("sort", sort);
     else nextParams.delete("sort");
 
@@ -55,6 +99,9 @@ export function DiscoverFilters({
     setQuery("");
     setCategory("");
     setNeighborhood("");
+    setMinRating(undefined);
+    setPriceTiers([]);
+    setFeatures([]);
     setSort("recommended");
     router.replace("/discover");
     setOpen(false);
@@ -75,46 +122,40 @@ export function DiscoverFilters({
               <span className="rounded-full bg-white/20 px-2 py-1 text-xs">{activeFilterCount}</span>
             ) : null}
           </button>
-          <div className="flex items-center gap-2 rounded-full border border-[var(--border)] bg-[rgba(255,255,255,0.68)] px-4 py-3 text-sm text-[var(--muted)]">
+          <div className="flex items-center gap-2 rounded-[22px] border border-[var(--border)] bg-[rgba(255,255,255,0.82)] px-4 py-3 text-sm text-[var(--muted)]">
             <Search className="h-4 w-4" />
             <span>{query || "Search businesses, categories, neighborhoods"}</span>
           </div>
         </div>
 
-        <div className="hidden gap-4 lg:grid lg:grid-cols-[1.4fr_0.95fr_0.95fr_1.1fr]">
-          <input
-            className="rounded-[22px] border border-[var(--border)] bg-[rgba(255,255,255,0.72)] px-4 py-3.5 outline-none transition focus:border-[var(--accent)]"
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search businesses, categories, neighborhoods"
-            value={query}
-          />
-          <select
-            className="rounded-[22px] border border-[var(--border)] bg-[rgba(255,255,255,0.72)] px-4 py-3.5 outline-none transition focus:border-[var(--accent)]"
-            onChange={(event) => setCategory(event.target.value)}
-            value={category}
-          >
-            <option value="">All categories</option>
-            {categories.map((item) => (
-              <option key={item.id} value={item.slug}>
-                {item.name}
-              </option>
-            ))}
-          </select>
-          <select
-            className="rounded-[22px] border border-[var(--border)] bg-[rgba(255,255,255,0.72)] px-4 py-3.5 outline-none transition focus:border-[var(--accent)]"
-            onChange={(event) => setNeighborhood(event.target.value)}
-            value={neighborhood}
-          >
-            <option value="">All neighborhoods</option>
-            {neighborhoods.map((item) => (
-              <option key={item.id} value={item.slug}>
-                {item.name}
-              </option>
-            ))}
-          </select>
-          <div className="flex gap-3">
+        <div className="hidden gap-4 lg:block">
+          <div className="grid gap-3 rounded-[28px] border border-[rgba(62,46,31,0.1)] bg-white p-3 shadow-[0_24px_60px_rgba(65,45,28,0.12)] lg:grid-cols-[minmax(0,1.8fr)_220px_210px_130px]">
+            <label className="flex items-center gap-3 rounded-[20px] bg-[var(--background-strong)] px-4 py-3.5 text-sm text-[var(--muted)]">
+              <Search className="h-4 w-4 text-[var(--accent)]" />
+              <input
+                className="w-full bg-transparent text-[color:var(--surface-dark)] outline-none placeholder:text-[var(--muted)]"
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search Addis businesses"
+                value={query}
+              />
+            </label>
+            <label className="flex items-center gap-3 rounded-[20px] bg-[var(--background-strong)] px-4 py-3.5 text-sm text-[var(--muted)]">
+              <MapPin className="h-4 w-4 text-[var(--accent)]" />
+              <select
+                className="w-full bg-transparent text-[color:var(--surface-dark)] outline-none"
+                onChange={(event) => setNeighborhood(event.target.value)}
+                value={neighborhood}
+              >
+                <option value="">All neighborhoods</option>
+                {neighborhoods.map((item) => (
+                  <option key={item.id} value={item.slug}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </label>
             <select
-              className="min-w-0 flex-1 rounded-[22px] border border-[var(--border)] bg-[rgba(255,255,255,0.72)] px-4 py-3.5 outline-none transition focus:border-[var(--accent)]"
+              className="rounded-[20px] bg-[var(--background-strong)] px-4 py-3.5 text-sm text-[color:var(--surface-dark)] outline-none"
               onChange={(event) => setSort(event.target.value as DiscoverSort)}
               value={sort}
             >
@@ -124,36 +165,15 @@ export function DiscoverFilters({
               <option value="most-saved">Most saved</option>
             </select>
             <button
-              className="rounded-[22px] bg-[var(--accent)] px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--accent-strong)]"
+              className="rounded-[20px] bg-[var(--accent)] px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--accent-strong)]"
               onClick={applyFilters}
               type="button"
             >
-              Apply
+              Search
             </button>
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
-          {query ? <span className="rounded-full border border-[rgba(62,46,31,0.1)] bg-[rgba(255,255,255,0.6)] px-3 py-2 text-xs text-[var(--muted-strong)]">Query: {query}</span> : null}
-          {category ? (
-            <span className="rounded-full border border-[rgba(62,46,31,0.1)] bg-[rgba(255,255,255,0.6)] px-3 py-2 text-xs text-[var(--muted-strong)]">
-              Category: {categories.find((item) => item.slug === category)?.name ?? category}
-            </span>
-          ) : null}
-          {neighborhood ? (
-            <span className="rounded-full border border-[rgba(62,46,31,0.1)] bg-[rgba(255,255,255,0.6)] px-3 py-2 text-xs text-[var(--muted-strong)]">
-              Neighborhood: {neighborhoods.find((item) => item.slug === neighborhood)?.name ?? neighborhood}
-            </span>
-          ) : null}
-          {sort !== "recommended" ? (
-            <span className="rounded-full border border-[rgba(62,46,31,0.1)] bg-[rgba(255,255,255,0.6)] px-3 py-2 text-xs text-[var(--muted-strong)]">Sort: {sort}</span>
-          ) : null}
-          {activeFilterCount === 0 ? (
-            <span className="rounded-full border border-[rgba(62,46,31,0.1)] bg-[rgba(255,255,255,0.6)] px-3 py-2 text-xs text-[var(--muted-strong)]">
-              Showing recommended businesses
-            </span>
-          ) : null}
-        </div>
       </div>
 
       <div
@@ -203,6 +223,70 @@ export function DiscoverFilters({
                 </option>
               ))}
             </select>
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">Minimum rating</p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  className={cn(
+                    "rounded-[16px] border px-3 py-2 text-sm",
+                    !minRating ? "border-[#ffb24a] bg-[#fff4e5] font-semibold text-[#ef8b11]" : "border-[var(--border)]"
+                  )}
+                  onClick={() => setMinRating(undefined)}
+                  type="button"
+                >
+                  Any
+                </button>
+                {MIN_RATING_OPTIONS.map((option) => (
+                  <button
+                    key={option}
+                    className={cn(
+                      "rounded-[16px] border px-3 py-2 text-sm",
+                      minRating === option ? "border-[#ffb24a] bg-[#fff4e5] font-semibold text-[#ef8b11]" : "border-[var(--border)]"
+                    )}
+                    onClick={() => setMinRating(option)}
+                    type="button"
+                  >
+                    ⭐ {option.toFixed(1)}+
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">Price range</p>
+              <div className="flex flex-wrap gap-2">
+                {PRICE_OPTIONS.map((option) => (
+                  <button
+                    key={option.value}
+                    className={cn(
+                      "rounded-[16px] border px-3 py-2 text-sm",
+                      priceTiers.includes(option.value) ? "border-[#ffb24a] bg-[#fff4e5] font-semibold text-[#ef8b11]" : "border-[var(--border)]"
+                    )}
+                    onClick={() => setPriceTiers((current) => toggleArrayValue(current, option.value))}
+                    type="button"
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">Features</p>
+              <div className="flex flex-wrap gap-2">
+                {FEATURE_OPTIONS.map((feature) => (
+                  <button
+                    key={feature}
+                    className={cn(
+                      "rounded-[16px] border px-3 py-2 text-sm",
+                      features.includes(feature) ? "border-[#ffb24a] bg-[#fff4e5] font-semibold text-[#ef8b11]" : "border-[var(--border)]"
+                    )}
+                    onClick={() => setFeatures((current) => toggleArrayValue(current, feature))}
+                    type="button"
+                  >
+                    {feature}
+                  </button>
+                ))}
+              </div>
+            </div>
             <select
               className="w-full rounded-[22px] border border-[var(--border)] bg-[rgba(255,255,255,0.72)] px-4 py-3.5 outline-none transition focus:border-[var(--accent)]"
               onChange={(event) => setSort(event.target.value as DiscoverSort)}

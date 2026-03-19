@@ -22,7 +22,7 @@ export type Business = {
   shortDescription: string;
   longDescription: string;
   address: string;
-  priceTier: "$" | "$$" | "$$$";
+  priceTier: "$" | "$$" | "$$$" | "$$$$";
   categoryId: string;
   neighborhoodId: string;
   tags: string[];
@@ -112,6 +112,9 @@ export type DiscoverFilters = {
   query?: string;
   category?: string;
   neighborhood?: string;
+  minRating?: number;
+  priceTiers?: string[];
+  features?: string[];
   sort?: DiscoverSort;
 };
 

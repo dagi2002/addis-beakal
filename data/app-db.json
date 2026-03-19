@@ -2,23 +2,63 @@
   "categories": [
     {
       "id": "cat-coffee",
-      "name": "Coffee",
-      "slug": "coffee"
+      "name": "Cafes",
+      "slug": "cafes"
     },
     {
       "id": "cat-dining",
-      "name": "Dining",
-      "slug": "dining"
+      "name": "Restaurants",
+      "slug": "restaurants"
     },
     {
       "id": "cat-culture",
-      "name": "Culture",
-      "slug": "culture"
+      "name": "Bars",
+      "slug": "bars"
     },
     {
       "id": "cat-bakery",
-      "name": "Bakery",
-      "slug": "bakery"
+      "name": "Bakeries",
+      "slug": "bakeries"
+    },
+    {
+      "id": "cat-hotels",
+      "name": "Hotels",
+      "slug": "hotels"
+    },
+    {
+      "id": "cat-salons",
+      "name": "Salons",
+      "slug": "salons"
+    },
+    {
+      "id": "cat-barbers",
+      "name": "Barbers",
+      "slug": "barbers"
+    },
+    {
+      "id": "cat-gyms",
+      "name": "Gyms",
+      "slug": "gyms"
+    },
+    {
+      "id": "cat-clinics",
+      "name": "Clinics",
+      "slug": "clinics"
+    },
+    {
+      "id": "cat-pharmacy",
+      "name": "Pharmacy",
+      "slug": "pharmacy"
+    },
+    {
+      "id": "cat-spas",
+      "name": "Spas",
+      "slug": "spas"
+    },
+    {
+      "id": "cat-car-services",
+      "name": "Car Services",
+      "slug": "car-services"
     }
   ],
   "neighborhoods": [
@@ -41,28 +81,90 @@
       "id": "hood-mexico",
       "name": "Mexico",
       "slug": "mexico"
+    },
+    {
+      "id": "hood-cmc",
+      "name": "CMC",
+      "slug": "cmc"
+    },
+    {
+      "id": "hood-sarbet",
+      "name": "Sarbet",
+      "slug": "sarbet"
+    },
+    {
+      "id": "hood-gerji",
+      "name": "Gerji",
+      "slug": "gerji"
+    },
+    {
+      "id": "hood-megenagna",
+      "name": "Megenagna",
+      "slug": "megenagna"
+    },
+    {
+      "id": "hood-lideta",
+      "name": "Lideta",
+      "slug": "lideta"
+    },
+    {
+      "id": "hood-22",
+      "name": "22",
+      "slug": "22"
+    },
+    {
+      "id": "hood-ayat",
+      "name": "Ayat",
+      "slug": "ayat"
+    },
+    {
+      "id": "hood-summit",
+      "name": "Summit",
+      "slug": "summit"
     }
   ],
   "businesses": [
     {
       "id": "biz-tomoca-atlas",
-      "slug": "tomoca-bole-atlas",
-      "name": "Tomoca Bole Atlas",
-      "shortDescription": "Classic Addis coffee energy with a fast-moving neighborhood crowd.",
+      "slug": "tomoca-coffee",
+      "name": "Tomoca Coffee",
+      "shortDescription": "Ethiopia's iconic coffee stop with the city rhythm still intact.",
       "longDescription": "A reliable stop for macchiatos, roasted beans, and that familiar standing-counter rhythm that locals move through every day.",
-      "address": "Bole Atlas, Addis Ababa",
+      "address": "Wavel Street, Piassa",
       "priceTier": "$",
       "categoryId": "cat-coffee",
-      "neighborhoodId": "hood-bole",
+      "neighborhoodId": "hood-piassa",
       "tags": [
-        "Macchiato",
-        "Quick stop",
-        "Local staple"
+        "great coffee",
+        "affordable",
+        "quick service",
+        "strong wifi"
       ],
       "coverFrom": "#d86e39",
       "coverTo": "#f2c078",
       "rating": 4.5,
       "reviewCount": 2,
+      "saveCount": 1
+    },
+    {
+      "id": "biz-kaldis-bole",
+      "slug": "kaldis-coffee",
+      "name": "Kaldi's Coffee",
+      "shortDescription": "A polished cafe stop for meetings, catch-ups, and dependable coffee runs.",
+      "longDescription": "A familiar Addis cafe format with easy seating, coffee standards people know, and a practical location for everyday routines.",
+      "address": "Bole, Addis Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-coffee",
+      "neighborhoodId": "hood-bole",
+      "tags": [
+        "great coffee",
+        "strong wifi",
+        "outdoor seating"
+      ],
+      "coverFrom": "#7e5946",
+      "coverTo": "#d7b29b",
+      "rating": 4,
+      "reviewCount": 1,
       "saveCount": 0
     },
     {
@@ -76,15 +178,16 @@
       "categoryId": "cat-dining",
       "neighborhoodId": "hood-bole",
       "tags": [
-        "Dinner",
-        "Live music",
-        "Groups"
+        "fasting friendly",
+        "halal",
+        "live music",
+        "family friendly"
       ],
       "coverFrom": "#1f6d5f",
       "coverTo": "#8dd2b6",
       "rating": 4.5,
       "reviewCount": 2,
-      "saveCount": 0
+      "saveCount": 2
     },
     {
       "id": "biz-sishu",
@@ -97,9 +200,9 @@
       "categoryId": "cat-dining",
       "neighborhoodId": "hood-mexico",
       "tags": [
-        "Brunch",
-        "Work-friendly",
-        "Contemporary"
+        "outdoor seating",
+        "strong wifi",
+        "family friendly"
       ],
       "coverFrom": "#4a5568",
       "coverTo": "#b9c2cf",
@@ -118,15 +221,15 @@
       "categoryId": "cat-culture",
       "neighborhoodId": "hood-kazanchis",
       "tags": [
-        "Art",
-        "Performance",
-        "Night out"
+        "live music",
+        "nightlife",
+        "date spot"
       ],
       "coverFrom": "#6f3f8f",
       "coverTo": "#d7b0f1",
       "rating": 5,
       "reviewCount": 1,
-      "saveCount": 0
+      "saveCount": 1
     },
     {
       "id": "biz-bilos",
@@ -139,14 +242,182 @@
       "categoryId": "cat-bakery",
       "neighborhoodId": "hood-piassa",
       "tags": [
-        "Pastries",
-        "Takeaway",
-        "Everyday"
+        "fresh baked",
+        "great coffee",
+        "affordable"
       ],
       "coverFrom": "#d4a947",
       "coverTo": "#f6dc8a",
       "rating": 4.5,
       "reviewCount": 2,
+      "saveCount": 1
+    },
+    {
+      "id": "biz-skylight",
+      "slug": "skylight-hotel-addis",
+      "name": "Skylight Hotel Addis",
+      "shortDescription": "A polished hotel stay with business-friendly amenities and a wide campus feel.",
+      "longDescription": "One of the city's best-known large-format hotels, popular for conferences, airport convenience, and weekend staycations.",
+      "address": "Bole International Airport Road, Addis Ababa",
+      "priceTier": "$$$$",
+      "categoryId": "cat-hotels",
+      "neighborhoodId": "hood-bole",
+      "tags": [
+        "rooftop",
+        "parking",
+        "strong wifi"
+      ],
+      "coverFrom": "#7da7c7",
+      "coverTo": "#dce9f5",
+      "rating": 5,
+      "reviewCount": 1,
+      "saveCount": 0
+    },
+    {
+      "id": "biz-harmony-spa",
+      "slug": "harmony-spa-wellness",
+      "name": "Harmony Spa & Wellness",
+      "shortDescription": "Calm treatment rooms and a softer luxury feel in central Addis.",
+      "longDescription": "A spa-focused experience for massages, facials, and quiet reset time without leaving the city.",
+      "address": "Kazanchis, Addis Ababa",
+      "priceTier": "$$$",
+      "categoryId": "cat-spas",
+      "neighborhoodId": "hood-kazanchis",
+      "tags": [
+        "parking",
+        "family friendly",
+        "relaxation"
+      ],
+      "coverFrom": "#d7c6bb",
+      "coverTo": "#f4ebe4",
+      "rating": 4,
+      "reviewCount": 1,
+      "saveCount": 0
+    },
+    {
+      "id": "biz-findfine-fitness",
+      "slug": "findfine-fitness",
+      "name": "Findfine Fitness",
+      "shortDescription": "A brighter gym floor with modern machines and a steady after-work crowd.",
+      "longDescription": "Known for approachable trainers, cleaner equipment zones, and convenient class timings for regulars.",
+      "address": "Sarbet, Addis Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-gyms",
+      "neighborhoodId": "hood-sarbet",
+      "tags": [
+        "parking",
+        "wellness",
+        "community"
+      ],
+      "coverFrom": "#7b8795",
+      "coverTo": "#d4dbe2",
+      "rating": 4,
+      "reviewCount": 1,
+      "saveCount": 0
+    },
+    {
+      "id": "biz-gleam-salon",
+      "slug": "gleam-beauty-salon",
+      "name": "Gleam Beauty Salon",
+      "shortDescription": "A dependable beauty stop for blowouts, nails, and event-ready styling.",
+      "longDescription": "A polished salon experience with strong repeat clientele and a reputation for steady service.",
+      "address": "Megenagna, Addis Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-salons",
+      "neighborhoodId": "hood-megenagna",
+      "tags": [
+        "beauty",
+        "appointments",
+        "family friendly"
+      ],
+      "coverFrom": "#f0bfd4",
+      "coverTo": "#f9e6ef",
+      "rating": 4,
+      "reviewCount": 1,
+      "saveCount": 0
+    },
+    {
+      "id": "biz-atlas-barber",
+      "slug": "atlas-barber-studio",
+      "name": "Atlas Barber Studio",
+      "shortDescription": "Sharp fades, clean lines, and a consistent neighborhood regular crowd.",
+      "longDescription": "A barber shop built around quick service, reliable cuts, and a straightforward booking rhythm.",
+      "address": "Gerji, Addis Ababa",
+      "priceTier": "$",
+      "categoryId": "cat-barbers",
+      "neighborhoodId": "hood-gerji",
+      "tags": [
+        "quick service",
+        "affordable",
+        "walk-in friendly"
+      ],
+      "coverFrom": "#737f8c",
+      "coverTo": "#dee5eb",
+      "rating": 5,
+      "reviewCount": 1,
+      "saveCount": 0
+    },
+    {
+      "id": "biz-beteseb-clinic",
+      "slug": "beteseb-family-clinic",
+      "name": "Beteseb Family Clinic",
+      "shortDescription": "A neighborhood clinic known for practical care and clear communication.",
+      "longDescription": "A local clinic focused on general consultations, pediatric care, and dependable daytime service.",
+      "address": "CMC, Addis Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-clinics",
+      "neighborhoodId": "hood-cmc",
+      "tags": [
+        "family friendly",
+        "parking",
+        "healthcare"
+      ],
+      "coverFrom": "#8ec2d5",
+      "coverTo": "#eef8fc",
+      "rating": 4,
+      "reviewCount": 1,
+      "saveCount": 0
+    },
+    {
+      "id": "biz-summit-pharmacy",
+      "slug": "summit-pharmacy",
+      "name": "Summit Pharmacy",
+      "shortDescription": "A trusted pharmacy stop for essentials, prescriptions, and quick advice.",
+      "longDescription": "A practical neighborhood pharmacy with a strong regular customer base and useful late-day convenience.",
+      "address": "Summit, Addis Ababa",
+      "priceTier": "$",
+      "categoryId": "cat-pharmacy",
+      "neighborhoodId": "hood-summit",
+      "tags": [
+        "delivery",
+        "healthcare",
+        "affordable"
+      ],
+      "coverFrom": "#7ac4bb",
+      "coverTo": "#e4faf6",
+      "rating": 4,
+      "reviewCount": 1,
+      "saveCount": 0
+    },
+    {
+      "id": "biz-lideta-garage",
+      "slug": "lideta-auto-care",
+      "name": "Lideta Auto Care",
+      "shortDescription": "Straightforward maintenance, diagnostics, and repeat local trust.",
+      "longDescription": "A car service business known for practical fixes, clear explanations, and steady turnaround times.",
+      "address": "Lideta, Addis Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-car-services",
+      "neighborhoodId": "hood-lideta",
+      "tags": [
+        "maintenance",
+        "diagnostics",
+        "parking"
+      ],
+      "coverFrom": "#7b8fa4",
+      "coverTo": "#e3ebf3",
+      "rating": 4,
+      "reviewCount": 1,
       "saveCount": 0
     }
   ],
@@ -315,11 +586,294 @@
       "authorId": "user-migrated-11",
       "updatedAt": "2026-01-13T10:00:00.000Z",
       "photoUrls": []
+    },
+    {
+      "id": "rev-12",
+      "businessId": "biz-skylight",
+      "authorId": "user-reviewer-1",
+      "authorName": "Sara M.",
+      "rating": 5,
+      "title": "Smooth stay for airport access",
+      "body": "Easy for conferences and travel days, with enough amenities to make longer stays comfortable too.",
+      "visitDate": "2026-02-14",
+      "createdAt": "2026-02-15T09:00:00.000Z",
+      "updatedAt": "2026-02-15T09:00:00.000Z",
+      "status": "published",
+      "reportCount": 0,
+      "photoUrls": []
+    },
+    {
+      "id": "rev-13",
+      "businessId": "biz-harmony-spa",
+      "authorId": "user-reviewer-2",
+      "authorName": "Eden T.",
+      "rating": 4,
+      "title": "Quiet, polished, and easy to recommend",
+      "body": "Relaxing rooms and a service style that feels calm instead of rushed.",
+      "visitDate": "2026-02-09",
+      "createdAt": "2026-02-10T11:10:00.000Z",
+      "updatedAt": "2026-02-10T11:10:00.000Z",
+      "status": "published",
+      "reportCount": 0,
+      "photoUrls": []
+    },
+    {
+      "id": "rev-14",
+      "businessId": "biz-findfine-fitness",
+      "authorId": "user-reviewer-3",
+      "authorName": "Samuel D.",
+      "rating": 4,
+      "title": "Good floor, strong equipment mix",
+      "body": "A gym that feels current and clean, especially if you go outside the busiest evening hour.",
+      "visitDate": "2026-02-05",
+      "createdAt": "2026-02-05T18:00:00.000Z",
+      "updatedAt": "2026-02-05T18:00:00.000Z",
+      "status": "published",
+      "reportCount": 0,
+      "photoUrls": []
+    },
+    {
+      "id": "rev-15",
+      "businessId": "biz-gleam-salon",
+      "authorId": "user-reviewer-4",
+      "authorName": "Helen K.",
+      "rating": 4,
+      "title": "Reliable for events and weekends",
+      "body": "Friendly team and a look that stayed polished all day without feeling overly formal.",
+      "visitDate": "2026-02-16",
+      "createdAt": "2026-02-17T08:45:00.000Z",
+      "updatedAt": "2026-02-17T08:45:00.000Z",
+      "status": "published",
+      "reportCount": 0,
+      "photoUrls": []
+    },
+    {
+      "id": "rev-16",
+      "businessId": "biz-atlas-barber",
+      "authorId": "user-reviewer-5",
+      "authorName": "Abel N.",
+      "rating": 5,
+      "title": "Quick cut, very solid finish",
+      "body": "Exactly the kind of neighborhood barber you want when you need something clean without a long wait.",
+      "visitDate": "2026-02-07",
+      "createdAt": "2026-02-07T12:20:00.000Z",
+      "updatedAt": "2026-02-07T12:20:00.000Z",
+      "status": "published",
+      "reportCount": 0,
+      "photoUrls": []
+    },
+    {
+      "id": "rev-17",
+      "businessId": "biz-beteseb-clinic",
+      "authorId": "user-reviewer-6",
+      "authorName": "Mimi A.",
+      "rating": 4,
+      "title": "Straightforward and reassuring",
+      "body": "Good communication, practical care, and an overall experience that felt organized from start to finish.",
+      "visitDate": "2026-02-03",
+      "createdAt": "2026-02-04T10:35:00.000Z",
+      "updatedAt": "2026-02-04T10:35:00.000Z",
+      "status": "published",
+      "reportCount": 0,
+      "photoUrls": []
+    },
+    {
+      "id": "rev-18",
+      "businessId": "biz-summit-pharmacy",
+      "authorId": "user-reviewer-7",
+      "authorName": "Noah G.",
+      "rating": 4,
+      "title": "Helpful late in the day",
+      "body": "A pharmacy that feels useful precisely because it is fast, familiar, and easy to navigate.",
+      "visitDate": "2026-02-12",
+      "createdAt": "2026-02-12T18:40:00.000Z",
+      "updatedAt": "2026-02-12T18:40:00.000Z",
+      "status": "published",
+      "reportCount": 0,
+      "photoUrls": []
+    },
+    {
+      "id": "rev-19",
+      "businessId": "biz-lideta-garage",
+      "authorId": "user-reviewer-8",
+      "authorName": "Rahel B.",
+      "rating": 4,
+      "title": "Honest explanations and fair timing",
+      "body": "The team walked through the problem clearly and did not overcomplicate what needed to be fixed.",
+      "visitDate": "2026-02-06",
+      "createdAt": "2026-02-06T16:25:00.000Z",
+      "updatedAt": "2026-02-06T16:25:00.000Z",
+      "status": "published",
+      "reportCount": 0,
+      "photoUrls": []
+    },
+    {
+      "id": "rev-20",
+      "businessId": "biz-kaldis-bole",
+      "authorId": "user-reviewer-9",
+      "authorName": "Henok W.",
+      "rating": 4,
+      "title": "Easy place to work for an hour",
+      "body": "Good coffee, decent seating, and the kind of cafe that makes quick meetings very easy to pull off.",
+      "visitDate": "2026-02-18",
+      "createdAt": "2026-02-18T11:15:00.000Z",
+      "updatedAt": "2026-02-18T11:15:00.000Z",
+      "status": "published",
+      "reportCount": 0,
+      "photoUrls": []
     }
   ],
-  "saves": [],
+  "saves": [
+    {
+      "id": "save-1",
+      "businessId": "biz-yod",
+      "userId": "user-demo-member",
+      "createdAt": "2026-02-21T18:20:00.000Z"
+    },
+    {
+      "id": "save-2",
+      "businessId": "biz-yod",
+      "userId": "user-reviewer-3",
+      "createdAt": "2026-02-21T18:30:00.000Z"
+    },
+    {
+      "id": "save-3",
+      "businessId": "biz-tomoca-atlas",
+      "userId": "user-reviewer-1",
+      "createdAt": "2026-02-14T09:00:00.000Z"
+    },
+    {
+      "id": "save-4",
+      "businessId": "biz-fendika",
+      "userId": "user-reviewer-7",
+      "createdAt": "2026-02-02T19:40:00.000Z"
+    },
+    {
+      "id": "save-5",
+      "businessId": "biz-bilos",
+      "userId": "user-reviewer-8",
+      "createdAt": "2026-02-11T07:50:00.000Z"
+    }
+  ],
   "reports": [],
   "users": [
+    {
+      "id": "user-demo-member",
+      "email": "demo@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Selam Demo",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-19T01:29:10.726Z"
+    },
+    {
+      "id": "user-demo-admin",
+      "email": "admin@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$lCXDqevZluLtdAJNFfXHdQ$zwdh0n7PzI/+5TbGtQSc9caWC4KT3V0LwEUx9uTD0HY",
+      "displayName": "Admin Demo",
+      "role": "admin",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
+    },
+    {
+      "id": "user-reviewer-1",
+      "email": "reviewer-1@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Sara M.",
+      "role": "member",
+      "createdAt": "2026-02-01T08:00:00.000Z",
+      "updatedAt": "2026-02-01T08:00:00.000Z"
+    },
+    {
+      "id": "user-reviewer-2",
+      "email": "reviewer-2@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Eden T.",
+      "role": "member",
+      "createdAt": "2026-02-01T08:00:00.000Z",
+      "updatedAt": "2026-02-01T08:00:00.000Z"
+    },
+    {
+      "id": "user-reviewer-3",
+      "email": "reviewer-3@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Samuel D.",
+      "role": "member",
+      "createdAt": "2026-02-01T08:00:00.000Z",
+      "updatedAt": "2026-02-01T08:00:00.000Z"
+    },
+    {
+      "id": "user-reviewer-4",
+      "email": "reviewer-4@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Helen K.",
+      "role": "member",
+      "createdAt": "2026-02-01T08:00:00.000Z",
+      "updatedAt": "2026-02-01T08:00:00.000Z"
+    },
+    {
+      "id": "user-reviewer-5",
+      "email": "reviewer-5@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Abel N.",
+      "role": "member",
+      "createdAt": "2026-02-01T08:00:00.000Z",
+      "updatedAt": "2026-02-01T08:00:00.000Z"
+    },
+    {
+      "id": "user-reviewer-6",
+      "email": "reviewer-6@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Mimi A.",
+      "role": "member",
+      "createdAt": "2026-02-01T08:00:00.000Z",
+      "updatedAt": "2026-02-01T08:00:00.000Z"
+    },
+    {
+      "id": "user-reviewer-7",
+      "email": "reviewer-7@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Noah G.",
+      "role": "member",
+      "createdAt": "2026-02-01T08:00:00.000Z",
+      "updatedAt": "2026-02-01T08:00:00.000Z"
+    },
+    {
+      "id": "user-reviewer-8",
+      "email": "reviewer-8@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Rahel B.",
+      "role": "member",
+      "createdAt": "2026-02-01T08:00:00.000Z",
+      "updatedAt": "2026-02-01T08:00:00.000Z"
+    },
+    {
+      "id": "user-reviewer-9",
+      "email": "reviewer-9@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Henok W.",
+      "role": "member",
+      "createdAt": "2026-02-01T08:00:00.000Z",
+      "updatedAt": "2026-02-01T08:00:00.000Z"
+    },
+    {
+      "id": "user-reviewer-10",
+      "email": "reviewer-10@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Moderation Queue",
+      "role": "member",
+      "createdAt": "2026-02-01T08:00:00.000Z",
+      "updatedAt": "2026-02-01T08:00:00.000Z"
+    },
+    {
+      "id": "user-reviewer-11",
+      "email": "reviewer-11@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Removed Review",
+      "role": "member",
+      "createdAt": "2026-02-01T08:00:00.000Z",
+      "updatedAt": "2026-02-01T08:00:00.000Z"
+    },
     {
       "id": "user-migrated-1",
       "email": "migrated-sara-m-1@addisbeakal.test",
@@ -416,24 +970,6 @@
       "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
       "displayName": "Removed Review",
       "role": "member",
-      "createdAt": "2026-03-16T12:00:00.000Z",
-      "updatedAt": "2026-03-16T12:00:00.000Z"
-    },
-    {
-      "id": "user-demo-member",
-      "email": "demo@addisbeakal.test",
-      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
-      "displayName": "Selam Demo",
-      "role": "member",
-      "createdAt": "2026-03-16T12:00:00.000Z",
-      "updatedAt": "2026-03-16T12:00:00.000Z"
-    },
-    {
-      "id": "user-demo-admin",
-      "email": "admin@addisbeakal.test",
-      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$lCXDqevZluLtdAJNFfXHdQ$zwdh0n7PzI/+5TbGtQSc9caWC4KT3V0LwEUx9uTD0HY",
-      "displayName": "Admin Demo",
-      "role": "admin",
       "createdAt": "2026-03-16T12:00:00.000Z",
       "updatedAt": "2026-03-16T12:00:00.000Z"
     }

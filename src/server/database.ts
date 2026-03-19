@@ -38,6 +38,18 @@ type RawDatabase = {
   businessClaims?: BusinessClaim[];
 };
 
+function mergeById<T extends { id: string }>(...collections: T[][]) {
+  const merged = new Map<string, T>();
+
+  for (const collection of collections) {
+    for (const item of collection) {
+      merged.set(item.id, item);
+    }
+  }
+
+  return Array.from(merged.values());
+}
+
 function slugify(value: string) {
   return value
     .toLowerCase()
@@ -163,17 +175,43 @@ function normalizeBusinesses(rawBusinesses: Business[] | undefined): Business[] 
   }));
 }
 
+function mergeBusinesses(seedBusinesses: Business[], currentBusinesses: Business[]) {
+  const currentById = new Map(currentBusinesses.map((business) => [business.id, business]));
+  const merged = seedBusinesses.map((seedBusiness) => {
+    const currentBusiness = currentById.get(seedBusiness.id);
+
+    if (!currentBusiness) {
+      return seedBusiness;
+    }
+
+    return {
+      ...seedBusiness,
+      rating: currentBusiness.rating,
+      reviewCount: currentBusiness.reviewCount,
+      saveCount: currentBusiness.saveCount,
+      ownerUserId: currentBusiness.ownerUserId,
+      claimedAt: currentBusiness.claimedAt
+    };
+  });
+
+  const seededIds = new Set(seedBusinesses.map((business) => business.id));
+  const extraBusinesses = currentBusinesses.filter((business) => !seededIds.has(business.id));
+
+  return [...merged, ...extraBusinesses];
+}
+
 function normalizeDatabase(raw: RawDatabase): AppDatabase {
+  const seed = buildSeedDatabase();
   const reviews = raw.reviews ?? [];
-  const users = normalizeUsers(raw.users, reviews);
+  const users = mergeDemoUsers(mergeById(seed.users, normalizeUsers(raw.users, reviews)));
 
   return syncAllBusinessMetrics({
-    categories: raw.categories ?? buildSeedDatabase().categories,
-    neighborhoods: raw.neighborhoods ?? buildSeedDatabase().neighborhoods,
-    businesses: normalizeBusinesses(raw.businesses),
-    reviews: normalizeReviews(reviews, users),
-    saves: normalizeSaves(raw.saves),
-    reports: normalizeReports(raw.reports),
+    categories: mergeById(raw.categories ?? [], seed.categories),
+    neighborhoods: mergeById(raw.neighborhoods ?? [], seed.neighborhoods),
+    businesses: mergeBusinesses(seed.businesses, normalizeBusinesses(raw.businesses)),
+    reviews: mergeById(seed.reviews, normalizeReviews(reviews, users)),
+    saves: mergeById(seed.saves, normalizeSaves(raw.saves)),
+    reports: mergeById(seed.reports, normalizeReports(raw.reports)),
     users,
     businessClaims: raw.businessClaims ?? []
   });

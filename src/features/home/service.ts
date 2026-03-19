@@ -31,6 +31,7 @@ export async function getHomePageData(viewerId?: string | null) {
     featuredBusinesses,
     topRatedBusinesses,
     recentReviews,
+    neighborhoods: database.neighborhoods,
     stats: {
       businessCount: database.businesses.length,
       reviewCount: database.reviews.filter((review) => review.status === "published").length,

@@ -5,14 +5,23 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { ModalShell } from "@/components/shared/modal-shell";
+import { cn } from "@/lib/utils";
 
 type ReviewFormProps = {
   businessId: string;
   isAuthenticated: boolean;
   hasReviewed: boolean;
+  className?: string;
+  label?: string;
 };
 
-export function ReviewForm({ businessId, isAuthenticated, hasReviewed }: ReviewFormProps) {
+export function ReviewForm({
+  businessId,
+  isAuthenticated,
+  hasReviewed,
+  className,
+  label
+}: ReviewFormProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -31,7 +40,10 @@ export function ReviewForm({ businessId, isAuthenticated, hasReviewed }: ReviewF
   return (
     <div className="space-y-3">
       <button
-        className="inline-flex items-center gap-2 rounded-full bg-[var(--surface-dark)] px-4 py-2.5 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
+        className={cn(
+          "inline-flex items-center gap-2 rounded-full bg-[var(--surface-dark)] px-4 py-2.5 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60",
+          className
+        )}
         disabled={hasReviewed}
         onClick={() => {
           if (!isAuthenticated) {
@@ -44,7 +56,7 @@ export function ReviewForm({ businessId, isAuthenticated, hasReviewed }: ReviewF
         type="button"
       >
         <MessageSquarePlus className="h-4 w-4" />
-        {hasReviewed ? "Review submitted" : isAuthenticated ? "Write a review" : "Sign in to review"}
+        {hasReviewed ? "Review submitted" : isAuthenticated ? (label ?? "Write a review") : "Sign in to review"}
       </button>
 
       <ModalShell

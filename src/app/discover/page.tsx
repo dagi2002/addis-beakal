@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { BusinessCard } from "@/components/business/business-card";
 import { DiscoverFilters } from "@/components/business/discover-filters";
 import { SiteShell } from "@/components/layout/site-shell";
@@ -7,6 +9,21 @@ import { getViewerId } from "@/lib/viewer";
 
 type DiscoverPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+const categoryEmojis: Record<string, string> = {
+  cafes: "☕",
+  restaurants: "🍛",
+  hotels: "🏨",
+  salons: "💇",
+  barbers: "✂️",
+  gyms: "💪",
+  clinics: "🏥",
+  pharmacy: "💊",
+  bakeries: "🍞",
+  bars: "🍸",
+  spas: "🧖",
+  "car-services": "🚗"
 };
 
 function getSearchParam(value: string | string[] | undefined) {
@@ -26,6 +43,48 @@ function getSortParam(value: string | undefined): DiscoverFilterValues["sort"] {
   return undefined;
 }
 
+function getRatingParam(value: string | undefined) {
+  const parsed = Number(value);
+  return [3, 3.5, 4, 4.5].includes(parsed) ? parsed : undefined;
+}
+
+function getSearchValues(value: string | string[] | undefined) {
+  if (!value) {
+    return [];
+  }
+
+  return Array.isArray(value) ? value : [value];
+}
+
+function buildDiscoverHref(
+  current: DiscoverFilterValues,
+  updates: Partial<DiscoverFilterValues>
+) {
+  const next = {
+    query: current.query ?? "",
+    category: current.category ?? "",
+    neighborhood: current.neighborhood ?? "",
+    minRating: current.minRating,
+    priceTiers: current.priceTiers ?? [],
+    features: current.features ?? [],
+    sort: current.sort ?? "recommended",
+    ...updates
+  };
+
+  const params = new URLSearchParams();
+
+  if (next.query) params.set("query", next.query);
+  if (next.category) params.set("category", next.category);
+  if (next.neighborhood) params.set("neighborhood", next.neighborhood);
+  if (next.minRating) params.set("minRating", String(next.minRating));
+  next.priceTiers?.forEach((priceTier) => params.append("price", priceTier));
+  next.features?.forEach((feature) => params.append("feature", feature));
+  if (next.sort && next.sort !== "recommended") params.set("sort", next.sort);
+
+  const queryString = params.toString();
+  return queryString ? `/discover?${queryString}` : "/discover";
+}
+
 export default async function DiscoverPage({ searchParams }: DiscoverPageProps) {
   const params = (await searchParams) ?? {};
   const viewerId = await getViewerId();
@@ -33,44 +92,41 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
     query: getSearchParam(params.query),
     category: getSearchParam(params.category),
     neighborhood: getSearchParam(params.neighborhood),
+    minRating: getRatingParam(getSearchParam(params.minRating)),
+    priceTiers: getSearchValues(params.price),
+    features: getSearchValues(params.feature),
     sort: getSortParam(getSearchParam(params.sort))
   };
 
   const data = await getDiscoverPageData(filters, viewerId);
 
-  return (
-    <SiteShell className="pb-0 pt-4" compactMain showHeaderSearch>
-      <section className="dark-panel overflow-hidden rounded-[40px] px-6 py-8 text-white lg:px-8 lg:py-10">
-        <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
-          <div className="space-y-4">
-            <p className="section-label text-[#f3bf74]">Explore Addis</p>
-            <h1 className="page-title max-w-4xl text-white">
-              Search with more texture,
-              <br />
-              fewer dead ends,
-              <br />
-              and better context.
-            </h1>
-            <p className="max-w-2xl text-base leading-8 text-white/66">
-              The discovery layer now leans into neighborhood mood, category intent, and stronger
-              ranking cues so exploring Addis feels less like filtering a spreadsheet.
-            </p>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-3">
-            {[
-              ["Results", data.businesses.length.toString()],
-              ["Categories", data.categories.length.toString()],
-              ["Neighborhoods", data.neighborhoods.length.toString()]
-            ].map(([label, value]) => (
-              <div key={label} className="rounded-[24px] border border-white/10 bg-white/8 p-4">
-                <p className="text-xs uppercase tracking-[0.18em] text-white/46">{label}</p>
-                <p className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-white">{value}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+  const ratingOptions = [3, 3.5, 4, 4.5] as const;
+  const priceOptions = [
+    { value: "$", label: "Under 100 ETB" },
+    { value: "$$", label: "100-300 ETB" },
+    { value: "$$$", label: "300-600 ETB" },
+    { value: "$$$$", label: "600+ ETB" }
+  ] as const;
+  const featureOptions = [
+    "great coffee",
+    "fasting friendly",
+    "halal",
+    "live music",
+    "rooftop",
+    "parking",
+    "delivery",
+    "strong wifi",
+    "outdoor seating",
+    "family friendly",
+    "affordable"
+  ] as const;
 
+  function toggleValue(values: string[], value: string) {
+    return values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
+  }
+
+  return (
+    <SiteShell className="pb-0 pt-4" compactMain>
       <section className="space-y-8">
         <DiscoverFilters
           categories={data.categories}
@@ -78,28 +134,169 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
           neighborhoods={data.neighborhoods}
         />
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="section-label">Discovery results</p>
-            <h2 className="editorial-title mt-3">Places worth a closer look.</h2>
-          </div>
-          <p className="max-w-xl text-sm leading-7 text-[var(--muted)]">
-            Results are ranked to surface businesses with stronger signals across ratings, review
-            volume, and saves while still letting you pivot by category and neighborhood.
-          </p>
-        </div>
+        <div className="grid gap-6 xl:grid-cols-[290px_minmax(0,1fr)]">
+          <aside className="rounded-[30px] border border-[#e8edf4] bg-white p-6 shadow-[0_16px_40px_rgba(34,51,84,0.06)]">
+            <div className="border-b border-[#eef2f7] pb-5">
+              <p className="text-2xl font-semibold tracking-[-0.04em] text-[#1b2433]">Filters</p>
+            </div>
 
-        <div className="grid gap-5 lg:grid-cols-3">
-          {data.businesses.map((business) => (
-            <BusinessCard key={business.id} business={business} />
-          ))}
-        </div>
+            <div className="space-y-8 pt-6">
+              <div className="space-y-4">
+                <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#6a7890]">Category</p>
+                <div className="space-y-2">
+                  <Link
+                    className={`block rounded-[16px] px-3 py-2 text-sm transition ${
+                      !data.activeFilters.category ? "bg-[#fff4e5] font-semibold text-[#ef8b11]" : "text-[#49576d] hover:bg-[#f7f9fc]"
+                    }`}
+                    href={buildDiscoverHref(data.activeFilters, { category: "" })}
+                  >
+                    All categories
+                  </Link>
+                  {data.categories.map((category) => (
+                    <Link
+                      key={category.id}
+                      className={`block rounded-[16px] px-3 py-2 text-sm transition ${
+                        data.activeFilters.category === category.slug
+                          ? "bg-[#fff4e5] font-semibold text-[#ef8b11]"
+                          : "text-[#49576d] hover:bg-[#f7f9fc]"
+                      }`}
+                      href={buildDiscoverHref(data.activeFilters, { category: category.slug })}
+                    >
+                      <span className="mr-2">{categoryEmojis[category.slug] ?? "•"}</span>
+                      {category.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
-        {data.businesses.length === 0 ? (
-          <div className="glass-panel rounded-[30px] border-dashed p-10 text-center text-[var(--muted)]">
-            No businesses matched those filters. Try widening the neighborhood or switching the sort.
+              <div className="space-y-4">
+                <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#6a7890]">Neighborhood</p>
+                <div className="flex flex-wrap gap-2">
+                  <Link
+                    className={`rounded-[16px] border px-3 py-2 text-sm transition ${
+                      !data.activeFilters.neighborhood
+                        ? "border-[#ffb24a] bg-[#fff4e5] font-semibold text-[#ef8b11]"
+                        : "border-[#dfe6f0] text-[#55657b] hover:bg-[#f7f9fc]"
+                    }`}
+                    href={buildDiscoverHref(data.activeFilters, { neighborhood: "" })}
+                  >
+                    All
+                  </Link>
+                  {data.neighborhoods.map((neighborhood) => (
+                    <Link
+                      key={neighborhood.id}
+                      className={`rounded-[16px] border px-3 py-2 text-sm transition ${
+                        data.activeFilters.neighborhood === neighborhood.slug
+                          ? "border-[#ffb24a] bg-[#fff4e5] font-semibold text-[#ef8b11]"
+                          : "border-[#dfe6f0] text-[#55657b] hover:bg-[#f7f9fc]"
+                      }`}
+                      href={buildDiscoverHref(data.activeFilters, { neighborhood: neighborhood.slug })}
+                    >
+                      {neighborhood.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4 border-t border-[#eef2f7] pt-8">
+                <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#6a7890]">Minimum Rating</p>
+                <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
+                  <Link
+                    className={`rounded-[16px] border px-3 py-2 text-sm transition ${
+                      !data.activeFilters.minRating
+                        ? "border-[#ffb24a] bg-[#fff4e5] font-semibold text-[#ef8b11]"
+                        : "border-[#dfe6f0] text-[#55657b] hover:bg-[#f7f9fc]"
+                    }`}
+                    href={buildDiscoverHref(data.activeFilters, { minRating: undefined })}
+                  >
+                    Any
+                  </Link>
+                  {ratingOptions.map((rating) => (
+                    <Link
+                      key={rating}
+                      className={`rounded-[16px] border px-3 py-2 text-sm transition ${
+                        data.activeFilters.minRating === rating
+                          ? "border-[#ffb24a] bg-[#fff4e5] font-semibold text-[#ef8b11]"
+                          : "border-[#dfe6f0] text-[#55657b] hover:bg-[#f7f9fc]"
+                      }`}
+                      href={buildDiscoverHref(data.activeFilters, { minRating: rating })}
+                    >
+                      ⭐ {rating.toFixed(1)}+
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4 border-t border-[#eef2f7] pt-8">
+                <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#6a7890]">Price Range</p>
+                <div className="grid gap-2">
+                  {priceOptions.map((option) => (
+                    <Link
+                      key={option.value}
+                      className={`rounded-[16px] border px-3 py-2 text-sm transition ${
+                        data.activeFilters.priceTiers.includes(option.value)
+                          ? "border-[#ffb24a] bg-[#fff4e5] font-semibold text-[#ef8b11]"
+                          : "border-[#dfe6f0] text-[#55657b] hover:bg-[#f7f9fc]"
+                      }`}
+                      href={buildDiscoverHref(data.activeFilters, {
+                        priceTiers: toggleValue(data.activeFilters.priceTiers, option.value)
+                      })}
+                    >
+                      {option.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4 border-t border-[#eef2f7] pt-8">
+                <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#6a7890]">Features</p>
+                <div className="flex flex-wrap gap-2">
+                  {featureOptions.map((feature) => (
+                    <Link
+                      key={feature}
+                      className={`rounded-[16px] border px-3 py-2 text-sm transition ${
+                        data.activeFilters.features.includes(feature)
+                          ? "border-[#ffb24a] bg-[#fff4e5] font-semibold text-[#ef8b11]"
+                          : "border-[#dfe6f0] text-[#55657b] hover:bg-[#f7f9fc]"
+                      }`}
+                      href={buildDiscoverHref(data.activeFilters, {
+                        features: toggleValue(data.activeFilters.features, feature)
+                      })}
+                    >
+                      {feature}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <div className="space-y-5">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6a7890]">Results</p>
+              <h2 className="mt-2 text-4xl font-semibold tracking-[-0.05em] text-[#18212f]">
+                {data.businesses.length} businesses found
+              </h2>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-2 2xl:grid-cols-3">
+              {data.businesses.map((business, index) => (
+                <BusinessCard
+                  key={business.id}
+                  business={business}
+                  featured={index < 2}
+                  variant="market"
+                />
+              ))}
+            </div>
+
+            {data.businesses.length === 0 ? (
+              <div className="rounded-[30px] border border-dashed border-[#d9e2ee] bg-white p-10 text-center text-[#66758b]">
+                No businesses matched those filters. Try widening the neighborhood or switching the sort.
+              </div>
+            ) : null}
           </div>
-        ) : null}
+        </div>
       </section>
     </SiteShell>
   );
