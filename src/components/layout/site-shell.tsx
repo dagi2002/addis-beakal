@@ -2,7 +2,9 @@ import { Search } from "lucide-react";
 import Link from "next/link";
 import type { PropsWithChildren } from "react";
 
+import { NotificationBell } from "@/components/layout/notification-bell";
 import { SettingsMenu } from "@/components/layout/settings-menu";
+import { getNotificationBellData } from "@/features/notifications/service";
 import { cn } from "@/lib/utils";
 import { getSessionActor } from "@/lib/viewer";
 
@@ -19,6 +21,7 @@ export async function SiteShell({
   compactMain = false
 }: SiteShellProps) {
   const actor = await getSessionActor();
+  const bellData = actor.userId ? await getNotificationBellData(actor.userId) : null;
 
   return (
     <div className="min-h-screen text-[var(--foreground)]">
@@ -57,7 +60,23 @@ export async function SiteShell({
               Saved
             </Link>
             {actor.userId ? (
-              <SettingsMenu displayName={actor.user?.displayName ?? "Account"} role={actor.role} />
+              <>
+                <Link className="rounded-full px-4 py-2.5 transition hover:bg-[rgba(197,91,45,0.1)]" href="/profile">
+                  Profile
+                </Link>
+                {actor.role === "owner" || actor.role === "admin" ? (
+                  <Link className="rounded-full px-4 py-2.5 transition hover:bg-[rgba(197,91,45,0.1)]" href="/owner">
+                    Owner
+                  </Link>
+                ) : null}
+                {bellData ? (
+                  <NotificationBell
+                    notifications={bellData.notifications}
+                    unreadCount={bellData.unreadCount}
+                  />
+                ) : null}
+                <SettingsMenu displayName={actor.user?.displayName ?? "Account"} role={actor.role} />
+              </>
             ) : (
               <>
                 <Link className="rounded-full px-4 py-2.5 transition hover:bg-[rgba(197,91,45,0.1)]" href="/login">

@@ -15,15 +15,14 @@ type ClaimBusinessOption = {
 
 type ClaimFormProps = {
   businesses: ClaimBusinessOption[];
-  initialDisplayName: string;
 };
 
-export function ClaimForm({ businesses, initialDisplayName }: ClaimFormProps) {
+export function ClaimForm({ businesses }: ClaimFormProps) {
   const router = useRouter();
   const [step, setStep] = useState<1 | 2>(1);
   const [query, setQuery] = useState("");
   const [businessId, setBusinessId] = useState(businesses[0]?.id ?? "");
-  const [claimantName, setClaimantName] = useState(initialDisplayName);
+  const [claimantName, setClaimantName] = useState("");
   const [claimantPhone, setClaimantPhone] = useState("");
   const [proofText, setProofText] = useState("");
   const [proofFiles, setProofFiles] = useState<File[]>([]);
@@ -59,6 +58,7 @@ export function ClaimForm({ businesses, initialDisplayName }: ClaimFormProps) {
   function resetAfterSubmit() {
     setStep(1);
     setQuery("");
+    setClaimantName("");
     setClaimantPhone("");
     setProofText("");
     setProofFiles([]);
@@ -220,7 +220,7 @@ export function ClaimForm({ businesses, initialDisplayName }: ClaimFormProps) {
                   return;
                 }
 
-                setMessage("Claim submitted for admin review.");
+                setMessage("Claim submitted for admin review. A status update was sent to your inbox.");
                 resetAfterSubmit();
                 router.refresh();
               });

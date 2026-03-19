@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import type { Business, BusinessClaim } from "@/features/businesses/types";
+import { queueNotifications } from "@/features/notifications/service";
 import type { AppActor } from "@/server/auth/actor";
 import { assertAuthenticated, assertIsAdmin } from "@/server/auth/policies";
 import { readDatabase, updateDatabase } from "@/server/database";
@@ -87,10 +88,39 @@ export async function submitClaim(input: unknown, actor: AppActor) {
     createdAt: new Date().toISOString()
   };
 
-  await updateDatabase((current) => ({
-    ...current,
-    businessClaims: [claim, ...current.businessClaims]
-  }));
+  await updateDatabase((current) => {
+    current.businessClaims = [claim, ...current.businessClaims];
+
+    queueNotifications(
+      current,
+      [actor.userId!],
+      {
+        kind: "claim_submitted",
+        title: `Claim submitted for ${business.name}`,
+        body: "Your ownership request is now in the admin queue. We will notify you here when it is reviewed.",
+        actionHref: "/claim-business#claim-history",
+        actionLabel: "View claim",
+        senderUserId: undefined
+      },
+      claim.createdAt
+    );
+
+    queueNotifications(
+      current,
+      current.users.filter((entry) => entry.role === "admin").map((entry) => entry.id),
+      {
+        kind: "claim_submitted",
+        title: `New claim request for ${business.name}`,
+        body: `${claim.claimantName} submitted an ownership claim that needs review.`,
+        actionHref: "/admin/claims/pending",
+        actionLabel: "Review claims",
+        senderUserId: actor.userId!
+      },
+      claim.createdAt
+    );
+
+    return current;
+  });
 
   return claim;
 }
@@ -256,6 +286,9 @@ export async function reviewClaim(claimId: string, input: unknown, actor: AppAct
   assertIsAdmin(actor);
   const payload = reviewClaimSchema.parse(input);
   let updatedClaim: BusinessClaim | null = null;
+  let targetUserId = "";
+  let businessName = "Business";
+  let reviewedAt = "";
 
   await updateDatabase((current) => {
     const targetClaim = current.businessClaims.find((claim) => claim.id === claimId);
@@ -273,6 +306,9 @@ export async function reviewClaim(claimId: string, input: unknown, actor: AppAct
     }
 
     const now = new Date().toISOString();
+    targetUserId = targetClaim.userId;
+    businessName = business.name;
+    reviewedAt = now;
 
     const nextClaims: BusinessClaim[] = current.businessClaims.map((claim) => {
       if (claim.id === claimId) {
@@ -317,11 +353,30 @@ export async function reviewClaim(claimId: string, input: unknown, actor: AppAct
           )
         : current.businesses;
 
-    return {
-      ...current,
-      businesses: nextBusinesses,
-      businessClaims: nextClaims
-    };
+    current.businesses = nextBusinesses;
+    current.businessClaims = nextClaims;
+
+    queueNotifications(
+      current,
+      [targetUserId],
+      {
+        kind: "claim_reviewed",
+        title:
+          payload.decision === "approved"
+            ? `Claim approved for ${businessName}`
+            : `Claim update for ${businessName}`,
+        body:
+          payload.decision === "approved"
+            ? "Your claim was approved and this account can now use owner tools for the business."
+            : payload.adminNote?.trim() || "Your claim was reviewed and was not approved.",
+        actionHref: payload.decision === "approved" ? "/owner" : "/claim-business#claim-history",
+        actionLabel: payload.decision === "approved" ? "Open owner dashboard" : "View claim",
+        senderUserId: actor.userId!
+      },
+      reviewedAt
+    );
+
+    return current;
   });
 
   if (!updatedClaim) {

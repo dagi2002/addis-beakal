@@ -1,14 +1,20 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 
-import { BUSINESS_FEATURE_OPTIONS, BUSINESS_WEEKDAYS } from "@/features/businesses/catalog";
+import {
+  BUSINESS_FEATURE_OPTIONS,
+  BUSINESS_WEEKDAYS,
+  PRICE_TIER_OPTIONS,
+  formatBusinessFeatureLabel
+} from "@/features/businesses/catalog";
 import { cn } from "@/lib/utils";
 
 type CreateBusinessFormProps = {
   categories: Array<{ id: string; name: string }>;
   neighborhoods: Array<{ id: string; name: string }>;
+  initialBusinessId?: string;
   existingBusinesses: Array<{
     id: string;
     name: string;
@@ -68,7 +74,8 @@ function createInitialForm() {
 export function CreateBusinessForm({
   categories,
   neighborhoods,
-  existingBusinesses
+  existingBusinesses,
+  initialBusinessId = ""
 }: CreateBusinessFormProps) {
   const router = useRouter();
   const [form, setForm] = useState(createInitialForm);
@@ -79,6 +86,46 @@ export function CreateBusinessForm({
   const [isUploadingGallery, setIsUploadingGallery] = useState(false);
   const bannerInputRef = useRef<HTMLInputElement | null>(null);
   const galleryInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (!initialBusinessId) {
+      return;
+    }
+
+    const business = existingBusinesses.find((item) => item.id === initialBusinessId);
+    if (!business) {
+      return;
+    }
+
+    setSelectedBusinessId(initialBusinessId);
+    setForm({
+      name: business.name,
+      categoryId: business.categoryId,
+      neighborhoodId: business.neighborhoodId,
+      address: business.address,
+      googleMapsUrl: business.googleMapsUrl,
+      bannerImageUrl: business.bannerImageUrl,
+      priceTier: business.priceTier,
+      features: business.features,
+      tags: business.tags.join(", "),
+      shortDescription: business.shortDescription,
+      longDescription: business.longDescription,
+      photoUrls: business.photoUrls.length ? business.photoUrls : [""],
+      openingHours: business.openingHours.length
+        ? BUSINESS_WEEKDAYS.map((day, index) => ({
+            day,
+            hours: business.openingHours[index]?.[1] ?? "Closed"
+          }))
+        : createInitialHours(),
+      services: business.services.length
+        ? business.services.map((service) => ({
+            name: service.name,
+            priceEtb: String(service.priceEtb),
+            description: service.description
+          }))
+        : [{ name: "", priceEtb: "", description: "" }]
+    });
+  }, [existingBusinesses, initialBusinessId]);
 
   function updateField<Key extends keyof ReturnType<typeof createInitialForm>>(
     key: Key,
@@ -410,10 +457,11 @@ export function CreateBusinessForm({
             onChange={(event) => updateField("priceTier", event.target.value as "$" | "$$" | "$$$" | "$$$$")}
             value={form.priceTier}
           >
-            <option value="$">$ Budget · under 300 ETB</option>
-            <option value="$$">$$ Mid-range · 300-800 ETB</option>
-            <option value="$$$">$$$ Premium · 800-1,800 ETB</option>
-            <option value="$$$$">$$$$ Luxury · 1,800+ ETB</option>
+            {PRICE_TIER_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.shortLabel} {option.label}
+              </option>
+            ))}
           </select>
         </label>
       </section>
@@ -441,7 +489,7 @@ export function CreateBusinessForm({
               onClick={() => toggleFeature(feature)}
               type="button"
             >
-              {feature}
+              {formatBusinessFeatureLabel(feature)}
             </button>
           ))}
         </div>

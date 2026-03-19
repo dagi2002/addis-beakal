@@ -35,8 +35,8 @@ export default async function AdminDecisionsPage({ searchParams }: DecisionsPage
           { label: "Dashboard", href: "/admin/dashboard" },
           { label: "Decisions" }
         ]}
-        description="Reviewed claim history with reviewers, timestamps, and outcomes."
-        title="Recent Decisions"
+        description="Reviewed ownership outcomes only: approved, rejected, and displaced claims."
+        title="Reviewed Decisions"
       />
 
       <div className="flex flex-col gap-4 rounded-[28px] border border-[#e6ebf2] bg-white p-5 shadow-[0_14px_36px_rgba(34,51,84,0.06)] lg:flex-row lg:items-center lg:justify-between">

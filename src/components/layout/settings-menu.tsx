@@ -22,7 +22,7 @@ export function SettingsMenu({ displayName, role }: SettingsMenuProps) {
         onClick={() => setOpen((current) => !current)}
         type="button"
       >
-        Profile
+        Settings
         <ChevronDown className="h-4 w-4" />
       </button>
 
@@ -41,14 +41,31 @@ export function SettingsMenu({ displayName, role }: SettingsMenuProps) {
             </div>
 
             <div className="mt-3 flex flex-col">
-              <Link className="rounded-[16px] px-4 py-3 text-sm text-[color:var(--surface-dark)] hover:bg-[#f7f9fc]" href="/profile">
-                My profile
+              <Link
+                className="rounded-[16px] px-4 py-3 text-sm text-[color:var(--surface-dark)] hover:bg-[#f7f9fc]"
+                href="/notifications"
+              >
+                Inbox
               </Link>
+              <Link
+                className="rounded-[16px] px-4 py-3 text-sm text-[color:var(--surface-dark)] hover:bg-[#f7f9fc]"
+                href="/profile?section=settings"
+              >
+                Account settings
+              </Link>
+              {role === "owner" || role === "admin" ? (
+                <Link
+                  className="rounded-[16px] px-4 py-3 text-sm text-[color:var(--surface-dark)] hover:bg-[#f7f9fc]"
+                  href="/owner"
+                >
+                  Owner dashboard
+                </Link>
+              ) : null}
               <Link className="rounded-[16px] px-4 py-3 text-sm text-[color:var(--surface-dark)] hover:bg-[#f7f9fc]" href="/saved">
                 Saved places
               </Link>
               {role === "admin" ? (
-                <Link className="rounded-[16px] px-4 py-3 text-sm text-[color:var(--surface-dark)] hover:bg-[#f7f9fc]" href="/admin/claims">
+                <Link className="rounded-[16px] px-4 py-3 text-sm text-[color:var(--surface-dark)] hover:bg-[#f7f9fc]" href="/admin/dashboard">
                   Admin panel
                 </Link>
               ) : null}

@@ -22,7 +22,13 @@ export default async function AdminLayout({ children }: PropsWithChildren) {
                   Addis Beakal Admin
                 </Link>
               </div>
-              <div className="ml-auto">
+              <div className="ml-auto flex items-center gap-3">
+                <Link
+                  className="rounded-full border border-[#d8e2ee] bg-white px-4 py-2.5 text-sm font-semibold text-[#111b2d] transition hover:bg-[#f7f9fc]"
+                  href="/profile"
+                >
+                  Back to profile
+                </Link>
                 <SettingsMenu displayName={actor.user?.displayName ?? "Admin"} role={actor.role} />
               </div>
             </div>

@@ -10,6 +10,36 @@ export async function getHomePageData(viewerId?: string | null) {
   const featuredBusinesses = sortedBusinesses
     .slice(0, 6)
     .map((business) => mapBusinessCardData(business, database, viewerId));
+  const pulseBusinesses = database.businesses
+    .map((business) => {
+      const weeklyReviewCount = database.reviews.filter(
+        (review) =>
+          review.businessId === business.id &&
+          review.status === "published" &&
+          Date.now() - Date.parse(review.createdAt) <= 7 * 24 * 60 * 60 * 1000
+      ).length;
+      const weeklyViewCount = database.engagementEvents.filter(
+        (event) =>
+          event.businessId === business.id &&
+          event.type === "page_view" &&
+          Date.now() - Date.parse(event.createdAt) <= 7 * 24 * 60 * 60 * 1000
+      ).length;
+
+      return {
+        business,
+        weeklyReviewCount,
+        weeklyViewCount
+      };
+    })
+    .sort((left, right) =>
+      right.weeklyReviewCount - left.weeklyReviewCount ||
+      right.business.rating - left.business.rating ||
+      right.weeklyViewCount - left.weeklyViewCount ||
+      right.business.saveCount - left.business.saveCount ||
+      left.business.name.localeCompare(right.business.name)
+    )
+    .slice(0, 3)
+    .map(({ business }) => mapBusinessCardData(business, database, viewerId));
   const topRatedBusinesses = sortBusinesses(database.businesses, "top-rated")
     .slice(0, 3)
     .map((business) => mapBusinessCardData(business, database, viewerId));
@@ -30,6 +60,7 @@ export async function getHomePageData(viewerId?: string | null) {
 
   return {
     featuredBusinesses,
+    pulseBusinesses,
     topRatedBusinesses,
     recentReviews,
     neighborhoods: database.neighborhoods,

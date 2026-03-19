@@ -4,7 +4,11 @@ import { MapPin, Search, SlidersHorizontal } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-import { BUSINESS_FEATURE_OPTIONS } from "@/features/businesses/catalog";
+import {
+  BUSINESS_FEATURE_OPTIONS,
+  PRICE_TIER_OPTIONS,
+  formatBusinessFeatureLabel
+} from "@/features/businesses/catalog";
 import type { Category, DiscoverSort, Neighborhood } from "@/features/businesses/types";
 import { cn } from "@/lib/utils";
 
@@ -23,12 +27,7 @@ type DiscoverFiltersProps = {
 };
 
 const MIN_RATING_OPTIONS = [3, 3.5, 4, 4.5] as const;
-const PRICE_OPTIONS = [
-  { value: "$", label: "Budget · under 300 ETB" },
-  { value: "$$", label: "Mid-range · 300-800 ETB" },
-  { value: "$$$", label: "Premium · 800-1,800 ETB" },
-  { value: "$$$$", label: "Luxury · 1,800+ ETB" }
-] as const;
+const PRICE_OPTIONS = PRICE_TIER_OPTIONS;
 const FEATURE_OPTIONS = BUSINESS_FEATURE_OPTIONS;
 
 export function DiscoverFilters({
@@ -271,7 +270,7 @@ export function DiscoverFilters({
                     onClick={() => setFeatures((current) => toggleArrayValue(current, feature))}
                     type="button"
                   >
-                    {feature}
+                    {formatBusinessFeatureLabel(feature)}
                   </button>
                 ))}
               </div>

@@ -1,11 +1,11 @@
 "use client";
 
 import {
-  Activity,
+  BellRing,
   Building2,
   FileCheck2,
   LayoutDashboard,
-  Settings2,
+  MessageSquareWarning,
   Shield,
   Wrench
 } from "lucide-react";
@@ -17,8 +17,8 @@ import { cn } from "@/lib/utils";
 const navigationItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/claims", label: "Claims", icon: FileCheck2 },
-  { href: "/admin/activity", label: "Activity", icon: Activity },
-  { href: "/admin/decisions", label: "Decisions", icon: FileCheck2 },
+  { href: "/admin/moderation", label: "Moderation", icon: MessageSquareWarning },
+  { href: "/admin/messages", label: "Messages", icon: BellRing },
   { href: "/admin/admin", label: "Admin", icon: Shield },
   { href: "/admin/tools", label: "Tools", icon: Wrench }
 ] as const;

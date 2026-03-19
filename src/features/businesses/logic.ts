@@ -1,4 +1,10 @@
-import type { AppDatabase, Business, Review, Save } from "@/features/businesses/types";
+import type {
+  AppDatabase,
+  Business,
+  BusinessEngagementEvent,
+  Review,
+  Save
+} from "@/features/businesses/types";
 
 export function isPublicReview(review: Review) {
   return review.status === "published";
@@ -7,10 +13,14 @@ export function isPublicReview(review: Review) {
 export function recalculateBusinessMetrics(
   business: Business,
   reviews: Review[],
-  saves: Save[]
+  saves: Save[],
+  engagementEvents: BusinessEngagementEvent[]
 ): Business {
   const publicReviews = reviews.filter((review) => review.businessId === business.id && isPublicReview(review));
   const businessSaves = saves.filter((save) => save.businessId === business.id);
+  const pageViews = engagementEvents.filter(
+    (event) => event.businessId === business.id && event.type === "page_view"
+  );
   const reviewCount = publicReviews.length;
   const rating =
     reviewCount === 0
@@ -21,14 +31,15 @@ export function recalculateBusinessMetrics(
     ...business,
     rating: Number(rating.toFixed(1)),
     reviewCount,
-    saveCount: businessSaves.length
+    saveCount: businessSaves.length,
+    viewCount: pageViews.length
   };
 }
 
 export function syncBusinessMetrics(database: AppDatabase, businessId: string) {
   database.businesses = database.businesses.map((business) =>
     business.id === businessId
-      ? recalculateBusinessMetrics(business, database.reviews, database.saves)
+      ? recalculateBusinessMetrics(business, database.reviews, database.saves, database.engagementEvents)
       : business
   );
 
@@ -37,7 +48,7 @@ export function syncBusinessMetrics(database: AppDatabase, businessId: string) {
 
 export function syncAllBusinessMetrics(database: AppDatabase) {
   database.businesses = database.businesses.map((business) =>
-    recalculateBusinessMetrics(business, database.reviews, database.saves)
+    recalculateBusinessMetrics(business, database.reviews, database.saves, database.engagementEvents)
   );
 
   return database;
