@@ -1,5 +1,32 @@
 import { syncAllBusinessMetrics } from "@/features/businesses/logic";
-import type { AppDatabase } from "@/features/businesses/types";
+import type { AppDatabase, User } from "@/features/businesses/types";
+import { demoUsers } from "@/server/auth/seed-users";
+
+const reviewerUsers: User[] = [
+  "Sara M.",
+  "Eden T.",
+  "Samuel D.",
+  "Helen K.",
+  "Abel N.",
+  "Mimi A.",
+  "Noah G.",
+  "Rahel B.",
+  "Henok W.",
+  "Moderation Queue",
+  "Removed Review"
+].map((displayName, index) => ({
+  id: `user-reviewer-${index + 1}`,
+  email: `reviewer-${index + 1}@addisbeakal.test`,
+  passwordHash: demoUsers[0].passwordHash,
+  displayName,
+  role: "member",
+  createdAt: "2026-02-01T08:00:00.000Z",
+  updatedAt: "2026-02-01T08:00:00.000Z"
+}));
+
+const reviewAuthorIdByName = Object.fromEntries(
+  reviewerUsers.map((user) => [user.displayName, user.id])
+);
 
 function baseDatabase(): AppDatabase {
   return {
@@ -15,6 +42,7 @@ function baseDatabase(): AppDatabase {
       { id: "hood-piassa", name: "Piassa", slug: "piassa" },
       { id: "hood-mexico", name: "Mexico", slug: "mexico" }
     ],
+    users: [...demoUsers, ...reviewerUsers],
     businesses: [
       {
         id: "biz-tomoca-atlas",
@@ -111,169 +139,203 @@ function baseDatabase(): AppDatabase {
       {
         id: "rev-1",
         businessId: "biz-tomoca-atlas",
+        authorId: reviewAuthorIdByName["Sara M."],
         authorName: "Sara M.",
         rating: 5,
         title: "The pace feels very Addis",
         body: "Fast service, great macchiato, and the kind of place that still feels anchored in the city.",
         visitDate: "2026-02-12",
         createdAt: "2026-02-13T10:00:00.000Z",
+        updatedAt: "2026-02-13T10:00:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-2",
         businessId: "biz-tomoca-atlas",
+        authorId: reviewAuthorIdByName["Eden T."],
         authorName: "Eden T.",
         rating: 4,
         title: "Reliable stop before meetings",
         body: "Easy coffee run with the usual crowd. Beans were fresh and the service moved quickly.",
         visitDate: "2026-01-29",
         createdAt: "2026-01-30T08:30:00.000Z",
+        updatedAt: "2026-01-30T08:30:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-3",
         businessId: "biz-yod",
+        authorId: reviewAuthorIdByName["Samuel D."],
         authorName: "Samuel D.",
         rating: 5,
         title: "Best for hosting visitors",
         body: "The performance element makes it memorable, and the whole experience feels polished.",
         visitDate: "2026-02-20",
         createdAt: "2026-02-21T18:10:00.000Z",
+        updatedAt: "2026-02-21T18:10:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-4",
         businessId: "biz-yod",
+        authorId: reviewAuthorIdByName["Helen K."],
         authorName: "Helen K.",
         rating: 4,
         title: "Big energy, a little loud",
         body: "Great for a celebratory dinner. Expect a lively room and plan ahead for peak time.",
         visitDate: "2026-02-08",
         createdAt: "2026-02-09T20:45:00.000Z",
+        updatedAt: "2026-02-09T20:45:00.000Z",
         status: "published",
-        reportCount: 1
+        reportCount: 1,
+        photoUrls: []
       },
       {
         id: "rev-5",
         businessId: "biz-sishu",
+        authorId: reviewAuthorIdByName["Abel N."],
         authorName: "Abel N.",
         rating: 4,
         title: "Solid lunch meeting choice",
         body: "The menu works for mixed preferences and the setting feels current without trying too hard.",
         visitDate: "2026-02-18",
         createdAt: "2026-02-19T12:00:00.000Z",
+        updatedAt: "2026-02-19T12:00:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-6",
         businessId: "biz-sishu",
+        authorId: reviewAuthorIdByName["Mimi A."],
         authorName: "Mimi A.",
         rating: 3,
         title: "Good, but timing slipped",
         body: "Nice room and friendly team, though service slowed down during the lunch rush.",
         visitDate: "2026-01-17",
         createdAt: "2026-01-17T14:00:00.000Z",
+        updatedAt: "2026-01-17T14:00:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-7",
         businessId: "biz-fendika",
+        authorId: reviewAuthorIdByName["Noah G."],
         authorName: "Noah G.",
         rating: 5,
         title: "A real city highlight",
         body: "If you want something specific to Addis rather than generic nightlife, this is the kind of place to start.",
         visitDate: "2026-02-01",
         createdAt: "2026-02-02T19:05:00.000Z",
+        updatedAt: "2026-02-02T19:05:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-8",
         businessId: "biz-bilos",
+        authorId: reviewAuthorIdByName["Rahel B."],
         authorName: "Rahel B.",
         rating: 4,
         title: "Pastries worth repeating",
         body: "Simple, easy, and consistently good for a quick catch-up or coffee break.",
         visitDate: "2026-02-10",
         createdAt: "2026-02-10T09:20:00.000Z",
+        updatedAt: "2026-02-10T09:20:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-9",
         businessId: "biz-bilos",
+        authorId: reviewAuthorIdByName["Henok W."],
         authorName: "Henok W.",
         rating: 5,
         title: "Morning favorite",
         body: "Friendly staff and the kind of bakery that gets recommended by locals for a reason.",
         visitDate: "2026-02-11",
         createdAt: "2026-02-11T07:40:00.000Z",
+        updatedAt: "2026-02-11T07:40:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-10",
         businessId: "biz-tomoca-atlas",
+        authorId: reviewAuthorIdByName["Moderation Queue"],
         authorName: "Moderation Queue",
         rating: 1,
         title: "Should not count yet",
         body: "This review is pending and intentionally excluded from the public score.",
         visitDate: "2026-02-04",
         createdAt: "2026-02-05T06:10:00.000Z",
+        updatedAt: "2026-02-05T06:10:00.000Z",
         status: "pending",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-11",
         businessId: "biz-sishu",
+        authorId: reviewAuthorIdByName["Removed Review"],
         authorName: "Removed Review",
         rating: 1,
         title: "Removed review",
         body: "This review exists to prove removed content does not affect ratings.",
         visitDate: "2026-01-12",
         createdAt: "2026-01-13T10:00:00.000Z",
+        updatedAt: "2026-01-13T10:00:00.000Z",
         status: "removed",
-        reportCount: 2
+        reportCount: 2,
+        photoUrls: []
       }
     ],
     saves: [
       {
         id: "save-1",
         businessId: "biz-yod",
-        viewerId: "seed_viewer_1",
+        userId: "user-demo-member",
         createdAt: "2026-02-21T18:20:00.000Z"
       },
       {
         id: "save-2",
         businessId: "biz-yod",
-        viewerId: "seed_viewer_2",
+        userId: reviewAuthorIdByName["Samuel D."],
         createdAt: "2026-02-21T18:30:00.000Z"
       },
       {
         id: "save-3",
         businessId: "biz-tomoca-atlas",
-        viewerId: "seed_viewer_3",
+        userId: reviewAuthorIdByName["Sara M."],
         createdAt: "2026-02-14T09:00:00.000Z"
       },
       {
         id: "save-4",
         businessId: "biz-fendika",
-        viewerId: "seed_viewer_4",
+        userId: reviewAuthorIdByName["Noah G."],
         createdAt: "2026-02-02T19:40:00.000Z"
       },
       {
         id: "save-5",
         businessId: "biz-bilos",
-        viewerId: "seed_viewer_5",
+        userId: reviewAuthorIdByName["Rahel B."],
         createdAt: "2026-02-11T07:50:00.000Z"
       }
     ],
-    reports: []
+    reports: [],
+    businessClaims: []
   };
 }
 

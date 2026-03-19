@@ -4,14 +4,22 @@
 
 :root {
   color-scheme: light;
-  --background: #f7f1e8;
-  --surface: rgba(255, 255, 255, 0.78);
-  --surface-strong: rgba(255, 255, 255, 0.92);
-  --foreground: #171717;
-  --muted: #5d5d5d;
-  --border: rgba(23, 23, 23, 0.08);
+  --background: #f6efe3;
+  --background-strong: #fff8ef;
+  --surface: rgba(255, 249, 239, 0.82);
+  --surface-strong: rgba(255, 252, 247, 0.94);
+  --surface-dark: #1f2b25;
+  --foreground: #20160f;
+  --muted: #6c6258;
+  --muted-strong: #4f453c;
+  --border: rgba(62, 46, 31, 0.12);
+  --accent: #c55b2d;
+  --accent-strong: #7f2f17;
+  --accent-soft: #f4d8bc;
+  --moss: #365847;
+  --gold: #c9a24a;
   --font-body: "Avenir Next", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-heading: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --font-heading: Georgia, "Times New Roman", serif;
 }
 
 * {
@@ -27,8 +35,9 @@ body {
   min-height: 100vh;
   font-family: var(--font-body);
   background:
-    linear-gradient(180deg, rgba(247, 241, 232, 0.96), rgba(247, 241, 232, 1)),
-    radial-gradient(circle at top, rgba(212, 169, 71, 0.18), transparent 30%);
+    radial-gradient(circle at top left, rgba(197, 91, 45, 0.18), transparent 24%),
+    radial-gradient(circle at top right, rgba(54, 88, 71, 0.14), transparent 28%),
+    linear-gradient(180deg, #fff9f0 0%, #f4eadb 42%, #efe5d7 100%);
   color: var(--foreground);
 }
 
@@ -54,5 +63,62 @@ textarea {
 }
 
 ::selection {
-  background: rgba(216, 110, 57, 0.2);
+  background: rgba(197, 91, 45, 0.24);
+}
+
+.page-title {
+  font-size: clamp(2.4rem, 5vw, 5.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
+  font-weight: 700;
+}
+
+@layer components {
+  .glass-panel {
+    background: linear-gradient(180deg, rgba(255, 250, 242, 0.9), rgba(255, 247, 237, 0.76));
+    border: 1px solid rgba(62, 46, 31, 0.12);
+    box-shadow: 0 24px 80px rgba(66, 47, 29, 0.12);
+    backdrop-filter: blur(18px);
+  }
+
+  .dark-panel {
+    background:
+      radial-gradient(circle at top left, rgba(201, 162, 74, 0.12), transparent 26%),
+      linear-gradient(180deg, rgba(31, 43, 37, 0.98), rgba(19, 27, 22, 0.98));
+    border: 1px solid rgba(255, 240, 220, 0.08);
+    box-shadow: 0 28px 90px rgba(22, 18, 12, 0.26);
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .editorial-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 3.6vw, 3.8rem);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    color: #23170f;
+  }
+
+  .grain-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .grain-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+      radial-gradient(rgba(255, 255, 255, 0.12) 0.7px, transparent 0.7px);
+    background-size: auto, 12px 12px;
+    opacity: 0.28;
+    pointer-events: none;
+  }
 }

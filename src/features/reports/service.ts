@@ -1,6 +1,8 @@
 import { z } from "zod";
 
 import type { Report } from "@/features/businesses/types";
+import type { AppActor } from "@/server/auth/actor";
+import { assertCanSubmitReport } from "@/server/auth/policies";
 import { readDatabase, updateDatabase } from "@/server/database";
 
 const reportReasons = [
@@ -21,7 +23,8 @@ export const submitReportSchema = z.object({
   contactEmail: z.string().email().optional().or(z.literal(""))
 });
 
-export async function submitReport(input: unknown, viewerId: string) {
+export async function submitReport(input: unknown, actor: AppActor) {
+  assertCanSubmitReport(actor);
   const payload = submitReportSchema.parse(input);
   const database = await readDatabase();
 
@@ -44,7 +47,7 @@ export async function submitReport(input: unknown, viewerId: string) {
     id: `report_${crypto.randomUUID()}`,
     businessId: payload.businessId,
     reviewId: payload.reviewId,
-    viewerId,
+    userId: actor.userId!,
     reason: payload.reason,
     details: payload.details,
     contactEmail: payload.contactEmail || undefined,

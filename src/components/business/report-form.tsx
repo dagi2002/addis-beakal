@@ -1,7 +1,10 @@
 "use client";
 
 import { Flag } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+
+import { ModalShell } from "@/components/shared/modal-shell";
 
 type ReportFormProps = {
   businessId: string;
@@ -18,6 +21,8 @@ const reasons = [
 ];
 
 export function ReportForm({ businessId, reviewId, label = "Report" }: ReportFormProps) {
+  const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState(reasons[0]);
   const [details, setDetails] = useState("");
@@ -28,7 +33,7 @@ export function ReportForm({ businessId, reviewId, label = "Report" }: ReportFor
   return (
     <div className="space-y-3">
       <button
-        className="inline-flex items-center gap-2 rounded-full border border-black/10 px-3 py-2 text-sm text-black/65 transition hover:bg-black/5"
+        className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[rgba(255,255,255,0.66)] px-4 py-2.5 text-sm text-[var(--muted-strong)] transition hover:bg-[rgba(197,91,45,0.08)]"
         onClick={() => setOpen((current) => !current)}
         type="button"
       >
@@ -36,9 +41,14 @@ export function ReportForm({ businessId, reviewId, label = "Report" }: ReportFor
         {label}
       </button>
 
-      {open ? (
+      <ModalShell
+        description="Use this to flag a listing or review for moderation. Reports create a real moderation record instead of disappearing into client-only state."
+        onClose={() => setOpen(false)}
+        open={open}
+        title={reviewId ? "Report this review" : "Report this listing"}
+      >
         <form
-          className="space-y-3 rounded-3xl border border-black/8 bg-white/80 p-4"
+          className="space-y-3"
           onSubmit={(event) => {
             event.preventDefault();
             setMessage("");
@@ -58,6 +68,11 @@ export function ReportForm({ businessId, reviewId, label = "Report" }: ReportFor
 
               const payload = (await response.json()) as { message?: string; error?: string };
 
+              if (response.status === 401) {
+                router.push(`/login?next=${encodeURIComponent(pathname || "/discover")}`);
+                return;
+              }
+
               if (!response.ok) {
                 setMessage(payload.error ?? "We could not submit that report.");
                 return;
@@ -72,7 +87,7 @@ export function ReportForm({ businessId, reviewId, label = "Report" }: ReportFor
         >
           <div className="grid gap-3 md:grid-cols-2">
             <select
-              className="rounded-2xl border border-black/10 bg-black/5 px-4 py-3 outline-none transition focus:border-clay"
+              className="rounded-[22px] border border-[var(--border)] bg-[rgba(255,255,255,0.72)] px-4 py-3 outline-none transition focus:border-[var(--accent)]"
               onChange={(event) => setReason(event.target.value)}
               value={reason}
             >
@@ -83,7 +98,7 @@ export function ReportForm({ businessId, reviewId, label = "Report" }: ReportFor
               ))}
             </select>
             <input
-              className="rounded-2xl border border-black/10 bg-black/5 px-4 py-3 outline-none transition focus:border-clay"
+              className="rounded-[22px] border border-[var(--border)] bg-[rgba(255,255,255,0.72)] px-4 py-3 outline-none transition focus:border-[var(--accent)]"
               onChange={(event) => setContactEmail(event.target.value)}
               placeholder="Optional contact email"
               type="email"
@@ -91,15 +106,18 @@ export function ReportForm({ businessId, reviewId, label = "Report" }: ReportFor
             />
           </div>
           <textarea
-            className="min-h-28 w-full rounded-2xl border border-black/10 bg-black/5 px-4 py-3 outline-none transition focus:border-clay"
+            className="min-h-32 w-full rounded-[22px] border border-[var(--border)] bg-[rgba(255,255,255,0.72)] px-4 py-3 outline-none transition focus:border-[var(--accent)]"
             onChange={(event) => setDetails(event.target.value)}
             placeholder="Tell us what happened and why this should be reviewed."
             value={details}
           />
           <div className="flex items-center justify-between gap-3">
-            <p className="text-xs text-black/50">Reports enter a moderation queue and are excluded from public scoring when removed.</p>
+            <p className="max-w-xl text-xs leading-5 text-[var(--muted)]">
+              Reports enter a moderation queue. If a review is later removed, it no longer contributes
+              to the business rating or review count.
+            </p>
             <button
-              className="rounded-full bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+              className="rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
               disabled={isPending}
               type="submit"
             >
@@ -107,9 +125,9 @@ export function ReportForm({ businessId, reviewId, label = "Report" }: ReportFor
             </button>
           </div>
         </form>
-      ) : null}
+      </ModalShell>
 
-      {message ? <p className="text-sm text-black/60">{message}</p> : null}
+      {message ? <p className="text-sm text-[var(--muted)]">{message}</p> : null}
     </div>
   );
 }

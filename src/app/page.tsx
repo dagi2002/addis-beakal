@@ -1,152 +1,296 @@
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Star, TrendingUp } from "lucide-react";
+import {
+  Activity,
+  ArrowRight,
+  Coffee,
+  Drum,
+  Flame,
+  Heart,
+  Hotel,
+  MapPin,
+  Music4,
+  Scissors,
+  Sparkles,
+  Star,
+  Stethoscope,
+  Utensils
+} from "lucide-react";
 
 import { BusinessCard } from "@/components/business/business-card";
-import { ReportForm } from "@/components/business/report-form";
 import { SiteShell } from "@/components/layout/site-shell";
-import { Pill } from "@/components/shared/pill";
-import { getHomePageData } from "@/features/businesses/service";
+import { getHomePageData } from "@/features/home/service";
+import { cn } from "@/lib/utils";
 import { getViewerId } from "@/lib/viewer";
-import { formatCompactNumber, formatRating } from "@/lib/utils";
+
+const categoryCards = [
+  { label: "Restaurants", description: "Traditional & modern cuisine", href: "/discover?query=restaurant", icon: Utensils, color: "bg-[#fff4e9] text-[#d86e39]" },
+  { label: "Cafes", description: "Coffee & buna spots", href: "/discover?category=coffee", icon: Coffee, color: "bg-[#fff6db] text-[#f4a62a]" },
+  { label: "Hotels", description: "Stay in comfort", href: "/discover?query=hotel", icon: Hotel, color: "bg-[#edf2ff] text-[#5578e8]" },
+  { label: "Salons", description: "Hair & beauty", href: "/discover?query=salon", icon: Sparkles, color: "bg-[#fdebf5] text-[#e0569b]" },
+  { label: "Barbers", description: "Fresh cuts & styles", href: "/discover?query=barber", icon: Scissors, color: "bg-[#eef2f8] text-[#4e607a]" },
+  { label: "Gyms", description: "Fitness & wellness", href: "/discover?query=gym", icon: Activity, color: "bg-[#edf9f2] text-[#39a379]" },
+  { label: "Clinics", description: "Health & care", href: "/discover?query=clinic", icon: Stethoscope, color: "bg-[#ecf9ff] text-[#42a9c2]" },
+  { label: "Bakery", description: "Fresh baked goods", href: "/discover?query=bakery", icon: Heart, color: "bg-[#fff6d7] text-[#d9a11f]" },
+  { label: "Live Music", description: "Nightlife & culture", href: "/discover?query=music", icon: Music4, color: "bg-[#f3edff] text-[#8b5fe4]" },
+  { label: "Culture", description: "Arts & events", href: "/discover?category=culture", icon: Drum, color: "bg-[#fceef0] text-[#d46b78]" }
+] as const;
+
+const curatedTags = [
+  "Best Buna",
+  "Fasting-Friendly",
+  "Trending Now",
+  "Strong WiFi",
+  "Date Spots",
+  "Family-Friendly",
+  "Live Music",
+  "Open Late"
+];
 
 export default async function HomePage() {
   const viewerId = await getViewerId();
   const data = await getHomePageData(viewerId);
 
   return (
-    <SiteShell className="gap-14">
-      <section className="grid gap-8 rounded-[36px] border border-black/8 bg-white/70 p-6 shadow-soft backdrop-blur lg:grid-cols-[1.35fr_0.9fr] lg:p-8">
-        <div className="space-y-6">
-          <Pill className="bg-clay/10 text-clay">Addis discovery, rebuilt for production</Pill>
-          <div className="space-y-4">
-            <h1 className="max-w-3xl font-[var(--font-heading)] text-4xl leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-              Find the local spots Addis people actually save, review, and report with confidence.
-            </h1>
-            <p className="max-w-2xl text-base leading-7 text-black/65 sm:text-lg">
-              Phase 1 focuses on the public browsing experience, real derived stats, moderation-aware
-              review scoring, and cleaner shared logic than the original Base44 build.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              className="inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-medium text-white"
-              href="/discover"
-            >
-              Explore businesses
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <a
-              className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-5 py-3 text-sm font-medium"
-              href="#reporting-and-moderation"
-            >
-              Review trust & safety
-            </a>
-          </div>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          {[
-            ["Businesses", formatCompactNumber(data.stats.businessCount)],
-            ["Published reviews", formatCompactNumber(data.stats.reviewCount)],
-            ["Neighborhoods", formatCompactNumber(data.stats.neighborhoodCount)],
-            ["Saves", formatCompactNumber(data.stats.saveCount)]
-          ].map(([label, value]) => (
-            <div key={label} className="rounded-[28px] border border-black/8 bg-sand p-5">
-              <p className="text-sm text-black/55">{label}</p>
-              <p className="mt-3 text-3xl font-semibold tracking-tight">{value}</p>
+    <SiteShell className="pb-2 pt-2" compactMain>
+      <section className="dark-panel grain-overlay overflow-hidden rounded-[40px] px-6 py-8 lg:px-8 lg:py-10">
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+          <div className="space-y-8 text-white">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white/88">
+              <Flame className="h-4 w-4 text-[#f3bf74]" />
+              Addis discovery, reimagined
             </div>
-          ))}
-        </div>
-      </section>
+            <div className="max-w-4xl">
+              <h1 className="page-title max-w-4xl text-white">
+                A richer way to find
+                <br />
+                the places that make
+                <br />
+                <span className="text-[#f3bf74]">Addis feel alive.</span>
+              </h1>
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-white/68">
+                Discover neighborhood favorites, polished destinations, and everyday essentials
+                through a warmer city guide built around real context instead of generic listings.
+              </p>
+            </div>
 
-      <section className="space-y-5">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-sm uppercase tracking-[0.24em] text-black/45">Featured now</p>
-            <h2 className="mt-2 font-[var(--font-heading)] text-3xl tracking-tight">Core public experience</h2>
-          </div>
-          <Link className="text-sm font-medium text-black/60" href="/discover">
-            Browse all
-          </Link>
-        </div>
-        <div className="grid gap-5 lg:grid-cols-3">
-          {data.featuredBusinesses.map((business) => (
-            <BusinessCard key={business.id} business={business} />
-          ))}
-        </div>
-      </section>
-
-      <section className="grid gap-5 lg:grid-cols-[1fr_1.1fr]">
-        <div className="rounded-[32px] border border-black/8 bg-white/80 p-6 shadow-soft">
-          <p className="text-sm uppercase tracking-[0.24em] text-black/45">Why this phase first</p>
-          <div className="mt-5 space-y-4">
-            <div className="flex gap-4">
-              <ShieldCheck className="mt-1 h-5 w-5 text-moss" />
-              <div>
-                <h3 className="font-semibold">Moderation-aware ratings</h3>
-                <p className="text-sm leading-6 text-black/60">
-                  Only published reviews contribute to public scores. Pending and removed content is excluded from the aggregate.
-                </p>
+            <div className="grid gap-3 rounded-[28px] border border-white/10 bg-white/8 p-4 backdrop-blur lg:max-w-[760px] lg:grid-cols-[1fr_220px_170px]">
+              <div className="rounded-[22px] border border-white/8 bg-white/8 px-4 py-4 text-sm text-white/68">
+                Restaurants, buna spots, salons, bakeries, culture...
               </div>
-            </div>
-            <div className="flex gap-4">
-              <TrendingUp className="mt-1 h-5 w-5 text-clay" />
-              <div>
-                <h3 className="font-semibold">Real home metrics</h3>
-                <p className="text-sm leading-6 text-black/60">
-                  Stats are derived from the underlying business, review, neighborhood, and save records instead of hard-coded placeholders.
-                </p>
+              <div className="rounded-[22px] border border-white/8 bg-white/8 px-4 py-4 text-sm text-white/58">
+                Bole, Piassa, Mexico, Kazanchis
               </div>
+              <Link
+                className="inline-flex items-center justify-center gap-2 rounded-[22px] bg-[var(--accent)] px-6 py-4 text-sm font-bold text-white transition hover:bg-[var(--accent-strong)]"
+                href="/discover"
+              >
+                Start exploring
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
-            <div className="flex gap-4">
-              <Star className="mt-1 h-5 w-5 text-gold" />
-              <div>
-                <h3 className="font-semibold">Shared logic for saves and discovery</h3>
-                <p className="text-sm leading-6 text-black/60">
-                  The discovery, save, and aggregation flows now live behind reusable services instead of being duplicated in page code.
-                </p>
-              </div>
+
+            <div className="flex flex-wrap gap-3">
+              {categoryCards.slice(0, 8).map((category) => (
+                <Link
+                  key={category.label}
+                  className="rounded-full border border-white/10 bg-white/8 px-4 py-2 text-sm font-medium text-white/88 transition hover:bg-white/14"
+                  href={category.href}
+                >
+                  {category.label}
+                </Link>
+              ))}
             </div>
           </div>
-        </div>
 
-        <div className="rounded-[32px] border border-black/8 bg-white/80 p-6 shadow-soft">
-          <p className="text-sm uppercase tracking-[0.24em] text-black/45">Recent published reviews</p>
-          <div className="mt-5 grid gap-4">
-            {data.recentReviews.map((review) => (
-              <article key={review.id} className="rounded-[24px] border border-black/8 bg-black/[0.03] p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <h3 className="font-medium">{review.businessName}</h3>
-                    <p className="text-sm text-black/55">{review.authorName}</p>
+          <div className="space-y-5">
+            <div className="rounded-[32px] border border-white/10 bg-[rgba(255,246,233,0.9)] p-5 text-[#2b1a10]">
+              <p className="section-label">Pulse</p>
+              <h2 className="mt-3 font-[var(--font-heading)] text-[2rem] leading-[0.98] tracking-[-0.05em]">
+                Places people are actually talking about this week.
+              </h2>
+              <div className="mt-5 space-y-3">
+                {data.featuredBusinesses.slice(0, 3).map((business, index) => (
+                  <div
+                    key={business.id}
+                    className="rounded-[22px] border border-[rgba(62,46,31,0.1)] bg-white/72 p-4"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                        0{index + 1}
+                      </span>
+                      <div className="flex items-center gap-1 text-xs font-semibold text-[var(--gold)]">
+                        <Star className="h-3.5 w-3.5 fill-current" />
+                        {business.rating.toFixed(1)}
+                      </div>
+                    </div>
+                    <p className="mt-2 font-[var(--font-heading)] text-[1.45rem] leading-[1.02] tracking-[-0.04em]">
+                      {business.name}
+                    </p>
+                    <p className="mt-2 text-sm text-[var(--muted)]">
+                      {business.category} · {business.neighborhood}
+                    </p>
                   </div>
-                  <span className="rounded-full bg-white/70 px-3 py-1 text-sm font-medium">
-                    {formatRating(review.rating)}
-                  </span>
-                </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="glass-panel rounded-[28px] p-5">
+              <p className="section-label">Signals</p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {[
+                  ["Businesses", data.stats.businessCount.toLocaleString()],
+                  ["Published reviews", data.stats.reviewCount.toLocaleString()],
+                  ["Neighborhoods", data.stats.neighborhoodCount.toLocaleString()],
+                  ["Saves", data.stats.saveCount.toLocaleString()]
+                ].map(([label, value]) => (
+                  <div key={label} className="rounded-[22px] bg-[rgba(255,255,255,0.58)] p-4">
+                    <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">{label}</p>
+                    <p className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-[#23170f]">{value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="glass-panel rounded-[36px] p-6 lg:p-8">
+          <p className="section-label">Browse with intent</p>
+          <h2 className="mt-4 editorial-title">Choose a lane, then follow the strongest local signals.</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {categoryCards.map((category) => {
+              const Icon = category.icon;
+
+              return (
+                <Link
+                  key={category.label}
+                  className="group rounded-[26px] border border-[rgba(62,46,31,0.1)] bg-[rgba(255,255,255,0.62)] p-5 transition hover:-translate-y-1 hover:shadow-[0_22px_50px_rgba(65,45,28,0.12)]"
+                  href={category.href}
+                >
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${category.color}`}>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="mt-5 text-xl font-semibold tracking-[-0.03em] text-[#23170f]">
+                    {category.label}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{category.description}</p>
+                  <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[var(--accent-strong)]">
+                    Browse
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="dark-panel rounded-[36px] p-6 lg:p-8">
+          <p className="section-label text-[#f3bf74]">Curated for Addis</p>
+          <h2 className="mt-4 font-[var(--font-heading)] text-[2.7rem] leading-[0.96] tracking-[-0.05em] text-white">
+            Discovery should feel like city knowledge, not database plumbing.
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-white/64">
+            Start from the cues people actually use here: coffee worth the stop, places good for
+            families, corners with strong WiFi, and destinations that still feel like Addis.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {curatedTags.map((tag, index) => (
+              <span
+                key={tag}
+                className={cn(
+                  "rounded-full border px-4 py-2.5 text-sm font-semibold text-white/88",
+                  index % 4 === 0 && "border-[#f3bf74]/30 bg-[#f3bf74]/12",
+                  index % 4 === 1 && "border-[#84b79f]/30 bg-[#84b79f]/12",
+                  index % 4 === 2 && "border-[#f1a48a]/28 bg-[#f1a48a]/10",
+                  index % 4 === 3 && "border-white/12 bg-white/8"
+                )}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {data.recentReviews.slice(0, 4).map((review) => (
+              <div key={review.id} className="rounded-[24px] border border-white/8 bg-white/8 p-4 text-white">
+                <p className="text-xs uppercase tracking-[0.18em] text-white/46">{review.businessName}</p>
                 <p className="mt-3 font-medium">{review.title}</p>
-                <p className="mt-2 text-sm leading-6 text-black/60">{review.body}</p>
-              </article>
+                <p className="mt-2 text-sm leading-6 text-white/64">{review.body}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section
-        className="grid gap-6 rounded-[32px] border border-black/8 bg-white/80 p-6 shadow-soft lg:grid-cols-[1fr_0.9fr]"
-        id="reporting-and-moderation"
-      >
-        <div className="space-y-4">
-          <p className="text-sm uppercase tracking-[0.24em] text-black/45">Reporting and moderation</p>
-          <h2 className="font-[var(--font-heading)] text-3xl tracking-tight">
-            Trust and safety starts in the data model, not as a later patch.
-          </h2>
-          <p className="max-w-2xl text-sm leading-7 text-black/65">
-            This rebuild starts with explicit review states, real report records, and derived rating rules that
-            immediately exclude anything that is no longer public.
-          </p>
+      <section className="space-y-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="section-label">Right now</p>
+            <h2 className="editorial-title mt-3">Places getting pulled into people’s rotation.</h2>
+          </div>
+          <Link
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent-strong)]"
+            href="/discover"
+          >
+            See all discovery
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
-        <ReportForm businessId={data.featuredBusinesses[0]?.id ?? ""} label="Submit a demo business report" />
+        <div className="grid gap-5 lg:grid-cols-3">
+          {data.featuredBusinesses.slice(0, 6).map((business) => (
+            <BusinessCard key={business.id} business={business} />
+          ))}
+        </div>
+      </section>
+
+      <section className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="glass-panel rounded-[36px] p-6 lg:p-8">
+          <p className="section-label">Top rated</p>
+          <h2 className="mt-4 editorial-title">When quality matters more than novelty.</h2>
+          <div className="mt-8 grid gap-5">
+            {data.topRatedBusinesses.map((business) => (
+              <BusinessCard key={business.id} business={business} />
+            ))}
+          </div>
+        </div>
+
+        <div className="dark-panel rounded-[36px] p-6 lg:p-8">
+          <p className="section-label text-[#f3bf74]">For business owners</p>
+          <h2 className="mt-4 font-[var(--font-heading)] text-[2.8rem] leading-[0.95] tracking-[-0.05em] text-white">
+            Claim your listing before someone else defines your first impression.
+          </h2>
+          <p className="mt-5 text-base leading-8 text-white/66">
+            Own the page, respond to reviews, and turn local discovery into an advantage instead of
+            a missed opportunity.
+          </p>
+          <div className="mt-8 grid gap-4">
+            {[
+              "Control your public business story",
+              "Respond directly to customer reviews",
+              "Show updated details and stronger trust signals"
+            ].map((item) => (
+              <div key={item} className="flex items-start gap-3 rounded-[22px] border border-white/10 bg-white/8 p-4 text-white/82">
+                <MapPin className="mt-0.5 h-4 w-4 text-[#f3bf74]" />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              className="rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-bold text-white transition hover:bg-[var(--accent-strong)]"
+              href="/claim-business"
+            >
+              Claim your business
+            </Link>
+            <Link
+              className="rounded-full border border-white/12 bg-white/8 px-6 py-3 text-sm font-bold text-white/88"
+              href="/discover"
+            >
+              Explore first
+            </Link>
+          </div>
+        </div>
       </section>
     </SiteShell>
   );

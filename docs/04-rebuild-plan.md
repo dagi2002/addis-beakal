@@ -1,30 +1,77 @@
 # Rebuild Plan
 
-These notes are based on the current repository state on 2026-03-16.
+These notes align the repository with the source documentation imported from the original planning files on 2026-03-16.
 
-## Current blocker
+## Exact Stack
 
-The existing source-of-truth docs in this folder are present but empty, so the detailed product, audit, and UI guidance described in the repo brief is not yet available in the working tree.
+- Next.js 15 App Router
+- React 19
+- TypeScript 5
+- Tailwind CSS with project-owned design tokens
+- PostgreSQL for production persistence
+- Prisma as the database access layer
+- Auth.js with Argon2id-backed credentials and role-aware sessions
+- Zod for API and form validation
+- Vitest for domain tests
+- Playwright for launch-critical end-to-end flows
 
-## Working assumptions for Phase 1
+## Recommended Folder Structure
 
-- Preserve a polished, modern visual direction without locking in a full redesign before the missing docs land.
-- Build the public browsing experience first.
-- Make rating, save, and report logic correct from the start.
-- Keep data, business logic, and UI separated so the current dev adapter can later be replaced by a production database adapter without rewriting the app surface.
+```text
+src/
+  app/                  Route entrypoints and API handlers
+  components/           Reusable UI primitives and feature UI blocks
+  features/
+    home/               Home page read models and services
+    discovery/          Search/filter read models and UX helpers
+    businesses/         Business detail models, aggregates, and business rules
+    saves/              Save and unsave mutation services
+    reports/            Report submission logic and moderation-safe flows
+  server/
+    auth/               Session actors, role checks, policies
+    data/               Adapter-agnostic persistence entrypoints
+    repositories/       File adapter now, Prisma adapter later
+  lib/                  Small shared helpers
+  types/                Shared app-wide type helpers as needed
+```
 
-## Recommended production stack
+## Implementation Phases
 
-- Next.js App Router with React and TypeScript
-- Tailwind CSS with design tokens and reusable primitives
-- PostgreSQL with Prisma for the production data layer
-- Strong server-side auth and role boundaries in a later phase
-- Zod for request validation
-- Vitest for domain logic tests
+### Phase 1
 
-## Proposed implementation phases
+- Import and preserve product context in-repo
+- Keep the current visual direction
+- Build the public home, discovery, and business detail experience
+- Use real derived home metrics
+- Keep save and unsave behavior correct
+- Exclude removed reviews from public ratings
+- Ship real report submission UI
+- Scaffold auth and repository boundaries without blocking delivery
 
-1. Foundation and public experience
-2. Real auth, roles, and protected write flows
-3. Production database adapter, moderation tooling, and admin surfaces
-4. Search quality, performance hardening, observability, and launch polish
+### Phase 2
+
+- Real auth
+- Roles and ownership checks
+- Review submission
+- Profiles and saved places
+- Claim your business flow
+
+### Phase 3
+
+- PostgreSQL and Prisma adapter
+- Moderation queues
+- Admin and owner surfaces
+- Email notifications
+- Audit logging
+
+### Phase 4
+
+- Search quality
+- Performance tuning
+- Observability
+- Launch QA
+- Seed expansion across more Addis neighborhoods and categories
+
+## Phase 1 Delivery Notes
+
+Phase 1 should optimize for production-minded structure and a trustworthy public experience, not for total feature parity with the original Base44 app. The rebuild should earn the right to expand by making the foundation reliable first.

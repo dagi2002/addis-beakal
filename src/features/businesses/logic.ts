@@ -45,7 +45,7 @@ export function syncAllBusinessMetrics(database: AppDatabase) {
 
 export function toggleBusinessSave(database: AppDatabase, businessId: string, viewerId: string) {
   const existingSave = database.saves.find(
-    (save) => save.businessId === businessId && save.viewerId === viewerId
+    (save) => save.businessId === businessId && save.userId === viewerId
   );
 
   if (existingSave) {
@@ -62,7 +62,7 @@ export function toggleBusinessSave(database: AppDatabase, businessId: string, vi
   database.saves.push({
     id: `save_${crypto.randomUUID()}`,
     businessId,
-    viewerId,
+    userId: viewerId,
     createdAt: new Date().toISOString()
   });
 

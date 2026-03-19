@@ -63,7 +63,7 @@
       "coverTo": "#f2c078",
       "rating": 4.5,
       "reviewCount": 2,
-      "saveCount": 1
+      "saveCount": 0
     },
     {
       "id": "biz-yod",
@@ -84,7 +84,7 @@
       "coverTo": "#8dd2b6",
       "rating": 4.5,
       "reviewCount": 2,
-      "saveCount": 2
+      "saveCount": 0
     },
     {
       "id": "biz-sishu",
@@ -126,7 +126,7 @@
       "coverTo": "#d7b0f1",
       "rating": 5,
       "reviewCount": 1,
-      "saveCount": 1
+      "saveCount": 0
     },
     {
       "id": "biz-bilos",
@@ -147,7 +147,7 @@
       "coverTo": "#f6dc8a",
       "rating": 4.5,
       "reviewCount": 2,
-      "saveCount": 1
+      "saveCount": 0
     }
   ],
   "reviews": [
@@ -161,7 +161,10 @@
       "visitDate": "2026-02-12",
       "createdAt": "2026-02-13T10:00:00.000Z",
       "status": "published",
-      "reportCount": 0
+      "reportCount": 0,
+      "authorId": "user-migrated-1",
+      "updatedAt": "2026-02-13T10:00:00.000Z",
+      "photoUrls": []
     },
     {
       "id": "rev-2",
@@ -173,7 +176,10 @@
       "visitDate": "2026-01-29",
       "createdAt": "2026-01-30T08:30:00.000Z",
       "status": "published",
-      "reportCount": 0
+      "reportCount": 0,
+      "authorId": "user-migrated-2",
+      "updatedAt": "2026-01-30T08:30:00.000Z",
+      "photoUrls": []
     },
     {
       "id": "rev-3",
@@ -185,7 +191,10 @@
       "visitDate": "2026-02-20",
       "createdAt": "2026-02-21T18:10:00.000Z",
       "status": "published",
-      "reportCount": 0
+      "reportCount": 0,
+      "authorId": "user-migrated-3",
+      "updatedAt": "2026-02-21T18:10:00.000Z",
+      "photoUrls": []
     },
     {
       "id": "rev-4",
@@ -197,7 +206,10 @@
       "visitDate": "2026-02-08",
       "createdAt": "2026-02-09T20:45:00.000Z",
       "status": "published",
-      "reportCount": 1
+      "reportCount": 1,
+      "authorId": "user-migrated-4",
+      "updatedAt": "2026-02-09T20:45:00.000Z",
+      "photoUrls": []
     },
     {
       "id": "rev-5",
@@ -209,7 +221,10 @@
       "visitDate": "2026-02-18",
       "createdAt": "2026-02-19T12:00:00.000Z",
       "status": "published",
-      "reportCount": 0
+      "reportCount": 0,
+      "authorId": "user-migrated-5",
+      "updatedAt": "2026-02-19T12:00:00.000Z",
+      "photoUrls": []
     },
     {
       "id": "rev-6",
@@ -221,7 +236,10 @@
       "visitDate": "2026-01-17",
       "createdAt": "2026-01-17T14:00:00.000Z",
       "status": "published",
-      "reportCount": 0
+      "reportCount": 0,
+      "authorId": "user-migrated-6",
+      "updatedAt": "2026-01-17T14:00:00.000Z",
+      "photoUrls": []
     },
     {
       "id": "rev-7",
@@ -233,7 +251,10 @@
       "visitDate": "2026-02-01",
       "createdAt": "2026-02-02T19:05:00.000Z",
       "status": "published",
-      "reportCount": 0
+      "reportCount": 0,
+      "authorId": "user-migrated-7",
+      "updatedAt": "2026-02-02T19:05:00.000Z",
+      "photoUrls": []
     },
     {
       "id": "rev-8",
@@ -245,7 +266,10 @@
       "visitDate": "2026-02-10",
       "createdAt": "2026-02-10T09:20:00.000Z",
       "status": "published",
-      "reportCount": 0
+      "reportCount": 0,
+      "authorId": "user-migrated-8",
+      "updatedAt": "2026-02-10T09:20:00.000Z",
+      "photoUrls": []
     },
     {
       "id": "rev-9",
@@ -257,7 +281,10 @@
       "visitDate": "2026-02-11",
       "createdAt": "2026-02-11T07:40:00.000Z",
       "status": "published",
-      "reportCount": 0
+      "reportCount": 0,
+      "authorId": "user-migrated-9",
+      "updatedAt": "2026-02-11T07:40:00.000Z",
+      "photoUrls": []
     },
     {
       "id": "rev-10",
@@ -269,7 +296,10 @@
       "visitDate": "2026-02-04",
       "createdAt": "2026-02-05T06:10:00.000Z",
       "status": "pending",
-      "reportCount": 0
+      "reportCount": 0,
+      "authorId": "user-migrated-10",
+      "updatedAt": "2026-02-05T06:10:00.000Z",
+      "photoUrls": []
     },
     {
       "id": "rev-11",
@@ -281,40 +311,132 @@
       "visitDate": "2026-01-12",
       "createdAt": "2026-01-13T10:00:00.000Z",
       "status": "removed",
-      "reportCount": 2
+      "reportCount": 2,
+      "authorId": "user-migrated-11",
+      "updatedAt": "2026-01-13T10:00:00.000Z",
+      "photoUrls": []
     }
   ],
-  "saves": [
+  "saves": [],
+  "reports": [],
+  "users": [
     {
-      "id": "save-1",
-      "businessId": "biz-yod",
-      "viewerId": "seed_viewer_1",
-      "createdAt": "2026-02-21T18:20:00.000Z"
+      "id": "user-migrated-1",
+      "email": "migrated-sara-m-1@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Sara M.",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
     },
     {
-      "id": "save-2",
-      "businessId": "biz-yod",
-      "viewerId": "seed_viewer_2",
-      "createdAt": "2026-02-21T18:30:00.000Z"
+      "id": "user-migrated-2",
+      "email": "migrated-eden-t-2@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Eden T.",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
     },
     {
-      "id": "save-3",
-      "businessId": "biz-tomoca-atlas",
-      "viewerId": "seed_viewer_3",
-      "createdAt": "2026-02-14T09:00:00.000Z"
+      "id": "user-migrated-3",
+      "email": "migrated-samuel-d-3@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Samuel D.",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
     },
     {
-      "id": "save-4",
-      "businessId": "biz-fendika",
-      "viewerId": "seed_viewer_4",
-      "createdAt": "2026-02-02T19:40:00.000Z"
+      "id": "user-migrated-4",
+      "email": "migrated-helen-k-4@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Helen K.",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
     },
     {
-      "id": "save-5",
-      "businessId": "biz-bilos",
-      "viewerId": "seed_viewer_5",
-      "createdAt": "2026-02-11T07:50:00.000Z"
+      "id": "user-migrated-5",
+      "email": "migrated-abel-n-5@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Abel N.",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
+    },
+    {
+      "id": "user-migrated-6",
+      "email": "migrated-mimi-a-6@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Mimi A.",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
+    },
+    {
+      "id": "user-migrated-7",
+      "email": "migrated-noah-g-7@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Noah G.",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
+    },
+    {
+      "id": "user-migrated-8",
+      "email": "migrated-rahel-b-8@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Rahel B.",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
+    },
+    {
+      "id": "user-migrated-9",
+      "email": "migrated-henok-w-9@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Henok W.",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
+    },
+    {
+      "id": "user-migrated-10",
+      "email": "migrated-moderation-queue-10@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Moderation Queue",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
+    },
+    {
+      "id": "user-migrated-11",
+      "email": "migrated-removed-review-11@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Removed Review",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
+    },
+    {
+      "id": "user-demo-member",
+      "email": "demo@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$KSjPIXF8Wvt4rLa2jXWMbA$dSgS0GoVFvMnd0WuGemwmoPePIG8MzQ6XuZZ7CBhxRs",
+      "displayName": "Selam Demo",
+      "role": "member",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
+    },
+    {
+      "id": "user-demo-admin",
+      "email": "admin@addisbeakal.test",
+      "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$lCXDqevZluLtdAJNFfXHdQ$zwdh0n7PzI/+5TbGtQSc9caWC4KT3V0LwEUx9uTD0HY",
+      "displayName": "Admin Demo",
+      "role": "admin",
+      "createdAt": "2026-03-16T12:00:00.000Z",
+      "updatedAt": "2026-03-16T12:00:00.000Z"
     }
   ],
-  "reports": []
+  "businessClaims": []
 }
