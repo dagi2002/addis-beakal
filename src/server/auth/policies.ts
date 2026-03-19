@@ -28,6 +28,14 @@ export function assertCanCreateReview(actor: AppActor) {
   assertAuthenticated(actor);
 }
 
+export function assertCanUseOwnerTools(actor: AppActor) {
+  assertAuthenticated(actor);
+
+  if (actor.role !== "owner" && actor.role !== "admin") {
+    throw new AuthorizationError("Owner access is required.", 403);
+  }
+}
+
 export function assertIsAdmin(actor: AppActor) {
   if (!actor.userId) {
     throw new AuthorizationError("Please sign in to continue.", 401);

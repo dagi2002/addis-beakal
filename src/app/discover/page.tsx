@@ -3,7 +3,11 @@ import Link from "next/link";
 import { BusinessCard } from "@/components/business/business-card";
 import { DiscoverFilters } from "@/components/business/discover-filters";
 import { SiteShell } from "@/components/layout/site-shell";
-import { BUSINESS_FEATURE_OPTIONS } from "@/features/businesses/catalog";
+import {
+  BUSINESS_FEATURE_OPTIONS,
+  PRICE_TIER_OPTIONS,
+  formatBusinessFeatureLabel
+} from "@/features/businesses/catalog";
 import { getDiscoverPageData } from "@/features/discovery/service";
 import type { DiscoverFilters as DiscoverFilterValues } from "@/features/businesses/types";
 import { getViewerId } from "@/lib/viewer";
@@ -100,14 +104,17 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
   };
 
   const data = await getDiscoverPageData(filters, viewerId);
+  const hasActiveSearch =
+    Boolean(filters.query?.trim()) ||
+    Boolean(filters.category) ||
+    Boolean(filters.neighborhood) ||
+    Boolean(filters.minRating) ||
+    (filters.priceTiers?.length ?? 0) > 0 ||
+    (filters.features?.length ?? 0) > 0 ||
+    Boolean(filters.sort && filters.sort !== "recommended");
 
   const ratingOptions = [3, 3.5, 4, 4.5] as const;
-  const priceOptions = [
-    { value: "$", label: "Budget · under 300 ETB" },
-    { value: "$$", label: "Mid-range · 300-800 ETB" },
-    { value: "$$$", label: "Premium · 800-1,800 ETB" },
-    { value: "$$$$", label: "Luxury · 1,800+ ETB" }
-  ] as const;
+  const priceOptions = PRICE_TIER_OPTIONS;
   const featureOptions = BUSINESS_FEATURE_OPTIONS;
 
   function toggleValue(values: string[], value: string) {
@@ -252,7 +259,7 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
                         features: toggleValue(data.activeFilters.features, feature)
                       })}
                     >
-                      {feature}
+                      {formatBusinessFeatureLabel(feature)}
                     </Link>
                   ))}
                 </div>
@@ -262,9 +269,11 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
 
           <div className="space-y-5">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6a7890]">Results</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6a7890]">
+                {hasActiveSearch ? "Results" : "Explore"}
+              </p>
               <h2 className="mt-2 text-4xl font-semibold tracking-[-0.05em] text-[#18212f]">
-                {data.businesses.length} businesses found
+                {data.businesses.length} {hasActiveSearch ? "businesses found" : "businesses available"}
               </h2>
             </div>
 

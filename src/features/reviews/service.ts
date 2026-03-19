@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import type { Review } from "@/features/businesses/types";
+import { queueNotifications } from "@/features/notifications/service";
 import type { AppActor } from "@/server/auth/actor";
 import { assertCanCreateReview } from "@/server/auth/policies";
 import { readDatabase, updateDatabase } from "@/server/database";
@@ -56,10 +57,27 @@ export async function createReview(input: unknown, actor: AppActor) {
     photoUrls: payload.photoUrls
   };
 
-  await updateDatabase((current) => ({
-    ...current,
-    reviews: [review, ...current.reviews]
-  }));
+  await updateDatabase((current) => {
+    current.reviews = [review, ...current.reviews];
+
+    if (business.ownerUserId && business.ownerUserId !== actor.userId) {
+      queueNotifications(
+        current,
+        [business.ownerUserId],
+        {
+          kind: "review_received",
+          title: `New review for ${business.name}`,
+          body: `${user.displayName} left a ${payload.rating}-star review. Reply below the review or send a private follow-up from owner tools.`,
+          actionHref: "/owner",
+          actionLabel: "Open owner dashboard",
+          senderUserId: actor.userId!
+        },
+        now
+      );
+    }
+
+    return current;
+  });
 
   return review;
 }

@@ -6,12 +6,16 @@ import { buildSeedDatabase } from "@/features/businesses/seed";
 import type {
   AppDatabase,
   Business,
+  BusinessEngagementEvent,
   BusinessClaim,
   Category,
   Neighborhood,
+  OwnerReviewReply,
   Report,
   Review,
+  ReviewDirectThread,
   Save,
+  UserNotification,
   User
 } from "@/features/businesses/types";
 import { syncAllBusinessMetrics } from "@/features/businesses/logic";
@@ -19,13 +23,16 @@ import { demoUsers } from "@/server/auth/seed-users";
 
 const DATA_DIRECTORY = path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIRECTORY, "app-db.json");
+let writeQueue: Promise<void> = Promise.resolve();
+let updateQueue: Promise<unknown> = Promise.resolve();
 
 type LegacyReview = Omit<Review, "authorId" | "updatedAt" | "photoUrls" | "tags">;
 type LegacySave = Omit<Save, "userId"> & {
   viewerId: string;
 };
-type LegacyReport = Omit<Report, "userId"> & {
+type LegacyReport = Omit<Report, "userId" | "targetType" | "targetId"> & {
   viewerId?: string;
+  reviewId?: string;
 };
 type LegacyBusinessClaim = Omit<BusinessClaim, "proofFileUrls" | "claimantPhone"> & {
   claimantPhone?: string;
@@ -39,8 +46,12 @@ type RawDatabase = {
   reviews?: Array<Review | LegacyReview>;
   saves?: Array<Save | LegacySave>;
   reports?: Array<Report | LegacyReport>;
+  engagementEvents?: BusinessEngagementEvent[];
+  ownerReviewReplies?: OwnerReviewReply[];
+  reviewDirectThreads?: ReviewDirectThread[];
   users?: User[];
   businessClaims?: Array<BusinessClaim | LegacyBusinessClaim>;
+  notifications?: UserNotification[];
 };
 
 function mergeById<T extends { id: string }>(...collections: T[][]) {
@@ -159,19 +170,71 @@ function normalizeReports(rawReports: Array<Report | LegacyReport> | undefined):
     return [];
   }
 
-  return rawReports
-    .filter((report): report is Report => "userId" in report && Boolean(report.userId))
-    .map((report) => ({
+  const normalizedReports: Report[] = [];
+
+  for (const report of rawReports) {
+    const userId = ("userId" in report ? report.userId : undefined) || ("viewerId" in report ? report.viewerId : undefined);
+    if (!userId) {
+      continue;
+    }
+
+    const targetType =
+      "targetType" in report && report.targetType
+        ? report.targetType
+        : "reviewId" in report && report.reviewId
+          ? "review"
+          : "business";
+    const targetId =
+      "targetId" in report && report.targetId
+        ? report.targetId
+        : "reviewId" in report && report.reviewId
+          ? report.reviewId
+          : report.businessId;
+
+    normalizedReports.push({
       id: report.id,
       businessId: report.businessId,
-      reviewId: report.reviewId,
-      userId: report.userId,
+      userId,
+      targetType,
+      targetId,
       reason: report.reason,
       details: report.details,
       contactEmail: report.contactEmail,
       createdAt: report.createdAt,
-      status: report.status
-    }));
+      status: `${report.status}` === "triaged" ? "resolved" : report.status,
+      resolution: "resolution" in report ? report.resolution : undefined,
+      resolvedAt: "resolvedAt" in report ? report.resolvedAt : undefined,
+      resolvedByUserId: "resolvedByUserId" in report ? report.resolvedByUserId : undefined,
+      resolutionNote: "resolutionNote" in report ? report.resolutionNote : undefined
+    });
+  }
+
+  return normalizedReports;
+}
+
+function normalizeEngagementEvents(rawEvents: BusinessEngagementEvent[] | undefined): BusinessEngagementEvent[] {
+  return (rawEvents ?? []).map((event) => ({
+    ...event,
+    reviewId: event.reviewId,
+    userId: event.userId
+  }));
+}
+
+function normalizeOwnerReviewReplies(rawReplies: OwnerReviewReply[] | undefined): OwnerReviewReply[] {
+  return (rawReplies ?? []).map((reply) => ({
+    ...reply,
+    status: reply.status ?? "active"
+  }));
+}
+
+function normalizeReviewDirectThreads(rawThreads: ReviewDirectThread[] | undefined): ReviewDirectThread[] {
+  return (rawThreads ?? []).map((thread) => ({
+    ...thread,
+    messages: thread.messages.map((message) => ({
+      ...message,
+      status: message.status ?? "active"
+    }))
+  }));
 }
 
 function normalizeBusinesses(rawBusinesses: Business[] | undefined): Business[] {
@@ -189,10 +252,21 @@ function normalizeBusinesses(rawBusinesses: Business[] | undefined): Business[] 
     photoUrls: business.photoUrls ?? [],
     openingHours: business.openingHours,
     services: business.services ?? [],
+    viewCount: business.viewCount ?? 0,
     createdAt: business.createdAt,
     createdByUserId: business.createdByUserId,
     ownerUserId: business.ownerUserId,
-    claimedAt: business.claimedAt
+    claimedAt: business.claimedAt,
+    ownerMessagingDisabledAt: business.ownerMessagingDisabledAt,
+    ownerMessagingDisabledReason: business.ownerMessagingDisabledReason
+  }));
+}
+
+function normalizeNotifications(rawNotifications: UserNotification[] | undefined): UserNotification[] {
+  return (rawNotifications ?? []).map((notification) => ({
+    ...notification,
+    status: notification.status ?? "unread",
+    readAt: notification.readAt
   }));
 }
 
@@ -224,8 +298,11 @@ function mergeBusinesses(seedBusinesses: Business[], currentBusinesses: Business
       rating: currentBusiness.rating,
       reviewCount: currentBusiness.reviewCount,
       saveCount: currentBusiness.saveCount,
+      viewCount: currentBusiness.viewCount,
       ownerUserId: currentBusiness.ownerUserId,
-      claimedAt: currentBusiness.claimedAt
+      claimedAt: currentBusiness.claimedAt,
+      ownerMessagingDisabledAt: currentBusiness.ownerMessagingDisabledAt,
+      ownerMessagingDisabledReason: currentBusiness.ownerMessagingDisabledReason
     };
   });
 
@@ -247,8 +324,12 @@ function normalizeDatabase(raw: RawDatabase): AppDatabase {
     reviews: mergeById(seed.reviews, normalizeReviews(reviews, users)),
     saves: mergeById(seed.saves, normalizeSaves(raw.saves)),
     reports: mergeById(seed.reports, normalizeReports(raw.reports)),
+    engagementEvents: mergeById(seed.engagementEvents, normalizeEngagementEvents(raw.engagementEvents)),
+    ownerReviewReplies: mergeById(seed.ownerReviewReplies, normalizeOwnerReviewReplies(raw.ownerReviewReplies)),
+    reviewDirectThreads: mergeById(seed.reviewDirectThreads, normalizeReviewDirectThreads(raw.reviewDirectThreads)),
     users,
-    businessClaims: normalizeBusinessClaims(raw.businessClaims)
+    businessClaims: normalizeBusinessClaims(raw.businessClaims),
+    notifications: mergeById(seed.notifications, normalizeNotifications(raw.notifications))
   });
 }
 
@@ -275,17 +356,29 @@ export async function readDatabase() {
 }
 
 export async function writeDatabase(database: AppDatabase) {
-  await mkdir(DATA_DIRECTORY, { recursive: true });
-  const tempFile = `${DATA_FILE}.tmp`;
-  await writeFile(tempFile, JSON.stringify(database, null, 2), "utf-8");
-  await rename(tempFile, DATA_FILE);
+  const payload = JSON.stringify(database, null, 2);
+
+  const pendingWrite = writeQueue.then(async () => {
+    await mkdir(DATA_DIRECTORY, { recursive: true });
+    const tempFile = `${DATA_FILE}.${process.pid}.${Date.now()}.${crypto.randomUUID()}.tmp`;
+    await writeFile(tempFile, payload, "utf-8");
+    await rename(tempFile, DATA_FILE);
+  });
+
+  writeQueue = pendingWrite.catch(() => undefined);
+  await pendingWrite;
 }
 
 export async function updateDatabase(
   updater: (database: AppDatabase) => AppDatabase | Promise<AppDatabase>
 ) {
-  const current = await readDatabase();
-  const next = await updater(current);
-  await writeDatabase(syncAllBusinessMetrics(next));
-  return next;
+  const pendingUpdate = updateQueue.then(async () => {
+    const current = await readDatabase();
+    const next = await updater(current);
+    await writeDatabase(syncAllBusinessMetrics(next));
+    return next;
+  });
+
+  updateQueue = pendingUpdate.catch(() => undefined);
+  return pendingUpdate as Promise<AppDatabase>;
 }

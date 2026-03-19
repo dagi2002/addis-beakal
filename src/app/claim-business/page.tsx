@@ -17,11 +17,10 @@ export default async function ClaimBusinessPage() {
             neighborhood: business.neighborhood,
             category: business.category
           }))}
-          initialDisplayName={data.viewer.displayName}
         />
       </section>
 
-      <section className="space-y-4">
+      <section className="scroll-mt-28 space-y-4" id="claim-history">
         <div>
           <p className="section-label">Your claim history</p>
           <h2 className="mt-3 font-[var(--font-heading)] text-4xl tracking-tight text-[color:var(--surface-dark)]">

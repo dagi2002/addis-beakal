@@ -9,6 +9,10 @@ import {
 
 import { BusinessCard } from "@/components/business/business-card";
 import { SiteShell } from "@/components/layout/site-shell";
+import {
+  CURATED_HOME_FEATURES,
+  formatBusinessFeatureLabel
+} from "@/features/businesses/catalog";
 import { getHomePageData } from "@/features/home/service";
 import { getViewerId } from "@/lib/viewer";
 
@@ -26,17 +30,6 @@ const categoryCards = [
   { emoji: "🧖", label: "Spas", description: "Relax & rejuvenate", href: "/discover?category=spas", accent: "bg-[#eaf8f2] text-[#36846c]" },
   { emoji: "🚗", label: "Car Services", description: "Maintenance & repair", href: "/discover?category=car-services", accent: "bg-[#eef1f5] text-[#566778]" }
 ] as const;
-
-const curatedTags = [
-  "Best Buna",
-  "Fasting-Friendly",
-  "Trending Now",
-  "Strong WiFi",
-  "Date Spots",
-  "Family-Friendly",
-  "Live Music",
-  "Open Late"
-];
 
 export default async function HomePage() {
   const viewerId = await getViewerId();
@@ -73,7 +66,7 @@ export default async function HomePage() {
                 Places people are actually talking about this week.
               </h2>
               <div className="mt-4 space-y-3">
-                {data.featuredBusinesses.slice(0, 3).map((business, index) => (
+                {data.pulseBusinesses.map((business, index) => (
                   <Link
                     key={business.id}
                     className="block rounded-[22px] border border-[rgba(62,46,31,0.1)] bg-white/72 p-3.5 transition hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_20px_36px_rgba(65,45,28,0.12)]"
@@ -178,13 +171,13 @@ export default async function HomePage() {
             <h2 className="mt-4 editorial-title">Find Exactly What You Need</h2>
           </div>
           <div className="flex flex-wrap gap-3">
-            {curatedTags.map((tag) => (
+            {CURATED_HOME_FEATURES.map((feature) => (
               <Link
-                key={tag}
+                key={feature}
                 className="rounded-full border border-[rgba(62,46,31,0.12)] bg-white px-4 py-3 text-sm font-semibold text-[color:var(--surface-dark)] shadow-[0_10px_24px_rgba(49,35,22,0.08)] transition hover:border-[var(--accent-soft)] hover:bg-[#fff8f1]"
-                href={`/discover?query=${encodeURIComponent(tag)}`}
+                href={`/discover?feature=${encodeURIComponent(feature)}`}
               >
-                {tag}
+                {formatBusinessFeatureLabel(feature)}
               </Link>
             ))}
           </div>

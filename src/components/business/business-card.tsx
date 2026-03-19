@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MapPin, Star } from "lucide-react";
 
+import { formatBusinessFeatureLabel } from "@/features/businesses/catalog";
 import type { BusinessCardData } from "@/features/businesses/types";
 import { formatRating } from "@/lib/utils";
 import { SaveButton } from "@/components/business/save-button";
@@ -136,7 +137,7 @@ export function BusinessCard({
                   : "border border-[rgba(62,46,31,0.1)] bg-[rgba(255,248,239,0.84)] text-[var(--muted-strong)]"
               )}
             >
-              {tag}
+              {formatBusinessFeatureLabel(tag)}
             </span>
           ))}
         </div>

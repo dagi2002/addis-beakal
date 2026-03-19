@@ -201,7 +201,23 @@ export async function getBusinessPageData(slug: string, viewerId?: string | null
 
   const category = database.categories.find((item) => item.id === business.categoryId);
   const neighborhood = database.neighborhoods.find((item) => item.id === business.neighborhoodId);
-  const reviews = resolvePublicReviews(database, business.id);
+  const reviews = resolvePublicReviews(database, business.id).map((review) => {
+    const ownerReply = database.ownerReviewReplies.find(
+      (reply) => reply.reviewId === review.id && reply.status === "active"
+    );
+
+    return {
+      ...review,
+      ownerReply:
+        ownerReply && business.ownerUserId
+          ? {
+              ...ownerReply,
+              ownerName:
+                database.users.find((user) => user.id === ownerReply.ownerUserId)?.displayName ?? "Business owner"
+            }
+          : null
+    };
+  });
   const viewerHasReviewed = Boolean(
     viewerId && database.reviews.find((review) => review.businessId === business.id && review.authorId === viewerId)
   );
@@ -245,7 +261,7 @@ export async function getBusinessPageData(slug: string, viewerId?: string | null
       features: business.features ?? [],
       isVerified: Boolean(business.ownerUserId) || business.reviewCount >= 2,
       isFeatured: slug.includes("tomoca") || business.saveCount >= 2 || business.rating >= 4.5,
-      viewCount: business.reviewCount * 311 + business.saveCount * 91 + 1000
+      viewCount: business.viewCount
     },
     reviews,
     reviewDistribution: getReviewDistribution(reviews),
@@ -253,7 +269,8 @@ export async function getBusinessPageData(slug: string, viewerId?: string | null
     viewerState: {
       isAuthenticated: Boolean(viewerId),
       hasReviewed: viewerHasReviewed,
-      isClaimed: Boolean(business.ownerUserId)
+      isClaimed: Boolean(business.ownerUserId),
+      isOwner: Boolean(viewerId && business.ownerUserId === viewerId)
     }
   };
 }
@@ -323,10 +340,13 @@ export async function saveBusiness(input: unknown, actor: AppActor) {
       rating: existingBusiness?.rating ?? 0,
       reviewCount: existingBusiness?.reviewCount ?? 0,
       saveCount: existingBusiness?.saveCount ?? 0,
+      viewCount: existingBusiness?.viewCount ?? 0,
       createdAt: existingBusiness?.createdAt ?? new Date().toISOString(),
       createdByUserId: existingBusiness?.createdByUserId ?? actor.userId!,
       ownerUserId: existingBusiness?.ownerUserId,
       claimedAt: existingBusiness?.claimedAt,
+      ownerMessagingDisabledAt: existingBusiness?.ownerMessagingDisabledAt,
+      ownerMessagingDisabledReason: existingBusiness?.ownerMessagingDisabledReason,
       ...(existingBusiness
         ? {
             coverFrom: existingBusiness.coverFrom,

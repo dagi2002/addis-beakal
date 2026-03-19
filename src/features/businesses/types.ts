@@ -1,7 +1,30 @@
 export type ReviewStatus = "published" | "pending" | "rejected" | "removed";
-export type ReportStatus = "open" | "triaged" | "resolved";
+export type ReportStatus = "open" | "resolved" | "dismissed";
 export type ClaimStatus = "pending" | "approved" | "rejected" | "superseded";
 export type UserRole = "member" | "admin";
+export type BusinessEngagementEventType = "page_view" | "map_view" | "directions_click";
+export type ReportTargetType = "business" | "review" | "owner_reply" | "direct_message";
+export type NotificationKind =
+  | "admin_broadcast"
+  | "claim_submitted"
+  | "claim_reviewed"
+  | "ownership_assigned"
+  | "direct_thread_message"
+  | "owner_reply_received"
+  | "admin_role_updated"
+  | "review_received"
+  | "moderation_update";
+export type NotificationStatus = "unread" | "read";
+export type ReportResolution =
+  | "dismissed"
+  | "content_removed"
+  | "content_restored"
+  | "thread_closed"
+  | "owner_messaging_suspended";
+export type OwnerReplyStatus = "active" | "removed";
+export type ReviewDirectThreadStatus = "open" | "closed" | "removed";
+export type DirectMessageStatus = "active" | "removed";
+export type DirectMessageSenderRole = "owner" | "reviewer";
 
 export type Category = {
   id: string;
@@ -37,10 +60,13 @@ export type Business = {
   rating: number;
   reviewCount: number;
   saveCount: number;
+  viewCount: number;
   createdAt?: string;
   createdByUserId?: string;
   ownerUserId?: string;
   claimedAt?: string;
+  ownerMessagingDisabledAt?: string;
+  ownerMessagingDisabledReason?: string;
 };
 
 export type Review = {
@@ -70,13 +96,61 @@ export type Save = {
 export type Report = {
   id: string;
   businessId: string;
-  reviewId?: string;
   userId: string;
+  targetType: ReportTargetType;
+  targetId: string;
   reason: string;
   details: string;
   contactEmail?: string;
   createdAt: string;
   status: ReportStatus;
+  resolution?: ReportResolution;
+  resolvedAt?: string;
+  resolvedByUserId?: string;
+  resolutionNote?: string;
+};
+
+export type BusinessEngagementEvent = {
+  id: string;
+  businessId: string;
+  reviewId?: string;
+  userId?: string;
+  sessionKey: string;
+  type: BusinessEngagementEventType;
+  createdAt: string;
+};
+
+export type OwnerReviewReply = {
+  id: string;
+  businessId: string;
+  reviewId: string;
+  ownerUserId: string;
+  body: string;
+  status: OwnerReplyStatus;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ReviewDirectMessage = {
+  id: string;
+  senderUserId: string;
+  senderRole: DirectMessageSenderRole;
+  body: string;
+  status: DirectMessageStatus;
+  createdAt: string;
+};
+
+export type ReviewDirectThread = {
+  id: string;
+  businessId: string;
+  reviewId: string;
+  ownerUserId: string;
+  reviewAuthorId: string;
+  status: ReviewDirectThreadStatus;
+  createdAt: string;
+  updatedAt: string;
+  lastMessageAt: string;
+  messages: ReviewDirectMessage[];
 };
 
 export type User = {
@@ -106,6 +180,20 @@ export type BusinessClaim = {
   reviewedByUserId?: string;
 };
 
+export type UserNotification = {
+  id: string;
+  userId: string;
+  kind: NotificationKind;
+  title: string;
+  body: string;
+  status: NotificationStatus;
+  createdAt: string;
+  readAt?: string;
+  actionHref?: string;
+  actionLabel?: string;
+  senderUserId?: string;
+};
+
 export type AppDatabase = {
   categories: Category[];
   neighborhoods: Neighborhood[];
@@ -113,8 +201,12 @@ export type AppDatabase = {
   reviews: Review[];
   saves: Save[];
   reports: Report[];
+  engagementEvents: BusinessEngagementEvent[];
+  ownerReviewReplies: OwnerReviewReply[];
+  reviewDirectThreads: ReviewDirectThread[];
   users: User[];
   businessClaims: BusinessClaim[];
+  notifications: UserNotification[];
 };
 
 export type DiscoverSort = "recommended" | "top-rated" | "most-reviewed" | "most-saved";

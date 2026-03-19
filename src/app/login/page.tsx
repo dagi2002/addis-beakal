@@ -15,7 +15,7 @@ function getSearchParam(value: string | string[] | undefined) {
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const sessionUser = await getOptionalSessionUser();
   const params = (await searchParams) ?? {};
-  const nextPath = getSearchParam(params.next) ?? "/discover";
+  const nextPath = getSearchParam(params.next) ?? "/";
 
   if (sessionUser) {
     redirect(nextPath);

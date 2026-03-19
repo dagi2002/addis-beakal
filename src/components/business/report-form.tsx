@@ -8,8 +8,11 @@ import { ModalShell } from "@/components/shared/modal-shell";
 
 type ReportFormProps = {
   businessId: string;
-  reviewId?: string;
+  endpoint?: string;
   label?: string;
+  targetId?: string;
+  targetType?: "business" | "review" | "owner_reply" | "direct_message";
+  title?: string;
 };
 
 const reasons = [
@@ -20,7 +23,14 @@ const reasons = [
   "Other"
 ];
 
-export function ReportForm({ businessId, reviewId, label = "Report" }: ReportFormProps) {
+export function ReportForm({
+  businessId,
+  endpoint = "/api/reports",
+  label = "Report",
+  targetId,
+  targetType = "business",
+  title
+}: ReportFormProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -45,7 +55,16 @@ export function ReportForm({ businessId, reviewId, label = "Report" }: ReportFor
         description="Use this to flag a listing or review for moderation. Reports create a real moderation record instead of disappearing into client-only state."
         onClose={() => setOpen(false)}
         open={open}
-        title={reviewId ? "Report this review" : "Report this listing"}
+        title={
+          title ??
+          (targetType === "review"
+            ? "Report this review"
+            : targetType === "owner_reply"
+              ? "Report this owner reply"
+              : targetType === "direct_message"
+                ? "Report this message"
+                : "Report this listing")
+        }
       >
         <form
           className="space-y-3"
@@ -54,12 +73,13 @@ export function ReportForm({ businessId, reviewId, label = "Report" }: ReportFor
             setMessage("");
 
             startTransition(async () => {
-              const response = await fetch("/api/reports", {
+              const response = await fetch(endpoint, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                   businessId,
-                  reviewId,
+                  targetType,
+                  targetId,
                   reason,
                   details,
                   contactEmail
@@ -82,6 +102,7 @@ export function ReportForm({ businessId, reviewId, label = "Report" }: ReportFor
               setContactEmail("");
               setOpen(false);
               setMessage(payload.message ?? "Report submitted.");
+              router.refresh();
             });
           }}
         >

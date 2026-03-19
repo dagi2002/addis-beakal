@@ -71,11 +71,48 @@ export async function getProfilePageData(userId: string) {
     .slice(0, 3)
     .map(([name]) => name);
 
+  const directThreads = database.reviewDirectThreads
+    .filter((thread) => thread.reviewAuthorId === userId && thread.status !== "removed")
+    .sort((left, right) => (left.lastMessageAt < right.lastMessageAt ? 1 : -1))
+    .map((thread) => {
+      const business = database.businesses.find((entry) => entry.id === thread.businessId) ?? null;
+      const review = database.reviews.find((entry) => entry.id === thread.reviewId) ?? null;
+      const owner = database.users.find((entry) => entry.id === thread.ownerUserId) ?? null;
+
+      return {
+        ...thread,
+        business:
+          business === null
+            ? null
+            : {
+                ...business,
+                category: database.categories.find((item) => item.id === business.categoryId)?.name ?? "Unknown",
+                neighborhood:
+                  database.neighborhoods.find((item) => item.id === business.neighborhoodId)?.name ?? "Unknown"
+              },
+        review,
+        owner,
+        messages: thread.messages.filter((message) => message.status === "active")
+      };
+    });
+
+  const notifications = database.notifications
+    .filter((notification) => notification.userId === userId)
+    .sort((left, right) => (left.createdAt < right.createdAt ? 1 : -1))
+    .map((notification) => ({
+      ...notification,
+      sender: notification.senderUserId
+        ? database.users.find((entry) => entry.id === notification.senderUserId) ?? null
+        : null
+    }));
+
   return {
     user,
     userReviews,
     savedBusinesses,
     ownedBusinesses,
+    directThreads,
+    notifications,
     stats: {
       reviewCount: userReviews.length,
       publishedReviewCount: publishedReviews.length,
@@ -92,7 +129,10 @@ export async function getProfilePageData(userId: string) {
       savedCount: savedBusinesses.length,
       savedCategoryCount: savedCategoryCounts.size,
       savedNeighborhoodCount: savedNeighborhoodCounts.size,
-      ownedCount: ownedBusinesses.length
+      ownedCount: ownedBusinesses.length,
+      directThreadCount: directThreads.length,
+      notificationCount: notifications.length,
+      unreadNotificationCount: notifications.filter((notification) => notification.status === "unread").length
     },
     savedInsights: {
       topCategories: topSavedCategories,

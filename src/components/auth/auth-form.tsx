@@ -41,7 +41,7 @@ export function AuthForm({ mode, nextPath }: AuthFormProps) {
             return;
           }
 
-          router.push(nextPath || "/discover");
+          router.push(nextPath || "/");
           router.refresh();
         });
       }}
@@ -68,7 +68,7 @@ export function AuthForm({ mode, nextPath }: AuthFormProps) {
         <input
           className={`w-full rounded-[22px] border px-4 py-3.5 outline-none transition ${
             mode === "signup"
-              ? "border-white/14 bg-white/8 text-white placeholder:text-white/38 focus:border-[color:var(--gold)]"
+              ? "border-white/18 bg-white text-[color:var(--surface-dark)] placeholder:text-black/35 focus:border-[color:var(--gold)]"
               : "border-black/10 bg-white/75 text-[color:var(--surface-dark)] placeholder:text-black/35 focus:border-[color:var(--accent)]"
           }`}
           onChange={(event) => setDisplayName(event.target.value)}
@@ -81,7 +81,7 @@ export function AuthForm({ mode, nextPath }: AuthFormProps) {
       <input
         className={`w-full rounded-[22px] border px-4 py-3.5 outline-none transition ${
           mode === "signup"
-            ? "border-white/14 bg-white/8 text-white placeholder:text-white/38 focus:border-[color:var(--gold)]"
+            ? "border-white/18 bg-white text-[color:var(--surface-dark)] placeholder:text-black/35 focus:border-[color:var(--gold)]"
             : "border-black/10 bg-white/75 text-[color:var(--surface-dark)] placeholder:text-black/35 focus:border-[color:var(--accent)]"
         }`}
         onChange={(event) => setEmail(event.target.value)}
@@ -93,7 +93,7 @@ export function AuthForm({ mode, nextPath }: AuthFormProps) {
       <input
         className={`w-full rounded-[22px] border px-4 py-3.5 outline-none transition ${
           mode === "signup"
-            ? "border-white/14 bg-white/8 text-white placeholder:text-white/38 focus:border-[color:var(--gold)]"
+            ? "border-white/18 bg-white text-[color:var(--surface-dark)] placeholder:text-black/35 focus:border-[color:var(--gold)]"
             : "border-black/10 bg-white/75 text-[color:var(--surface-dark)] placeholder:text-black/35 focus:border-[color:var(--accent)]"
         }`}
         minLength={8}

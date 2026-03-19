@@ -71,12 +71,13 @@ function baseDatabase(): AppDatabase {
         priceTier: "$",
         categoryId: "cat-coffee",
         neighborhoodId: "hood-piassa",
-        tags: ["great coffee", "affordable", "quick service", "strong wifi"],
+        tags: ["best buna", "trending now", "strong wifi", "affordable", "quick service"],
         coverFrom: "#d86e39",
         coverTo: "#f2c078",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       },
       {
         id: "biz-kaldis-bole",
@@ -89,12 +90,13 @@ function baseDatabase(): AppDatabase {
         priceTier: "$$",
         categoryId: "cat-coffee",
         neighborhoodId: "hood-bole",
-        tags: ["great coffee", "strong wifi", "outdoor seating"],
+        tags: ["best buna", "strong wifi", "trending now", "outdoor seating"],
         coverFrom: "#7e5946",
         coverTo: "#d7b29b",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       },
       {
         id: "biz-yod",
@@ -107,12 +109,13 @@ function baseDatabase(): AppDatabase {
         priceTier: "$$$",
         categoryId: "cat-dining",
         neighborhoodId: "hood-bole",
-        tags: ["fasting friendly", "halal", "live music", "family friendly"],
+        tags: ["fasting-friendly", "halal", "live music", "family-friendly", "date spots"],
         coverFrom: "#1f6d5f",
         coverTo: "#8dd2b6",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       },
       {
         id: "biz-sishu",
@@ -125,12 +128,13 @@ function baseDatabase(): AppDatabase {
         priceTier: "$$",
         categoryId: "cat-dining",
         neighborhoodId: "hood-mexico",
-        tags: ["outdoor seating", "strong wifi", "family friendly"],
+        tags: ["outdoor seating", "strong wifi", "family-friendly", "date spots"],
         coverFrom: "#4a5568",
         coverTo: "#b9c2cf",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       },
       {
         id: "biz-fendika",
@@ -143,12 +147,13 @@ function baseDatabase(): AppDatabase {
         priceTier: "$$",
         categoryId: "cat-culture",
         neighborhoodId: "hood-kazanchis",
-        tags: ["live music", "nightlife", "date spot"],
+        tags: ["live music", "trending now", "date spots", "open late", "nightlife"],
         coverFrom: "#6f3f8f",
         coverTo: "#d7b0f1",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       },
       {
         id: "biz-bilos",
@@ -161,12 +166,13 @@ function baseDatabase(): AppDatabase {
         priceTier: "$",
         categoryId: "cat-bakery",
         neighborhoodId: "hood-piassa",
-        tags: ["fresh baked", "great coffee", "affordable"],
+        tags: ["fresh baked", "best buna", "family-friendly", "affordable"],
         coverFrom: "#d4a947",
         coverTo: "#f6dc8a",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       },
       {
         id: "biz-skylight",
@@ -179,12 +185,13 @@ function baseDatabase(): AppDatabase {
         priceTier: "$$$$",
         categoryId: "cat-hotels",
         neighborhoodId: "hood-bole",
-        tags: ["rooftop", "parking", "strong wifi"],
+        tags: ["rooftop", "parking", "strong wifi", "family-friendly"],
         coverFrom: "#7da7c7",
         coverTo: "#dce9f5",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       },
       {
         id: "biz-harmony-spa",
@@ -197,12 +204,13 @@ function baseDatabase(): AppDatabase {
         priceTier: "$$$",
         categoryId: "cat-spas",
         neighborhoodId: "hood-kazanchis",
-        tags: ["parking", "family friendly", "relaxation"],
+        tags: ["parking", "family-friendly", "relaxation", "date spots"],
         coverFrom: "#d7c6bb",
         coverTo: "#f4ebe4",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       },
       {
         id: "biz-findfine-fitness",
@@ -215,12 +223,13 @@ function baseDatabase(): AppDatabase {
         priceTier: "$$",
         categoryId: "cat-gyms",
         neighborhoodId: "hood-sarbet",
-        tags: ["parking", "wellness", "community"],
+        tags: ["parking", "wellness", "community", "trending now"],
         coverFrom: "#7b8795",
         coverTo: "#d4dbe2",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       },
       {
         id: "biz-gleam-salon",
@@ -233,12 +242,13 @@ function baseDatabase(): AppDatabase {
         priceTier: "$$",
         categoryId: "cat-salons",
         neighborhoodId: "hood-megenagna",
-        tags: ["beauty", "appointments", "family friendly"],
+        tags: ["beauty", "appointments", "family-friendly"],
         coverFrom: "#f0bfd4",
         coverTo: "#f9e6ef",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       },
       {
         id: "biz-atlas-barber",
@@ -257,6 +267,7 @@ function baseDatabase(): AppDatabase {
         rating: 0,
         reviewCount: 0,
         saveCount: 0,
+        viewCount: 0,
         ownerUserId: reviewAuthorIdByName["Abel N."],
         claimedAt: "2026-03-12T09:30:00.000Z"
       },
@@ -271,12 +282,13 @@ function baseDatabase(): AppDatabase {
         priceTier: "$$",
         categoryId: "cat-clinics",
         neighborhoodId: "hood-cmc",
-        tags: ["family friendly", "parking", "healthcare"],
+        tags: ["family-friendly", "parking", "healthcare"],
         coverFrom: "#8ec2d5",
         coverTo: "#eef8fc",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       },
       {
         id: "biz-summit-pharmacy",
@@ -294,7 +306,8 @@ function baseDatabase(): AppDatabase {
         coverTo: "#e4faf6",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       },
       {
         id: "biz-lideta-garage",
@@ -312,7 +325,8 @@ function baseDatabase(): AppDatabase {
         coverTo: "#e3ebf3",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        viewCount: 0
       }
     ],
     reviews: ([
@@ -652,7 +666,134 @@ function baseDatabase(): AppDatabase {
         createdAt: "2026-02-11T07:50:00.000Z"
       }
     ],
-    reports: [],
+    reports: [
+      {
+        id: "report-review-yod",
+        businessId: "biz-yod",
+        userId: reviewAuthorIdByName["Sara M."],
+        targetType: "review",
+        targetId: "rev-3",
+        reason: "False information",
+        details: "This review mentions details that do not match the current business experience.",
+        createdAt: "2026-03-18T09:40:00.000Z",
+        status: "open"
+      },
+      {
+        id: "report-owner-reply-kaldis",
+        businessId: "biz-kaldis-bole",
+        userId: reviewAuthorIdByName["Henok W."],
+        targetType: "owner_reply",
+        targetId: "owner-reply-kaldis-rev20",
+        reason: "Spam or promotional",
+        details: "The owner reply feels more like advertising than a direct response to the review.",
+        createdAt: "2026-03-18T11:20:00.000Z",
+        status: "open"
+      },
+      {
+        id: "report-direct-message-kaldis",
+        businessId: "biz-kaldis-bole",
+        userId: reviewAuthorIdByName["Henok W."],
+        targetType: "direct_message",
+        targetId: "thread-message-kaldis-followup-2",
+        reason: "Off-topic",
+        details: "This private message keeps repeating a promotion instead of addressing the review feedback.",
+        createdAt: "2026-03-19T07:10:00.000Z",
+        status: "open"
+      }
+    ],
+    engagementEvents: [
+      {
+        id: "engagement-kaldis-page-1",
+        businessId: "biz-kaldis-bole",
+        userId: "user-demo-member",
+        sessionKey: "seed-session-kaldis-1",
+        type: "page_view",
+        createdAt: "2026-03-18T08:00:00.000Z"
+      },
+      {
+        id: "engagement-kaldis-page-2",
+        businessId: "biz-kaldis-bole",
+        userId: reviewAuthorIdByName["Henok W."],
+        sessionKey: "seed-session-kaldis-2",
+        type: "page_view",
+        createdAt: "2026-03-18T12:00:00.000Z"
+      },
+      {
+        id: "engagement-kaldis-direction-1",
+        businessId: "biz-kaldis-bole",
+        userId: reviewAuthorIdByName["Henok W."],
+        sessionKey: "seed-session-kaldis-2",
+        type: "directions_click",
+        createdAt: "2026-03-18T12:04:00.000Z"
+      },
+      {
+        id: "engagement-hebir-page-1",
+        businessId: "biz-hebir-ethiopia",
+        userId: reviewAuthorIdByName["Samuel D."],
+        sessionKey: "seed-session-hebir-1",
+        type: "page_view",
+        createdAt: "2026-03-17T15:15:00.000Z"
+      },
+      {
+        id: "engagement-hebir-page-2",
+        businessId: "biz-hebir-ethiopia",
+        userId: reviewAuthorIdByName["Rahel B."],
+        sessionKey: "seed-session-hebir-2",
+        type: "page_view",
+        createdAt: "2026-03-18T18:20:00.000Z"
+      },
+      {
+        id: "engagement-hebir-map-1",
+        businessId: "biz-hebir-ethiopia",
+        userId: reviewAuthorIdByName["Rahel B."],
+        sessionKey: "seed-session-hebir-2",
+        type: "map_view",
+        createdAt: "2026-03-18T18:22:00.000Z"
+      }
+    ],
+    ownerReviewReplies: [
+      {
+        id: "owner-reply-kaldis-rev20",
+        businessId: "biz-kaldis-bole",
+        reviewId: "rev-20",
+        ownerUserId: "user-demo-member",
+        body: "Thanks for the thoughtful review. We have been improving the seating layout and appreciate you calling out the work-friendly atmosphere.",
+        status: "active",
+        createdAt: "2026-03-18T10:00:00.000Z",
+        updatedAt: "2026-03-18T10:00:00.000Z"
+      }
+    ],
+    reviewDirectThreads: [
+      {
+        id: "review-thread-kaldis-rev20",
+        businessId: "biz-kaldis-bole",
+        reviewId: "rev-20",
+        ownerUserId: "user-demo-member",
+        reviewAuthorId: reviewAuthorIdByName["Henok W."],
+        status: "open",
+        createdAt: "2026-03-18T10:20:00.000Z",
+        updatedAt: "2026-03-19T07:00:00.000Z",
+        lastMessageAt: "2026-03-19T07:00:00.000Z",
+        messages: [
+          {
+            id: "thread-message-kaldis-followup-1",
+            senderUserId: "user-demo-member",
+            senderRole: "owner",
+            body: "Thanks again for the review. If you visit next week, ask for the quieter corner table near the window.",
+            status: "active",
+            createdAt: "2026-03-18T10:20:00.000Z"
+          },
+          {
+            id: "thread-message-kaldis-followup-2",
+            senderUserId: "user-demo-member",
+            senderRole: "owner",
+            body: "We also have a weekday coffee pass running this month if you are around Bole often.",
+            status: "active",
+            createdAt: "2026-03-19T07:00:00.000Z"
+          }
+        ]
+      }
+    ],
     businessClaims: [
       {
         id: "claim-pending-kaldis-selam",
@@ -682,6 +823,44 @@ function baseDatabase(): AppDatabase {
         createdAt: "2026-03-11T10:00:00.000Z",
         reviewedAt: "2026-03-12T09:30:00.000Z",
         reviewedByUserId: "user-demo-admin"
+      }
+    ],
+    notifications: [
+      {
+        id: "notification-demo-broadcast-1",
+        userId: "user-demo-member",
+        kind: "admin_broadcast",
+        title: "New cafes and owner tools are live",
+        body: "We just refreshed discovery, added owner follow-up, and opened a cleaner inbox for account updates.",
+        status: "unread",
+        createdAt: "2026-03-19T08:30:00.000Z",
+        actionHref: "/discover",
+        actionLabel: "Explore updates",
+        senderUserId: "user-demo-admin"
+      },
+      {
+        id: "notification-demo-claim-submitted",
+        userId: "user-demo-member",
+        kind: "claim_submitted",
+        title: "Claim received for Kaldi's Coffee",
+        body: "Your ownership request was submitted and is now waiting for admin review.",
+        status: "unread",
+        createdAt: "2026-03-18T08:16:00.000Z",
+        actionHref: "/claim-business#claim-history",
+        actionLabel: "View claim",
+        senderUserId: "user-demo-admin"
+      },
+      {
+        id: "notification-demo-thread-1",
+        userId: reviewAuthorIdByName["Henok W."],
+        kind: "direct_thread_message",
+        title: "Kaldi's Coffee sent a private follow-up",
+        body: "The owner replied privately about your recent review.",
+        status: "unread",
+        createdAt: "2026-03-19T07:00:00.000Z",
+        actionHref: "/profile?section=inbox",
+        actionLabel: "Open inbox",
+        senderUserId: "user-demo-member"
       }
     ]
   };

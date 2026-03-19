@@ -2,7 +2,12 @@ import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { CreateBusinessForm } from "@/components/admin/create-business-form";
 import { getAdminBusinessFormData } from "@/features/admin/service";
 
-export default async function AdminBusinessNewPage() {
+type AdminBusinessNewPageProps = {
+  searchParams?: Promise<{ businessId?: string }>;
+};
+
+export default async function AdminBusinessNewPage({ searchParams }: AdminBusinessNewPageProps) {
+  const params = (await searchParams) ?? {};
   const data = await getAdminBusinessFormData();
 
   return (
@@ -10,9 +15,9 @@ export default async function AdminBusinessNewPage() {
       <AdminPageHeader
         breadcrumbs={[
           { label: "Dashboard", href: "/admin/dashboard" },
-          { label: "Add Business" }
+          { label: params.businessId ? "Edit Business" : "Add Business" }
         ]}
-        description="Create a new listing or load an existing listing for editing."
+        description="Create a new listing or load any existing business in the system for editing."
         title="Business Editor"
       />
 
@@ -20,6 +25,7 @@ export default async function AdminBusinessNewPage() {
         <CreateBusinessForm
           categories={data.categories}
           existingBusinesses={data.existingBusinesses}
+          initialBusinessId={params.businessId}
           neighborhoods={data.neighborhoods}
         />
       </section>

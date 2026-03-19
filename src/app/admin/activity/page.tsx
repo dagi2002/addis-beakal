@@ -16,7 +16,7 @@ function getSearchParam(value: string | string[] | undefined) {
 export default async function AdminActivityPage({ searchParams }: ActivityPageProps) {
   const params = (await searchParams) ?? {};
   const query = getSearchParam(params.q);
-  const status = getSearchParam(params.status) as "all" | "pending" | "approved" | "rejected" | "suspended" | undefined;
+  const status = getSearchParam(params.status) as "all" | "pending" | undefined;
   const page = Number(getSearchParam(params.page)) || 1;
   const data = await getAdminActivityData({ query, status, page });
 
@@ -35,8 +35,8 @@ export default async function AdminActivityPage({ searchParams }: ActivityPagePr
           { label: "Dashboard", href: "/admin/dashboard" },
           { label: "Activity" }
         ]}
-        description="Monitor claim submissions and reviewed handoffs in chronological order."
-        title="Recent Claim Activity"
+        description="Incoming ownership claim submissions that are still waiting in the queue."
+        title="Pending Claim Activity"
       />
 
       <div className="flex flex-col gap-4 rounded-[28px] border border-[#e6ebf2] bg-white p-5 shadow-[0_14px_36px_rgba(34,51,84,0.06)] lg:flex-row lg:items-center lg:justify-between">
@@ -53,11 +53,8 @@ export default async function AdminActivityPage({ searchParams }: ActivityPagePr
             defaultValue={data.status}
             name="status"
           >
-            <option value="all">All statuses</option>
+            <option value="all">All pending work</option>
             <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-            <option value="suspended">Suspended</option>
           </select>
           <button className="rounded-full bg-[#111b2d] px-4 py-2.5 text-sm font-semibold text-white" type="submit">
             Filter

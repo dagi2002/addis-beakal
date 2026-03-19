@@ -2,12 +2,16 @@
 
 import Image from "next/image";
 import { Clock3, ExternalLink, MapPin, Star } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ReportForm } from "@/components/business/report-form";
 import { ReviewForm } from "@/components/business/review-form";
 import { SaveButton } from "@/components/business/save-button";
 import { Pill } from "@/components/shared/pill";
+import {
+  formatBusinessFeatureLabel,
+  formatPriceTierLabel
+} from "@/features/businesses/catalog";
 import { formatRating } from "@/lib/utils";
 
 type BusinessDetailTabsProps = {
@@ -49,6 +53,12 @@ type BusinessDetailTabsProps = {
     rating: number;
     visitDate: string;
     photoUrls: string[];
+    ownerReply: {
+      id: string;
+      ownerName: string;
+      body: string;
+      updatedAt: string;
+    } | null;
   }>;
   reviewDistribution: Array<{
     rating: number;
@@ -57,11 +67,14 @@ type BusinessDetailTabsProps = {
   viewerState: {
     isAuthenticated: boolean;
     hasReviewed: boolean;
+    isOwner: boolean;
   };
 };
 
 const tabOptions = ["overview", "reviews", "photos", "hours"] as const;
 type ActiveTab = (typeof tabOptions)[number];
+const SESSION_KEY_STORAGE_KEY = "addis-beakal-engagement-session";
+const PAGE_VIEW_STORAGE_PREFIX = "addis-beakal-page-view:";
 
 function formatVisitDate(value: string) {
   const date = new Date(value);
@@ -75,13 +88,6 @@ function formatVisitDate(value: string) {
     day: "numeric",
     year: "numeric"
   }).format(date);
-}
-
-function formatPriceTier(priceTier: string) {
-  if (priceTier === "$") return "Budget · under 300 ETB";
-  if (priceTier === "$$") return "Mid-range · 300-800 ETB";
-  if (priceTier === "$$$") return "Premium · 800-1,800 ETB";
-  return "Luxury · 1,800+ ETB";
 }
 
 export function BusinessDetailTabs({
@@ -113,6 +119,44 @@ export function BusinessDetailTabs({
     ],
     [detail.photos, reviews]
   );
+
+  const trackEngagement = useCallback(async (type: "page_view" | "map_view" | "directions_click") => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const storedSessionKey = window.sessionStorage.getItem(SESSION_KEY_STORAGE_KEY);
+    const sessionKey = storedSessionKey ?? crypto.randomUUID();
+    if (!storedSessionKey) {
+      window.sessionStorage.setItem(SESSION_KEY_STORAGE_KEY, sessionKey);
+    }
+
+    await fetch(`/api/businesses/${business.id}/events`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type,
+        sessionKey
+      })
+    });
+  }, [business.id]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const storageKey = `${PAGE_VIEW_STORAGE_PREFIX}${business.id}`;
+    const lastTrackedAt = Number(window.sessionStorage.getItem(storageKey) ?? "0");
+    const now = Date.now();
+
+    if (Number.isFinite(lastTrackedAt) && now - lastTrackedAt < 30 * 60 * 1000) {
+      return;
+    }
+
+    window.sessionStorage.setItem(storageKey, String(now));
+    void trackEngagement("page_view");
+  }, [business.id, trackEngagement]);
 
   return (
     <div className="space-y-6">
@@ -164,7 +208,7 @@ export function BusinessDetailTabs({
                     </span>
                     <span className="font-semibold text-[#162033]">{formatRating(business.rating)}</span>
                     <span>({business.reviewCount} reviews)</span>
-                    <span>{formatPriceTier(business.priceTier)}</span>
+                    <span>{formatPriceTierLabel(business.priceTier)}</span>
                     <span className="inline-flex items-center gap-1.5">
                       <MapPin className="h-4 w-4" />
                       {business.neighborhood}, Addis Ababa
@@ -277,11 +321,40 @@ export function BusinessDetailTabs({
                           <span>{formatVisitDate(review.visitDate)}</span>
                         </div>
                       </div>
+                      <ReportForm
+                        businessId={business.id}
+                        endpoint={`/api/reviews/${review.id}/reports`}
+                        label="Report"
+                        targetId={review.id}
+                        targetType="review"
+                      />
                     </div>
                     {review.title ? (
                       <h3 className="mt-4 text-[1.1rem] font-semibold text-[#162033]">{review.title}</h3>
                     ) : null}
                     <p className="mt-2 text-sm leading-7 text-[#66768c]">{review.body}</p>
+                    {review.ownerReply ? (
+                      <div className="mt-4 rounded-[20px] border border-[#e4ebf4] bg-white p-4">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7d8ca1]">
+                              Owner response
+                            </p>
+                            <p className="mt-2 text-sm font-semibold text-[#162033]">
+                              {review.ownerReply.ownerName}
+                            </p>
+                            <p className="mt-2 text-sm leading-7 text-[#66768c]">{review.ownerReply.body}</p>
+                          </div>
+                          <ReportForm
+                            businessId={business.id}
+                            endpoint={`/api/owner-replies/${review.ownerReply.id}/reports`}
+                            label="Report reply"
+                            targetId={review.ownerReply.id}
+                            targetType="owner_reply"
+                          />
+                        </div>
+                      </div>
+                    ) : null}
                     {review.tags.length > 0 ? (
                       <div className="mt-4 flex flex-wrap gap-2">
                         {review.tags.map((tag) => (
@@ -374,7 +447,7 @@ export function BusinessDetailTabs({
                   </div>
                   <div className="pt-1">
                     <p className="text-[1.1rem] font-semibold text-[#111b2d]">Price range</p>
-                    <p className="mt-1 text-[1.05rem] text-[#42536a]">{formatPriceTier(business.priceTier)}</p>
+                    <p className="mt-1 text-[1.05rem] text-[#42536a]">{formatPriceTierLabel(business.priceTier)}</p>
                   </div>
                 </div>
                 {detail.features.length > 0 ? (
@@ -386,7 +459,7 @@ export function BusinessDetailTabs({
                           key={feature}
                           className="rounded-full border border-[#e4ebf4] bg-[#f8fafc] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#6f7f94]"
                         >
-                          {feature}
+                          {formatBusinessFeatureLabel(feature)}
                         </span>
                       ))}
                     </div>
@@ -401,6 +474,10 @@ export function BusinessDetailTabs({
                 <a
                   className="inline-flex items-center gap-2 text-sm font-semibold text-[#ef8613]"
                   href={mapUrl}
+                  onClick={() => {
+                    void trackEngagement("map_view");
+                    void trackEngagement("directions_click");
+                  }}
                   rel="noreferrer"
                   target="_blank"
                 >
@@ -447,15 +524,30 @@ export function BusinessDetailTabs({
                   Share what stood out, add a few tags, and give people the local context they
                   actually use when choosing where to go.
                 </p>
+                {viewerState.isOwner ? (
+                  <p className="mt-3 max-w-2xl text-sm leading-7 text-[#4d6179]">
+                    Owner reply path: open your owner dashboard to reply below any review publicly or send a private follow-up to the reviewer.
+                  </p>
+                ) : null}
               </div>
-              <ReviewForm
-                businessId={business.id}
-                businessName={business.name}
-                className="bg-[#f59e19] text-white hover:bg-[#e58a08]"
-                hasReviewed={viewerState.hasReviewed}
-                isAuthenticated={viewerState.isAuthenticated}
-                label="Write review"
-              />
+              <div className="flex flex-wrap gap-3">
+                {viewerState.isOwner ? (
+                  <a
+                    className="rounded-full bg-[#151f33] px-5 py-3 text-sm font-semibold text-white hover:bg-[#0f1726]"
+                    href="/owner"
+                  >
+                    Open owner dashboard
+                  </a>
+                ) : null}
+                <ReviewForm
+                  businessId={business.id}
+                  businessName={business.name}
+                  className="bg-[#f59e19] text-white hover:bg-[#e58a08]"
+                  hasReviewed={viewerState.hasReviewed}
+                  isAuthenticated={viewerState.isAuthenticated}
+                  label="Write review"
+                />
+              </div>
             </div>
           </article>
 
@@ -476,13 +568,39 @@ export function BusinessDetailTabs({
                     <span>{formatVisitDate(review.visitDate)}</span>
                   </div>
                 </div>
-                <ReportForm businessId={business.id} label="Report review" reviewId={review.id} />
+                <ReportForm
+                  businessId={business.id}
+                  endpoint={`/api/reviews/${review.id}/reports`}
+                  label="Report review"
+                  targetId={review.id}
+                  targetType="review"
+                />
               </div>
 
               {review.title ? (
                 <h3 className="mt-5 text-[1.3rem] font-semibold text-[#162033]">{review.title}</h3>
               ) : null}
               <p className="mt-3 text-[1rem] leading-8 text-[#66768c]">{review.body}</p>
+              {review.ownerReply ? (
+                <div className="mt-5 rounded-[24px] border border-[#e4ebf4] bg-[#f7f9fc] p-5">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7d8ca1]">
+                        Owner response
+                      </p>
+                      <p className="mt-2 text-base font-semibold text-[#162033]">{review.ownerReply.ownerName}</p>
+                      <p className="mt-3 text-sm leading-7 text-[#66768c]">{review.ownerReply.body}</p>
+                    </div>
+                    <ReportForm
+                      businessId={business.id}
+                      endpoint={`/api/owner-replies/${review.ownerReply.id}/reports`}
+                      label="Report reply"
+                      targetId={review.ownerReply.id}
+                      targetType="owner_reply"
+                    />
+                  </div>
+                </div>
+              ) : null}
               {review.tags.length > 0 ? (
                 <div className="mt-4 flex flex-wrap gap-2">
                   {review.tags.map((tag) => (
