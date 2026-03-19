@@ -104,30 +104,30 @@ export async function SiteShell({
             </div>
             <div className="space-y-3 text-sm text-white/65">
               <p className="font-semibold text-white">Explore</p>
-              <p>Restaurants</p>
-              <p>Cafes</p>
-              <p>Hotels</p>
-              <p>Salons</p>
-              <p>Culture</p>
-              <p>Bakery</p>
+              <Link className="block transition hover:text-white" href="/discover?category=restaurants">Restaurants</Link>
+              <Link className="block transition hover:text-white" href="/discover?category=cafes">Cafes</Link>
+              <Link className="block transition hover:text-white" href="/discover?category=hotels">Hotels</Link>
+              <Link className="block transition hover:text-white" href="/discover?category=salons">Salons</Link>
+              <Link className="block transition hover:text-white" href="/discover?category=bars">Culture</Link>
+              <Link className="block transition hover:text-white" href="/discover?category=bakeries">Bakery</Link>
             </div>
             <div className="space-y-3 text-sm text-white/65">
-              <p className="font-semibold text-white">Neighborhoods</p>
-              <p>Bole</p>
-              <p>Kazanchis</p>
-              <p>Piassa</p>
-              <p>Mexico</p>
-              <p>Atlas</p>
-              <p>City center</p>
+              <p className="font-semibold text-white">Areas</p>
+              <Link className="block transition hover:text-white" href="/discover?neighborhood=bole">Bole</Link>
+              <Link className="block transition hover:text-white" href="/discover?neighborhood=kazanchis">Kazanchis</Link>
+              <Link className="block transition hover:text-white" href="/discover?neighborhood=piassa">Piassa</Link>
+              <Link className="block transition hover:text-white" href="/discover?neighborhood=mexico">Mexico</Link>
+              <Link className="block transition hover:text-white" href="/discover?neighborhood=sarbet">Sarbet</Link>
+              <Link className="block transition hover:text-white" href="/discover?neighborhood=cmc">CMC</Link>
             </div>
             <div className="space-y-3 text-sm text-white/65">
               <p className="font-semibold text-white">Build With Us</p>
-              <p>Claim your business</p>
-              <p>Owner tools</p>
-              <p>Moderation standards</p>
-              <p>Contact</p>
-              <p>Privacy</p>
-              <p>Terms</p>
+              <Link className="block transition hover:text-white" href="/claim-business">Claim your business</Link>
+              <Link className="block transition hover:text-white" href="/owner">Owner tools</Link>
+              <Link className="block transition hover:text-white" href="/terms">Moderation standards</Link>
+              <Link className="block transition hover:text-white" href="/contact">Contact</Link>
+              <Link className="block transition hover:text-white" href="/privacy">Privacy</Link>
+              <Link className="block transition hover:text-white" href="/terms">Terms</Link>
             </div>
           </div>
           <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-2 border-t border-white/10 px-6 py-5 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between lg:px-10">

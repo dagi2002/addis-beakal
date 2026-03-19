@@ -1,6 +1,7 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { BUSINESS_FEATURE_OPTIONS } from "@/features/businesses/catalog";
 import { buildSeedDatabase } from "@/features/businesses/seed";
 import type {
   AppDatabase,
@@ -19,12 +20,16 @@ import { demoUsers } from "@/server/auth/seed-users";
 const DATA_DIRECTORY = path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIRECTORY, "app-db.json");
 
-type LegacyReview = Omit<Review, "authorId" | "updatedAt" | "photoUrls">;
+type LegacyReview = Omit<Review, "authorId" | "updatedAt" | "photoUrls" | "tags">;
 type LegacySave = Omit<Save, "userId"> & {
   viewerId: string;
 };
 type LegacyReport = Omit<Report, "userId"> & {
   viewerId?: string;
+};
+type LegacyBusinessClaim = Omit<BusinessClaim, "proofFileUrls" | "claimantPhone"> & {
+  claimantPhone?: string;
+  proofFileUrls?: string[];
 };
 
 type RawDatabase = {
@@ -35,7 +40,7 @@ type RawDatabase = {
   saves?: Array<Save | LegacySave>;
   reports?: Array<Report | LegacyReport>;
   users?: User[];
-  businessClaims?: BusinessClaim[];
+  businessClaims?: Array<BusinessClaim | LegacyBusinessClaim>;
 };
 
 function mergeById<T extends { id: string }>(...collections: T[][]) {
@@ -116,7 +121,8 @@ function normalizeReviews(rawReviews: Array<Review | LegacyReview>, users: User[
     if ("authorId" in review && "updatedAt" in review && "photoUrls" in review) {
       return {
         ...review,
-        photoUrls: review.photoUrls ?? []
+        photoUrls: review.photoUrls ?? [],
+        tags: "tags" in review ? review.tags ?? [] : []
       };
     }
 
@@ -127,7 +133,8 @@ function normalizeReviews(rawReviews: Array<Review | LegacyReview>, users: User[
       ...review,
       authorId: matchedUser.id,
       updatedAt: review.createdAt,
-      photoUrls: []
+      photoUrls: [],
+      tags: []
     };
   });
 }
@@ -168,10 +175,38 @@ function normalizeReports(rawReports: Array<Report | LegacyReport> | undefined):
 }
 
 function normalizeBusinesses(rawBusinesses: Business[] | undefined): Business[] {
+  const knownFeatures = new Set<string>(BUSINESS_FEATURE_OPTIONS);
+
   return (rawBusinesses ?? []).map((business) => ({
     ...business,
+    features:
+      business.features?.length
+        ? business.features
+        : business.tags.filter((tag) => knownFeatures.has(tag as (typeof BUSINESS_FEATURE_OPTIONS)[number])),
+    tags: business.tags ?? [],
+    googleMapsUrl: business.googleMapsUrl,
+    bannerImageUrl: business.bannerImageUrl,
+    photoUrls: business.photoUrls ?? [],
+    openingHours: business.openingHours,
+    services: business.services ?? [],
+    createdAt: business.createdAt,
+    createdByUserId: business.createdByUserId,
     ownerUserId: business.ownerUserId,
     claimedAt: business.claimedAt
+  }));
+}
+
+function normalizeBusinessClaims(
+  rawBusinessClaims: Array<BusinessClaim | LegacyBusinessClaim> | undefined
+): BusinessClaim[] {
+  if (!rawBusinessClaims) {
+    return [];
+  }
+
+  return rawBusinessClaims.map((claim) => ({
+    ...claim,
+    claimantPhone: claim.claimantPhone,
+    proofFileUrls: claim.proofFileUrls ?? []
   }));
 }
 
@@ -213,7 +248,7 @@ function normalizeDatabase(raw: RawDatabase): AppDatabase {
     saves: mergeById(seed.saves, normalizeSaves(raw.saves)),
     reports: mergeById(seed.reports, normalizeReports(raw.reports)),
     users,
-    businessClaims: raw.businessClaims ?? []
+    businessClaims: normalizeBusinessClaims(raw.businessClaims)
   });
 }
 

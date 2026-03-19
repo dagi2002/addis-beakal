@@ -26,6 +26,7 @@ export default async function BusinessDetailPage({ params }: BusinessDetailPageP
         }}
         detail={data.detail}
         reviews={data.reviews}
+        reviewDistribution={data.reviewDistribution}
         viewerState={data.viewerState}
       />
 

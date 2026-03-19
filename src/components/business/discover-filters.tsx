@@ -4,6 +4,7 @@ import { MapPin, Search, SlidersHorizontal } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
+import { BUSINESS_FEATURE_OPTIONS } from "@/features/businesses/catalog";
 import type { Category, DiscoverSort, Neighborhood } from "@/features/businesses/types";
 import { cn } from "@/lib/utils";
 
@@ -23,24 +24,12 @@ type DiscoverFiltersProps = {
 
 const MIN_RATING_OPTIONS = [3, 3.5, 4, 4.5] as const;
 const PRICE_OPTIONS = [
-  { value: "$", label: "Under 100 ETB" },
-  { value: "$$", label: "100-300 ETB" },
-  { value: "$$$", label: "300-600 ETB" },
-  { value: "$$$$", label: "600+ ETB" }
+  { value: "$", label: "Budget · under 300 ETB" },
+  { value: "$$", label: "Mid-range · 300-800 ETB" },
+  { value: "$$$", label: "Premium · 800-1,800 ETB" },
+  { value: "$$$$", label: "Luxury · 1,800+ ETB" }
 ] as const;
-const FEATURE_OPTIONS = [
-  "great coffee",
-  "fasting friendly",
-  "halal",
-  "live music",
-  "rooftop",
-  "parking",
-  "delivery",
-  "strong wifi",
-  "outdoor seating",
-  "family friendly",
-  "affordable"
-] as const;
+const FEATURE_OPTIONS = BUSINESS_FEATURE_OPTIONS;
 
 export function DiscoverFilters({
   categories,
@@ -124,7 +113,7 @@ export function DiscoverFilters({
           </button>
           <div className="flex items-center gap-2 rounded-[22px] border border-[var(--border)] bg-[rgba(255,255,255,0.82)] px-4 py-3 text-sm text-[var(--muted)]">
             <Search className="h-4 w-4" />
-            <span>{query || "Search businesses, categories, neighborhoods"}</span>
+            <span>{query || "Search businesses, categories, areas"}</span>
           </div>
         </div>
 
@@ -146,7 +135,7 @@ export function DiscoverFilters({
                 onChange={(event) => setNeighborhood(event.target.value)}
                 value={neighborhood}
               >
-                <option value="">All neighborhoods</option>
+                <option value="">All areas</option>
                 {neighborhoods.map((item) => (
                   <option key={item.id} value={item.slug}>
                     {item.name}
@@ -190,7 +179,7 @@ export function DiscoverFilters({
             </button>
           </div>
           <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-            Search, sort, and neighborhood filters stay grouped here so mobile discovery feels fast rather than cramped.
+            Search, sort, and area filters stay grouped here so mobile discovery feels fast rather than cramped.
           </p>
           <div className="mt-5 space-y-4">
             <input
@@ -216,7 +205,7 @@ export function DiscoverFilters({
               onChange={(event) => setNeighborhood(event.target.value)}
               value={neighborhood}
             >
-              <option value="">All neighborhoods</option>
+              <option value="">All areas</option>
               {neighborhoods.map((item) => (
                 <option key={item.id} value={item.slug}>
                   {item.name}

@@ -68,7 +68,7 @@ export async function getDiscoverPageData(
         (!filters.minRating || business.rating >= filters.minRating) &&
         (!filters.priceTiers?.length || filters.priceTiers.includes(business.priceTier)) &&
         (!filters.features?.length ||
-          filters.features.every((feature) => matchesFeature(business.tags, feature, business.priceTier)))
+          filters.features.every((feature) => matchesFeature(business.features ?? [], feature, business.priceTier)))
       );
     }),
     sort

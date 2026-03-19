@@ -165,7 +165,9 @@
       "coverTo": "#d7b29b",
       "rating": 4,
       "reviewCount": 1,
-      "saveCount": 0
+      "saveCount": 0,
+      "ownerUserId": "user-demo-member",
+      "claimedAt": "2026-03-19T15:10:27.519Z"
     },
     {
       "id": "biz-yod",
@@ -187,7 +189,7 @@
       "coverTo": "#8dd2b6",
       "rating": 4.5,
       "reviewCount": 2,
-      "saveCount": 2
+      "saveCount": 3
     },
     {
       "id": "biz-sishu",
@@ -208,7 +210,7 @@
       "coverTo": "#b9c2cf",
       "rating": 3.5,
       "reviewCount": 2,
-      "saveCount": 0
+      "saveCount": 1
     },
     {
       "id": "biz-fendika",
@@ -229,7 +231,7 @@
       "coverTo": "#d7b0f1",
       "rating": 5,
       "reviewCount": 1,
-      "saveCount": 1
+      "saveCount": 2
     },
     {
       "id": "biz-bilos",
@@ -271,7 +273,7 @@
       "coverTo": "#dce9f5",
       "rating": 5,
       "reviewCount": 1,
-      "saveCount": 0
+      "saveCount": 1
     },
     {
       "id": "biz-harmony-spa",
@@ -355,7 +357,9 @@
       "coverTo": "#dee5eb",
       "rating": 5,
       "reviewCount": 1,
-      "saveCount": 0
+      "saveCount": 0,
+      "ownerUserId": "user-reviewer-5",
+      "claimedAt": "2026-03-12T09:30:00.000Z"
     },
     {
       "id": "biz-beteseb-clinic",
@@ -419,6 +423,100 @@
       "rating": 4,
       "reviewCount": 1,
       "saveCount": 0
+    },
+    {
+      "id": "biz-tutu-noodles",
+      "slug": "tutu-noodles",
+      "name": "Tutu Noodles",
+      "shortDescription": "Best noodles in town. Best noodles in town. Best noodles in town. Best noodles in town.",
+      "longDescription": "Best noodles in town. Best noodles in town. Best noodles in town. Best noodles in town.Best noodles in town. Best noodles in town. Best noodles in town. Best noodles in town.",
+      "address": "Bole, Addis Ababa",
+      "googleMapsUrl": "https://www.google.com/maps/dir//TUTU+NOODLES+%7C+Friendship,+behind+Friendship+Hypermarket,+Addis+Ababa/@8.9549131,38.7472896,15z/data=!3m1!4b1!4m8!4m7!1m0!1m5!1m1!1s0x164b85ebd7d4cdb5:0x88657e85c25d18fb!2m2!1d38.7859741!2d8.9893682?entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
+      "priceTier": "$$",
+      "categoryId": "cat-dining",
+      "neighborhoodId": "hood-bole",
+      "features": [
+        "family friendly",
+        "affordable",
+        "takeaway"
+      ],
+      "tags": [],
+      "photoUrls": [],
+      "openingHours": [
+        [
+          "Monday",
+          "7:00 AM - 7:00 PM"
+        ],
+        [
+          "Tuesday",
+          "7:00 AM - 7:00 PM"
+        ],
+        [
+          "Wednesday",
+          "7:00 AM - 7:00 PM"
+        ],
+        [
+          "Thursday",
+          "7:00 AM - 7:00 PM"
+        ],
+        [
+          "Friday",
+          "7:00 AM - 7:00 PM"
+        ],
+        [
+          "Saturday",
+          "8:00 AM - 8:00 PM"
+        ],
+        [
+          "Sunday",
+          "8:00 AM - 6:00 PM"
+        ]
+      ],
+      "services": [
+        {
+          "name": "Vegitable Noodles",
+          "priceEtb": 600,
+          "description": "vegi"
+        },
+        {
+          "name": "Chicken Noodles",
+          "priceEtb": 650,
+          "description": "vegi"
+        }
+      ],
+      "rating": 0,
+      "reviewCount": 0,
+      "saveCount": 1,
+      "createdAt": "2026-03-19T14:39:04.990Z",
+      "createdByUserId": "user-demo-admin",
+      "coverFrom": "#1f6d5f",
+      "coverTo": "#9dd8c1"
+    },
+    {
+      "id": "biz-hebir-ethiopia",
+      "slug": "hebir-ethiopia",
+      "name": "Hebir Ethiopia",
+      "shortDescription": "The best food in town. Great drinks with good vibes.",
+      "longDescription": "Hebir Ethiopia (also spelled Hibir or Hebir Etiopia) is a well-known multi-concept venue in the Bole area of Addis Ababa, Ethiopia. It is particularly famous for its traditional Ethiopian cuisine, but it also caters to international tastes with a diverse menu and different atmospheres under one roof.",
+      "address": "Bole Friendship, Addis Ababa",
+      "googleMapsUrl": "https://www.google.com/maps?client=safari&rls=en&oe=UTF-8&um=1&ie=UTF-8&fb=1&gl=et&sa=X&geocode=KdGjpwP8hEsWMe7jOQ8ryV3I&daddr=Africa+Avenu+Africa+Ave,+Addis+Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-dining",
+      "neighborhoodId": "hood-bole",
+      "tags": [
+        "good food",
+        "great vibes",
+        "smoking area",
+        "premier league football."
+      ],
+      "rating": 0,
+      "reviewCount": 0,
+      "saveCount": 0,
+      "coverFrom": "#1f6d5f",
+      "coverTo": "#9dd8c1",
+      "features": [],
+      "photoUrls": [],
+      "services": []
     }
   ],
   "reviews": [
@@ -435,7 +533,8 @@
       "reportCount": 0,
       "authorId": "user-migrated-1",
       "updatedAt": "2026-02-13T10:00:00.000Z",
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-2",
@@ -450,7 +549,8 @@
       "reportCount": 0,
       "authorId": "user-migrated-2",
       "updatedAt": "2026-01-30T08:30:00.000Z",
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-3",
@@ -465,7 +565,8 @@
       "reportCount": 0,
       "authorId": "user-migrated-3",
       "updatedAt": "2026-02-21T18:10:00.000Z",
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-4",
@@ -480,7 +581,8 @@
       "reportCount": 1,
       "authorId": "user-migrated-4",
       "updatedAt": "2026-02-09T20:45:00.000Z",
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-5",
@@ -495,7 +597,8 @@
       "reportCount": 0,
       "authorId": "user-migrated-5",
       "updatedAt": "2026-02-19T12:00:00.000Z",
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-6",
@@ -510,7 +613,8 @@
       "reportCount": 0,
       "authorId": "user-migrated-6",
       "updatedAt": "2026-01-17T14:00:00.000Z",
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-7",
@@ -525,7 +629,8 @@
       "reportCount": 0,
       "authorId": "user-migrated-7",
       "updatedAt": "2026-02-02T19:05:00.000Z",
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-8",
@@ -540,7 +645,8 @@
       "reportCount": 0,
       "authorId": "user-migrated-8",
       "updatedAt": "2026-02-10T09:20:00.000Z",
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-9",
@@ -555,7 +661,8 @@
       "reportCount": 0,
       "authorId": "user-migrated-9",
       "updatedAt": "2026-02-11T07:40:00.000Z",
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-10",
@@ -570,7 +677,8 @@
       "reportCount": 0,
       "authorId": "user-migrated-10",
       "updatedAt": "2026-02-05T06:10:00.000Z",
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-11",
@@ -585,7 +693,8 @@
       "reportCount": 2,
       "authorId": "user-migrated-11",
       "updatedAt": "2026-01-13T10:00:00.000Z",
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-12",
@@ -600,7 +709,8 @@
       "updatedAt": "2026-02-15T09:00:00.000Z",
       "status": "published",
       "reportCount": 0,
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-13",
@@ -615,7 +725,8 @@
       "updatedAt": "2026-02-10T11:10:00.000Z",
       "status": "published",
       "reportCount": 0,
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-14",
@@ -630,7 +741,8 @@
       "updatedAt": "2026-02-05T18:00:00.000Z",
       "status": "published",
       "reportCount": 0,
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-15",
@@ -645,7 +757,8 @@
       "updatedAt": "2026-02-17T08:45:00.000Z",
       "status": "published",
       "reportCount": 0,
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-16",
@@ -660,7 +773,8 @@
       "updatedAt": "2026-02-07T12:20:00.000Z",
       "status": "published",
       "reportCount": 0,
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-17",
@@ -675,7 +789,8 @@
       "updatedAt": "2026-02-04T10:35:00.000Z",
       "status": "published",
       "reportCount": 0,
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-18",
@@ -690,7 +805,8 @@
       "updatedAt": "2026-02-12T18:40:00.000Z",
       "status": "published",
       "reportCount": 0,
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-19",
@@ -705,7 +821,8 @@
       "updatedAt": "2026-02-06T16:25:00.000Z",
       "status": "published",
       "reportCount": 0,
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     },
     {
       "id": "rev-20",
@@ -720,7 +837,8 @@
       "updatedAt": "2026-02-18T11:15:00.000Z",
       "status": "published",
       "reportCount": 0,
-      "photoUrls": []
+      "photoUrls": [],
+      "tags": []
     }
   ],
   "saves": [
@@ -753,6 +871,36 @@
       "businessId": "biz-bilos",
       "userId": "user-reviewer-8",
       "createdAt": "2026-02-11T07:50:00.000Z"
+    },
+    {
+      "id": "save_22d67a50-29e7-4240-ac31-f288f32116a4",
+      "businessId": "biz-fendika",
+      "userId": "user-demo-admin",
+      "createdAt": "2026-03-19T15:24:27.030Z"
+    },
+    {
+      "id": "save_4dc02e20-67c8-4367-8563-afaaa6bf8bd6",
+      "businessId": "biz-skylight",
+      "userId": "user-demo-admin",
+      "createdAt": "2026-03-19T15:24:28.118Z"
+    },
+    {
+      "id": "save_6bd16f49-1663-417d-80c6-f642e212a5c3",
+      "businessId": "biz-sishu",
+      "userId": "user-demo-admin",
+      "createdAt": "2026-03-19T15:25:18.425Z"
+    },
+    {
+      "id": "save_b10b8ee0-596e-400d-97a4-3d0dcfabc5c5",
+      "businessId": "biz-yod",
+      "userId": "user-demo-admin",
+      "createdAt": "2026-03-19T15:25:19.227Z"
+    },
+    {
+      "id": "save_66de7be6-daca-4080-9256-32d7ef4a44d6",
+      "businessId": "biz-tutu-noodles",
+      "userId": "user-demo-admin",
+      "createdAt": "2026-03-19T15:25:20.151Z"
     }
   ],
   "reports": [],
@@ -974,5 +1122,35 @@
       "updatedAt": "2026-03-16T12:00:00.000Z"
     }
   ],
-  "businessClaims": []
+  "businessClaims": [
+    {
+      "id": "claim-pending-kaldis-selam",
+      "businessId": "biz-kaldis-bole",
+      "userId": "user-demo-member",
+      "claimantName": "Selam Demo",
+      "claimantEmail": "demo@addisbeakal.test",
+      "claimantPhone": "+251911002200",
+      "proofText": "I manage the Bole branch operations and can provide the renewed trade license plus an official manager confirmation letter.",
+      "proofFileUrls": [],
+      "status": "approved",
+      "createdAt": "2026-03-18T08:15:00.000Z",
+      "reviewedAt": "2026-03-19T15:10:27.519Z",
+      "reviewedByUserId": "user-demo-admin"
+    },
+    {
+      "id": "claim-approved-atlas-abel",
+      "businessId": "biz-atlas-barber",
+      "userId": "user-reviewer-5",
+      "claimantName": "Abel N.",
+      "claimantEmail": "reviewer-5@addisbeakal.test",
+      "claimantPhone": "+251933445566",
+      "proofText": "I operate Atlas Barber Studio and verified ownership with the business license, tax registration, and storefront identity documents.",
+      "proofFileUrls": [],
+      "status": "approved",
+      "adminNote": "Identity and license details matched the storefront submission.",
+      "createdAt": "2026-03-11T10:00:00.000Z",
+      "reviewedAt": "2026-03-12T09:30:00.000Z",
+      "reviewedByUserId": "user-demo-admin"
+    }
+  ]
 }

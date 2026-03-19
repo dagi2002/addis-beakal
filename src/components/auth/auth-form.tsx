@@ -47,7 +47,7 @@ export function AuthForm({ mode, nextPath }: AuthFormProps) {
       }}
     >
       <div className="space-y-2">
-        <p className={`section-label ${mode === "signup" ? "text-white/58" : ""}`}>
+        <p className={`section-label ${mode === "signup" ? "text-white/74" : ""}`}>
           {mode === "login" ? "Account access" : "Create your account"}
         </p>
         <h2
@@ -57,7 +57,7 @@ export function AuthForm({ mode, nextPath }: AuthFormProps) {
         >
           {mode === "login" ? "Welcome back." : "Start your profile."}
         </h2>
-        <p className={`text-sm leading-7 ${mode === "signup" ? "text-white/66" : "text-[color:var(--ink-soft)]"}`}>
+        <p className={`text-sm leading-7 ${mode === "signup" ? "text-white/90" : "text-[color:var(--ink-soft)]"}`}>
           {mode === "login"
             ? "Use your account to save listings, publish reviews, and access owner or admin workflows."
             : "Your display name will appear on future reviews while older snapshots stay preserved for audit integrity."}
@@ -115,11 +115,11 @@ export function AuthForm({ mode, nextPath }: AuthFormProps) {
         {mode === "login" ? "Sign in" : "Create account"}
       </button>
       {message ? (
-        <p className={`rounded-[20px] border px-4 py-3 text-sm ${mode === "signup" ? "border-white/12 bg-white/8 text-white/78" : "border-black/8 bg-black/4 text-[color:var(--ink-soft)]"}`}>
+        <p className={`rounded-[20px] border px-4 py-3 text-sm ${mode === "signup" ? "border-white/12 bg-white/8 text-white/90" : "border-black/8 bg-black/4 text-[color:var(--ink-soft)]"}`}>
           {message}
         </p>
       ) : null}
-      <p className={`text-sm ${mode === "signup" ? "text-white/64" : "text-black/60"}`}>
+      <p className={`text-sm ${mode === "signup" ? "text-white/90" : "text-black/60"}`}>
         {mode === "login" ? "Need an account?" : "Already have an account?"}{" "}
         <Link
           className={`font-medium ${mode === "signup" ? "text-[color:var(--gold)]" : "text-[color:var(--surface-dark)]"}`}

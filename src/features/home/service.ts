@@ -23,7 +23,8 @@ export async function getHomePageData(viewerId?: string | null) {
 
       return {
         ...review,
-        businessName: business?.name ?? "Unknown business"
+        businessName: business?.name ?? "Unknown business",
+        businessSlug: business?.slug ?? ""
       };
     });
 

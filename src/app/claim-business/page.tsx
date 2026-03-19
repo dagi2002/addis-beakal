@@ -9,38 +9,16 @@ export default async function ClaimBusinessPage() {
 
   return (
     <SiteShell className="gap-10">
-      <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="dark-panel relative overflow-hidden rounded-[40px] px-7 py-8 sm:px-9 sm:py-9">
-          <div className="grain-overlay" />
-          <div className="relative space-y-7">
-            <div className="space-y-4">
-              <p className="section-label text-white/56">Ownership claims</p>
-              <h1 className="editorial-title max-w-2xl text-[clamp(2.8rem,6vw,4.9rem)] leading-[0.95] text-white">
-                Claim a listing and start the owner handoff.
-              </h1>
-              <p className="max-w-2xl text-base leading-8 text-white/72 sm:text-lg">
-                This slice includes submission, admin review, and the first owner-only dashboard after approval.
-              </p>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-[26px] border border-white/12 bg-white/8 p-5 text-sm leading-7 text-white/72">
-                Claims stay pending until an admin reviews them.
-              </div>
-              <div className="rounded-[26px] border border-white/12 bg-[linear-gradient(135deg,rgba(255,205,117,0.14),rgba(255,255,255,0.06))] p-5 text-sm leading-7 text-white/74">
-                Approved claims immediately assign ownership and supersede competing pending requests.
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="glass-panel rounded-[40px] p-6 sm:p-7">
-          <ClaimForm
-            businesses={data.businesses.map((business) => ({
-              id: business.id,
-              name: business.name,
-              neighborhoodId: business.neighborhoodId
-            }))}
-          />
-        </div>
+      <section className="mx-auto w-full max-w-[880px]">
+        <ClaimForm
+          businesses={data.businesses.map((business) => ({
+            id: business.id,
+            name: business.name,
+            neighborhood: business.neighborhood,
+            category: business.category
+          }))}
+          initialDisplayName={data.viewer.displayName}
+        />
       </section>
 
       <section className="space-y-4">
@@ -59,12 +37,34 @@ export default async function ClaimBusinessPage() {
                   <h3 className="mt-3 font-[var(--font-heading)] text-2xl text-[color:var(--surface-dark)]">
                     {claim.business?.name ?? "Unknown business"}
                   </h3>
+                  {claim.business ? (
+                    <p className="mt-2 text-sm text-[color:var(--ink-soft)]">
+                      {claim.business.neighborhood} · {claim.business.category}
+                    </p>
+                  ) : null}
                 </div>
-                <span className="rounded-full border border-black/10 bg-black/5 px-3 py-2 text-sm text-[color:var(--ink-soft)]">
-                  {claim.relationship}
-                </span>
+                {claim.claimantPhone ? (
+                  <span className="rounded-full border border-black/10 bg-black/5 px-3 py-2 text-sm text-[color:var(--ink-soft)]">
+                    {claim.claimantPhone}
+                  </span>
+                ) : null}
               </div>
               <p className="mt-4 text-sm leading-7 text-[color:var(--ink-soft)]">{claim.proofText}</p>
+              {claim.proofFileUrls.length > 0 ? (
+                <div className="mt-4 flex flex-wrap gap-3">
+                  {claim.proofFileUrls.map((fileUrl, index) => (
+                    <a
+                      key={fileUrl}
+                      className="rounded-full border border-black/10 bg-white/70 px-4 py-2 text-sm font-medium text-[color:var(--surface-dark)]"
+                      href={fileUrl}
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      View proof file {index + 1}
+                    </a>
+                  ))}
+                </div>
+              ) : null}
               {claim.adminNote ? <p className="mt-3 text-sm text-black/55">Admin note: {claim.adminNote}</p> : null}
             </article>
           ))}

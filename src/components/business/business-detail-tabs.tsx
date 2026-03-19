@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Clock3, ExternalLink, MapPin, Phone, Star } from "lucide-react";
+import { Clock3, ExternalLink, MapPin, Star } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { ReportForm } from "@/components/business/report-form";
@@ -28,13 +28,14 @@ type BusinessDetailTabsProps = {
   };
   detail: {
     longDescription: string;
-    phone: string;
     contactAddress: string;
+    googleMapsUrl?: string;
     openToday: string;
     openingHours: [string, string][];
     services: Array<{ name: string; priceEtb: number; description: string }>;
-    photos: Array<{ title: string; from: string; to: string }>;
+    photos: Array<{ title: string; url?: string; from?: string; to?: string }>;
     heroImageUrl: string;
+    features: string[];
     isVerified: boolean;
     isFeatured: boolean;
     viewCount: number;
@@ -44,9 +45,14 @@ type BusinessDetailTabsProps = {
     authorName: string;
     title: string;
     body: string;
+    tags: string[];
     rating: number;
     visitDate: string;
     photoUrls: string[];
+  }>;
+  reviewDistribution: Array<{
+    rating: number;
+    count: number;
   }>;
   viewerState: {
     isAuthenticated: boolean;
@@ -72,24 +78,39 @@ function formatVisitDate(value: string) {
 }
 
 function formatPriceTier(priceTier: string) {
-  if (priceTier === "$") return "Under 100 ETB";
-  if (priceTier === "$$") return "100-300 ETB";
-  if (priceTier === "$$$") return "300-600 ETB";
-  return "600+ ETB";
+  if (priceTier === "$") return "Budget · under 300 ETB";
+  if (priceTier === "$$") return "Mid-range · 300-800 ETB";
+  if (priceTier === "$$$") return "Premium · 800-1,800 ETB";
+  return "Luxury · 1,800+ ETB";
 }
 
 export function BusinessDetailTabs({
   business,
   detail,
   reviews,
+  reviewDistribution,
   viewerState
 }: BusinessDetailTabsProps) {
   const [activeTab, setActiveTab] = useState<ActiveTab>("overview");
   const mapQuery = encodeURIComponent(`${business.name}, ${detail.contactAddress}, Addis Ababa, Ethiopia`);
-  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+  const mapUrl = detail.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
   const recentReviews = reviews.slice(0, 3);
+  const highestDistributionCount = Math.max(...reviewDistribution.map((item) => item.count), 1);
   const photoGallery = useMemo(
-    () => [...detail.photos, ...reviews.flatMap((review) => review.photoUrls.map((url) => ({ title: review.title, url })))],
+    () => [
+      ...detail.photos.map((photo) =>
+        photo.url
+          ? { kind: "image" as const, title: photo.title, url: photo.url }
+          : { kind: "gradient" as const, title: photo.title, from: photo.from ?? "#d0d9e6", to: photo.to ?? "#f5f7fb" }
+      ),
+      ...reviews.flatMap((review) =>
+        review.photoUrls.map((url) => ({
+          kind: "image" as const,
+          title: review.title || `${review.authorName}'s review`,
+          url
+        }))
+      )
+    ],
     [detail.photos, reviews]
   );
 
@@ -167,6 +188,7 @@ export function BusinessDetailTabs({
                 />
                 <ReviewForm
                   businessId={business.id}
+                  businessName={business.name}
                   className="bg-[#f59e19] text-white hover:bg-[#e58a08]"
                   hasReviewed={viewerState.hasReviewed}
                   isAuthenticated={viewerState.isAuthenticated}
@@ -256,8 +278,22 @@ export function BusinessDetailTabs({
                         </div>
                       </div>
                     </div>
-                    <h3 className="mt-4 text-[1.1rem] font-semibold text-[#162033]">{review.title}</h3>
+                    {review.title ? (
+                      <h3 className="mt-4 text-[1.1rem] font-semibold text-[#162033]">{review.title}</h3>
+                    ) : null}
                     <p className="mt-2 text-sm leading-7 text-[#66768c]">{review.body}</p>
+                    {review.tags.length > 0 ? (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {review.tags.map((tag) => (
+                          <span
+                            key={`${review.id}-overview-${tag}`}
+                            className="rounded-full border border-[#e4ebf4] bg-white px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6f7f94]"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
                   </article>
                 ))}
               </div>
@@ -266,19 +302,62 @@ export function BusinessDetailTabs({
 
           <aside className="space-y-6">
             <article className="rounded-[30px] border border-[#e7edf5] bg-white p-8 shadow-[0_16px_40px_rgba(34,51,84,0.06)]">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#7d8ca1]">Review snapshot</p>
+                  <div className="mt-3 flex items-end gap-3">
+                    <p className="text-[3.3rem] font-semibold leading-none tracking-[-0.07em] text-[#111b2d]">
+                      {formatRating(business.rating)}
+                    </p>
+                    <div className="pb-2">
+                      <div className="flex items-center gap-1 text-[#f2b31a]">
+                        {Array.from({ length: 5 }).map((_, index) => (
+                          <Star
+                            key={`${business.id}-summary-${index}`}
+                            className={index < Math.round(business.rating) ? "h-4 w-4 fill-current" : "h-4 w-4 text-[#d9e2ef]"}
+                          />
+                        ))}
+                      </div>
+                      <p className="mt-2 text-sm text-[#66768c]">{business.reviewCount} public reviews</p>
+                    </div>
+                  </div>
+                </div>
+                <ReviewForm
+                  businessId={business.id}
+                  businessName={business.name}
+                  className="bg-[#151f33] text-white hover:bg-[#0f1726]"
+                  hasReviewed={viewerState.hasReviewed}
+                  isAuthenticated={viewerState.isAuthenticated}
+                  label="Write review"
+                />
+              </div>
+              <div className="mt-6 space-y-3">
+                {reviewDistribution.map((entry) => (
+                  <div key={entry.rating} className="grid grid-cols-[60px_minmax(0,1fr)_30px] items-center gap-3">
+                    <p className="text-sm font-medium text-[#55657b]">{entry.rating} star</p>
+                    <div className="h-2.5 overflow-hidden rounded-full bg-[#edf2f8]">
+                      <div
+                        className="h-full rounded-full bg-[linear-gradient(90deg,#f5bb43,#ef8613)]"
+                        style={{ width: `${(entry.count / highestDistributionCount) * 100}%` }}
+                      />
+                    </div>
+                    <p className="text-right text-sm font-semibold text-[#111b2d]">{entry.count}</p>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            <article className="rounded-[30px] border border-[#e7edf5] bg-white p-8 shadow-[0_16px_40px_rgba(34,51,84,0.06)]">
               <h2 className="text-[2rem] font-semibold tracking-[-0.05em] text-[#121c30]">Contact & Info</h2>
               <div className="mt-6 space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="rounded-[18px] bg-[#fff4d6] p-4 text-[#dd8b09]">
-                    <Phone className="h-6 w-6" />
-                  </div>
-                  <p className="pt-2 text-[1.05rem] text-[#42536a]">{detail.phone}</p>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="rounded-[18px] bg-[#fff4d6] p-4 text-[#dd8b09]">
                     <MapPin className="h-6 w-6" />
                   </div>
-                  <p className="pt-2 text-[1.05rem] text-[#42536a]">{detail.contactAddress}</p>
+                  <div className="pt-1">
+                    <p className="text-[1.1rem] font-semibold text-[#111b2d]">Location</p>
+                    <p className="mt-1 text-[1.05rem] text-[#42536a]">{detail.contactAddress}</p>
+                  </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="rounded-[18px] bg-[#fff4d6] p-4 text-[#dd8b09]">
@@ -289,6 +368,30 @@ export function BusinessDetailTabs({
                     <p className="mt-1 text-[1.05rem] text-[#42536a]">{detail.openToday}</p>
                   </div>
                 </div>
+                <div className="flex items-start gap-4">
+                  <div className="rounded-[18px] bg-[#fff4d6] p-4 text-[#dd8b09]">
+                    <Star className="h-6 w-6" />
+                  </div>
+                  <div className="pt-1">
+                    <p className="text-[1.1rem] font-semibold text-[#111b2d]">Price range</p>
+                    <p className="mt-1 text-[1.05rem] text-[#42536a]">{formatPriceTier(business.priceTier)}</p>
+                  </div>
+                </div>
+                {detail.features.length > 0 ? (
+                  <div>
+                    <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#7d8ca1]">Features</p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {detail.features.map((feature) => (
+                        <span
+                          key={feature}
+                          className="rounded-full border border-[#e4ebf4] bg-[#f8fafc] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#6f7f94]"
+                        >
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </article>
 
@@ -333,6 +436,29 @@ export function BusinessDetailTabs({
 
       {activeTab === "reviews" ? (
         <section className="space-y-4">
+          <article className="rounded-[30px] border border-[#e7edf5] bg-[linear-gradient(135deg,#fff9ef,#ffffff)] p-8 shadow-[0_16px_40px_rgba(34,51,84,0.06)]">
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#7d8ca1]">Write a review</p>
+                <h2 className="mt-3 text-[2.1rem] font-semibold tracking-[-0.05em] text-[#121c30]">
+                  Help the next person decide faster.
+                </h2>
+                <p className="mt-3 max-w-2xl text-base leading-8 text-[#5c6f87]">
+                  Share what stood out, add a few tags, and give people the local context they
+                  actually use when choosing where to go.
+                </p>
+              </div>
+              <ReviewForm
+                businessId={business.id}
+                businessName={business.name}
+                className="bg-[#f59e19] text-white hover:bg-[#e58a08]"
+                hasReviewed={viewerState.hasReviewed}
+                isAuthenticated={viewerState.isAuthenticated}
+                label="Write review"
+              />
+            </div>
+          </article>
+
           {reviews.map((review) => (
             <article key={review.id} className="rounded-[30px] border border-[#e7edf5] bg-white p-8 shadow-[0_16px_40px_rgba(34,51,84,0.06)]">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -353,8 +479,22 @@ export function BusinessDetailTabs({
                 <ReportForm businessId={business.id} label="Report review" reviewId={review.id} />
               </div>
 
-              <h3 className="mt-5 text-[1.3rem] font-semibold text-[#162033]">{review.title}</h3>
+              {review.title ? (
+                <h3 className="mt-5 text-[1.3rem] font-semibold text-[#162033]">{review.title}</h3>
+              ) : null}
               <p className="mt-3 text-[1rem] leading-8 text-[#66768c]">{review.body}</p>
+              {review.tags.length > 0 ? (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {review.tags.map((tag) => (
+                    <span
+                      key={`${review.id}-${tag}`}
+                      className="rounded-full border border-[#e4ebf4] bg-[#f8fafc] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#6f7f94]"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
 
               {review.photoUrls.length > 0 ? (
                 <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -378,18 +518,22 @@ export function BusinessDetailTabs({
 
       {activeTab === "photos" ? (
         <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {photoGallery.map((photo, index) =>
-            "url" in photo ? (
-              <Image
-                key={`${photo.url}-${index}`}
-                alt={`${business.name} photo`}
-                className="h-72 w-full rounded-[30px] border border-[#e7edf5] object-cover shadow-[0_16px_40px_rgba(34,51,84,0.06)]"
-                height={520}
-                src={photo.url}
-                unoptimized
-                width={520}
-              />
-            ) : (
+          {photoGallery.map((photo, index) => {
+            if (photo.kind === "image") {
+              return (
+                <Image
+                  key={`${photo.url}-${index}`}
+                  alt={`${business.name} photo`}
+                  className="h-72 w-full rounded-[30px] border border-[#e7edf5] object-cover shadow-[0_16px_40px_rgba(34,51,84,0.06)]"
+                  height={520}
+                  src={photo.url}
+                  unoptimized
+                  width={520}
+                />
+              );
+            }
+
+            return (
               <article
                 key={`${photo.title}-${index}`}
                 className="flex h-72 items-end rounded-[30px] border border-[#e7edf5] p-6 shadow-[0_16px_40px_rgba(34,51,84,0.06)]"
@@ -400,8 +544,8 @@ export function BusinessDetailTabs({
                   <p className="mt-1 text-xl font-semibold tracking-[-0.04em] text-[#152033]">{photo.title}</p>
                 </div>
               </article>
-            )
-          )}
+            );
+          })}
         </section>
       ) : null}
 

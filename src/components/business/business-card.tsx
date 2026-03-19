@@ -23,12 +23,17 @@ export function BusinessCard({
   return (
     <article
       className={cn(
-        "overflow-hidden transition duration-300",
+        "group relative overflow-hidden transition duration-300",
         isMarket
           ? "rounded-[30px] border border-[#e4e9f0] bg-white shadow-[0_16px_40px_rgba(39,52,76,0.08)] hover:-translate-y-1 hover:shadow-[0_24px_48px_rgba(39,52,76,0.12)]"
           : "glass-panel rounded-[30px] hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(78,52,29,0.18)]"
       )}
     >
+      <Link
+        aria-label={`Open ${business.name}`}
+        className="absolute inset-0 z-10 rounded-[30px]"
+        href={`/business/${business.slug}`}
+      />
       <div
         className={cn("relative", isMarket ? "h-64" : "h-56")}
         style={{
@@ -65,7 +70,7 @@ export function BusinessCard({
         <SaveButton
           businessId={business.id}
           compact
-          className="absolute right-3 top-3"
+          className="absolute right-3 top-3 z-20"
           initialSaved={business.isSaved}
           initialSaveCount={business.saveCount}
         />
@@ -73,17 +78,16 @@ export function BusinessCard({
       <div className={cn("space-y-5 p-5", isMarket && "space-y-4 p-6")}>
         <div className="space-y-2">
           <div className="flex items-start justify-between gap-4">
-            <Link
-              href={`/business/${business.slug}`}
+            <p
               className={cn(
-                "leading-[1.02] tracking-[-0.04em] text-[#23170f]",
+                "leading-[1.02] tracking-[-0.04em] text-[#23170f] transition group-hover:text-[var(--accent-strong)]",
                 isMarket
                   ? "text-[2rem] font-semibold"
                   : "font-[var(--font-heading)] text-[1.85rem]"
               )}
             >
               {business.name}
-            </Link>
+            </p>
             <span
               className={cn(
                 "rounded-full px-3 py-1 text-xs font-semibold",

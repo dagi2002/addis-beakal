@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BusinessCard } from "@/components/business/business-card";
 import { DiscoverFilters } from "@/components/business/discover-filters";
 import { SiteShell } from "@/components/layout/site-shell";
+import { BUSINESS_FEATURE_OPTIONS } from "@/features/businesses/catalog";
 import { getDiscoverPageData } from "@/features/discovery/service";
 import type { DiscoverFilters as DiscoverFilterValues } from "@/features/businesses/types";
 import { getViewerId } from "@/lib/viewer";
@@ -102,24 +103,12 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
 
   const ratingOptions = [3, 3.5, 4, 4.5] as const;
   const priceOptions = [
-    { value: "$", label: "Under 100 ETB" },
-    { value: "$$", label: "100-300 ETB" },
-    { value: "$$$", label: "300-600 ETB" },
-    { value: "$$$$", label: "600+ ETB" }
+    { value: "$", label: "Budget · under 300 ETB" },
+    { value: "$$", label: "Mid-range · 300-800 ETB" },
+    { value: "$$$", label: "Premium · 800-1,800 ETB" },
+    { value: "$$$$", label: "Luxury · 1,800+ ETB" }
   ] as const;
-  const featureOptions = [
-    "great coffee",
-    "fasting friendly",
-    "halal",
-    "live music",
-    "rooftop",
-    "parking",
-    "delivery",
-    "strong wifi",
-    "outdoor seating",
-    "family friendly",
-    "affordable"
-  ] as const;
+  const featureOptions = BUSINESS_FEATURE_OPTIONS;
 
   function toggleValue(values: string[], value: string) {
     return values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
@@ -170,7 +159,7 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
               </div>
 
               <div className="space-y-4">
-                <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#6a7890]">Neighborhood</p>
+                <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#6a7890]">Area</p>
                 <div className="flex flex-wrap gap-2">
                   <Link
                     className={`rounded-[16px] border px-3 py-2 text-sm transition ${
@@ -292,7 +281,7 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
 
             {data.businesses.length === 0 ? (
               <div className="rounded-[30px] border border-dashed border-[#d9e2ee] bg-white p-10 text-center text-[#66758b]">
-                No businesses matched those filters. Try widening the neighborhood or switching the sort.
+                No businesses matched those filters. Try widening the area or switching the sort.
               </div>
             ) : null}
           </div>

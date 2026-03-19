@@ -256,7 +256,9 @@ function baseDatabase(): AppDatabase {
         coverTo: "#dee5eb",
         rating: 0,
         reviewCount: 0,
-        saveCount: 0
+        saveCount: 0,
+        ownerUserId: reviewAuthorIdByName["Abel N."],
+        claimedAt: "2026-03-12T09:30:00.000Z"
       },
       {
         id: "biz-beteseb-clinic",
@@ -313,7 +315,7 @@ function baseDatabase(): AppDatabase {
         saveCount: 0
       }
     ],
-    reviews: [
+    reviews: ([
       {
         id: "rev-1",
         businessId: "biz-tomoca-atlas",
@@ -614,7 +616,10 @@ function baseDatabase(): AppDatabase {
         reportCount: 0,
         photoUrls: []
       }
-    ],
+    ] as Array<Omit<AppDatabase["reviews"][number], "tags">>).map((review) => ({
+      ...review,
+      tags: []
+    })),
     saves: [
       {
         id: "save-1",
@@ -648,7 +653,37 @@ function baseDatabase(): AppDatabase {
       }
     ],
     reports: [],
-    businessClaims: []
+    businessClaims: [
+      {
+        id: "claim-pending-kaldis-selam",
+        businessId: "biz-kaldis-bole",
+        userId: "user-demo-member",
+        claimantName: "Selam Demo",
+        claimantEmail: "demo@addisbeakal.test",
+        claimantPhone: "+251911002200",
+        proofText:
+          "I manage the Bole branch operations and can provide the renewed trade license plus an official manager confirmation letter.",
+        proofFileUrls: [],
+        status: "pending",
+        createdAt: "2026-03-18T08:15:00.000Z"
+      },
+      {
+        id: "claim-approved-atlas-abel",
+        businessId: "biz-atlas-barber",
+        userId: reviewAuthorIdByName["Abel N."],
+        claimantName: "Abel N.",
+        claimantEmail: "reviewer-5@addisbeakal.test",
+        claimantPhone: "+251933445566",
+        proofText:
+          "I operate Atlas Barber Studio and verified ownership with the business license, tax registration, and storefront identity documents.",
+        proofFileUrls: [],
+        status: "approved",
+        adminNote: "Identity and license details matched the storefront submission.",
+        createdAt: "2026-03-11T10:00:00.000Z",
+        reviewedAt: "2026-03-12T09:30:00.000Z",
+        reviewedByUserId: "user-demo-admin"
+      }
+    ]
   };
 }
 

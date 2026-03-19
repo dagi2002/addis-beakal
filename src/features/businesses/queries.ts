@@ -39,7 +39,7 @@ export function mapBusinessCardData(
     priceTier: business.priceTier,
     category: category?.name ?? "Unknown",
     neighborhood: neighborhood?.name ?? "Unknown",
-    tags: business.tags,
+    tags: Array.from(new Set([...(business.features ?? []), ...business.tags])),
     rating: business.rating,
     reviewCount: business.reviewCount,
     saveCount: business.saveCount,
@@ -90,6 +90,7 @@ export function matchesBusinessQuery(
     business.shortDescription,
     business.longDescription,
     business.address,
+    (business.features ?? []).join(" "),
     business.tags.join(" "),
     category?.name ?? "",
     neighborhood?.name ?? ""

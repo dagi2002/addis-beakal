@@ -8,8 +8,9 @@ import { readDatabase, updateDatabase } from "@/server/database";
 export const createReviewSchema = z.object({
   businessId: z.string().min(1),
   rating: z.number().int().min(1).max(5),
-  title: z.string().trim().min(4).max(80),
+  title: z.string().trim().max(80).default(""),
   body: z.string().trim().min(20).max(1000),
+  tags: z.array(z.string().trim().min(1).max(32)).max(14).default([]),
   visitDate: z.string().min(1),
   photoUrls: z.array(z.string().min(1)).max(4).default([])
 });
@@ -46,6 +47,7 @@ export async function createReview(input: unknown, actor: AppActor) {
     rating: payload.rating,
     title: payload.title.trim(),
     body: payload.body.trim(),
+    tags: payload.tags.map((tag) => tag.trim()),
     visitDate: payload.visitDate,
     createdAt: now,
     updatedAt: now,
