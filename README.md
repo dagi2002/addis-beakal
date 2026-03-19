@@ -23,6 +23,22 @@ npm run dev
 npm run lint
 npm test
 npm run build
+npm run mobile:sync-data
+```
+
+## Mobile app
+
+An Expo-based mobile app now lives in [`mobile/`](/Users/dagemamogne/Documents/addis-beakal/mobile) and reuses the repo's business taxonomy plus a sanitized generated dataset from [`data/mobile-public.json`](/Users/dagemamogne/Documents/addis-beakal/data/mobile-public.json).
+
+Mobile workflow:
+
+```bash
+npm run mobile:sync-data
+cd mobile
+npm install
+npm run lint
+npm run typecheck
+npx expo start
 ```
 
 ## Demo accounts

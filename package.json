@@ -7,7 +7,8 @@
     "build": "XDG_CACHE_HOME=.cache next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "mobile:sync-data": "node scripts/generate-mobile-public-data.mjs"
   },
   "dependencies": {
     "argon2": "^0.44.0",
