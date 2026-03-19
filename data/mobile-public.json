@@ -1,0 +1,830 @@
+{
+  "categories": [
+    {
+      "id": "cat-coffee",
+      "name": "Cafes",
+      "slug": "cafes"
+    },
+    {
+      "id": "cat-dining",
+      "name": "Restaurants",
+      "slug": "restaurants"
+    },
+    {
+      "id": "cat-culture",
+      "name": "Bars",
+      "slug": "bars"
+    },
+    {
+      "id": "cat-bakery",
+      "name": "Bakeries",
+      "slug": "bakeries"
+    },
+    {
+      "id": "cat-hotels",
+      "name": "Hotels",
+      "slug": "hotels"
+    },
+    {
+      "id": "cat-salons",
+      "name": "Salons",
+      "slug": "salons"
+    },
+    {
+      "id": "cat-barbers",
+      "name": "Barbers",
+      "slug": "barbers"
+    },
+    {
+      "id": "cat-gyms",
+      "name": "Gyms",
+      "slug": "gyms"
+    },
+    {
+      "id": "cat-clinics",
+      "name": "Clinics",
+      "slug": "clinics"
+    },
+    {
+      "id": "cat-pharmacy",
+      "name": "Pharmacy",
+      "slug": "pharmacy"
+    },
+    {
+      "id": "cat-spas",
+      "name": "Spas",
+      "slug": "spas"
+    },
+    {
+      "id": "cat-car-services",
+      "name": "Car Services",
+      "slug": "car-services"
+    }
+  ],
+  "neighborhoods": [
+    {
+      "id": "hood-bole",
+      "name": "Bole",
+      "slug": "bole"
+    },
+    {
+      "id": "hood-kazanchis",
+      "name": "Kazanchis",
+      "slug": "kazanchis"
+    },
+    {
+      "id": "hood-piassa",
+      "name": "Piassa",
+      "slug": "piassa"
+    },
+    {
+      "id": "hood-mexico",
+      "name": "Mexico",
+      "slug": "mexico"
+    },
+    {
+      "id": "hood-cmc",
+      "name": "CMC",
+      "slug": "cmc"
+    },
+    {
+      "id": "hood-sarbet",
+      "name": "Sarbet",
+      "slug": "sarbet"
+    },
+    {
+      "id": "hood-gerji",
+      "name": "Gerji",
+      "slug": "gerji"
+    },
+    {
+      "id": "hood-megenagna",
+      "name": "Megenagna",
+      "slug": "megenagna"
+    },
+    {
+      "id": "hood-lideta",
+      "name": "Lideta",
+      "slug": "lideta"
+    },
+    {
+      "id": "hood-22",
+      "name": "22",
+      "slug": "22"
+    },
+    {
+      "id": "hood-ayat",
+      "name": "Ayat",
+      "slug": "ayat"
+    },
+    {
+      "id": "hood-summit",
+      "name": "Summit",
+      "slug": "summit"
+    }
+  ],
+  "businesses": [
+    {
+      "id": "biz-tomoca-atlas",
+      "slug": "tomoca-coffee",
+      "name": "Tomoca Coffee",
+      "shortDescription": "Ethiopia's iconic coffee stop with the city rhythm still intact.",
+      "longDescription": "A reliable stop for macchiatos, roasted beans, and that familiar standing-counter rhythm that locals move through every day.",
+      "address": "Wavel Street, Piassa",
+      "priceTier": "$",
+      "categoryId": "cat-coffee",
+      "neighborhoodId": "hood-piassa",
+      "features": [],
+      "tags": [
+        "best buna",
+        "trending now",
+        "strong wifi",
+        "affordable",
+        "quick service"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#d86e39",
+      "coverTo": "#f2c078",
+      "rating": 4.5,
+      "reviewCount": 2,
+      "saveCount": 1,
+      "viewCount": 0
+    },
+    {
+      "id": "biz-kaldis-bole",
+      "slug": "kaldis-coffee",
+      "name": "Kaldi's Coffee",
+      "shortDescription": "A polished cafe stop for meetings, catch-ups, and dependable coffee runs.",
+      "longDescription": "A familiar Addis cafe format with easy seating, coffee standards people know, and a practical location for everyday routines.",
+      "address": "Bole, Addis Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-coffee",
+      "neighborhoodId": "hood-bole",
+      "features": [],
+      "tags": [
+        "best buna",
+        "strong wifi",
+        "trending now",
+        "outdoor seating"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#7e5946",
+      "coverTo": "#d7b29b",
+      "rating": 4.5,
+      "reviewCount": 2,
+      "saveCount": 0,
+      "viewCount": 4
+    },
+    {
+      "id": "biz-yod",
+      "slug": "yod-abyssinia",
+      "name": "Yod Abyssinia",
+      "shortDescription": "Dinner, performance, and a polished big-night-out atmosphere.",
+      "longDescription": "Known for Ethiopian dining paired with dance and music programming, with a menu that works for groups and visitors.",
+      "address": "Bole Medhanialem, Addis Ababa",
+      "priceTier": "$$$",
+      "categoryId": "cat-dining",
+      "neighborhoodId": "hood-bole",
+      "features": [],
+      "tags": [
+        "fasting-friendly",
+        "halal",
+        "live music",
+        "family-friendly",
+        "date spots"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#1f6d5f",
+      "coverTo": "#8dd2b6",
+      "rating": 4.5,
+      "reviewCount": 2,
+      "saveCount": 3,
+      "viewCount": 0
+    },
+    {
+      "id": "biz-sishu",
+      "slug": "sishu-mexico",
+      "name": "Sishu Mexico",
+      "shortDescription": "Stylish all-day dining with a menu broad enough for mixed groups.",
+      "longDescription": "A contemporary restaurant-cafe hybrid that is popular for lunch meetings, relaxed dinners, and dependable coffee service.",
+      "address": "Mexico Square, Addis Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-dining",
+      "neighborhoodId": "hood-mexico",
+      "features": [],
+      "tags": [
+        "outdoor seating",
+        "strong wifi",
+        "family-friendly",
+        "date spots"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#4a5568",
+      "coverTo": "#b9c2cf",
+      "rating": 3.5,
+      "reviewCount": 2,
+      "saveCount": 1,
+      "viewCount": 0
+    },
+    {
+      "id": "biz-fendika",
+      "slug": "fendika-cultural-center",
+      "name": "Fendika Cultural Center",
+      "shortDescription": "One of the city's most memorable places for art, music, and movement.",
+      "longDescription": "An iconic cultural venue with live performances and a strong sense of local creative identity.",
+      "address": "Kazanchis, Addis Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-culture",
+      "neighborhoodId": "hood-kazanchis",
+      "features": [],
+      "tags": [
+        "live music",
+        "trending now",
+        "date spots",
+        "open late",
+        "nightlife"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#6f3f8f",
+      "coverTo": "#d7b0f1",
+      "rating": 5,
+      "reviewCount": 1,
+      "saveCount": 2,
+      "viewCount": 1
+    },
+    {
+      "id": "biz-bilos",
+      "slug": "bilos-piassa",
+      "name": "Bilo's Piassa",
+      "shortDescription": "A dependable pastry and coffee stop that locals recommend often.",
+      "longDescription": "A bakery-led neighborhood favorite for quick meetings, takeaway pastries, and an easy everyday routine.",
+      "address": "Piassa, Addis Ababa",
+      "priceTier": "$",
+      "categoryId": "cat-bakery",
+      "neighborhoodId": "hood-piassa",
+      "features": [],
+      "tags": [
+        "fresh baked",
+        "best buna",
+        "family-friendly",
+        "affordable"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#d4a947",
+      "coverTo": "#f6dc8a",
+      "rating": 4.5,
+      "reviewCount": 2,
+      "saveCount": 1,
+      "viewCount": 0
+    },
+    {
+      "id": "biz-skylight",
+      "slug": "skylight-hotel-addis",
+      "name": "Skylight Hotel Addis",
+      "shortDescription": "A polished hotel stay with business-friendly amenities and a wide campus feel.",
+      "longDescription": "One of the city's best-known large-format hotels, popular for conferences, airport convenience, and weekend staycations.",
+      "address": "Bole International Airport Road, Addis Ababa",
+      "priceTier": "$$$$",
+      "categoryId": "cat-hotels",
+      "neighborhoodId": "hood-bole",
+      "features": [],
+      "tags": [
+        "rooftop",
+        "parking",
+        "strong wifi",
+        "family-friendly"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#7da7c7",
+      "coverTo": "#dce9f5",
+      "rating": 5,
+      "reviewCount": 1,
+      "saveCount": 1,
+      "viewCount": 0
+    },
+    {
+      "id": "biz-harmony-spa",
+      "slug": "harmony-spa-wellness",
+      "name": "Harmony Spa & Wellness",
+      "shortDescription": "Calm treatment rooms and a softer luxury feel in central Addis.",
+      "longDescription": "A spa-focused experience for massages, facials, and quiet reset time without leaving the city.",
+      "address": "Kazanchis, Addis Ababa",
+      "priceTier": "$$$",
+      "categoryId": "cat-spas",
+      "neighborhoodId": "hood-kazanchis",
+      "features": [],
+      "tags": [
+        "parking",
+        "family-friendly",
+        "relaxation",
+        "date spots"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#d7c6bb",
+      "coverTo": "#f4ebe4",
+      "rating": 4,
+      "reviewCount": 1,
+      "saveCount": 0,
+      "viewCount": 0
+    },
+    {
+      "id": "biz-findfine-fitness",
+      "slug": "findfine-fitness",
+      "name": "Findfine Fitness",
+      "shortDescription": "A brighter gym floor with modern machines and a steady after-work crowd.",
+      "longDescription": "Known for approachable trainers, cleaner equipment zones, and convenient class timings for regulars.",
+      "address": "Sarbet, Addis Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-gyms",
+      "neighborhoodId": "hood-sarbet",
+      "features": [],
+      "tags": [
+        "parking",
+        "wellness",
+        "community",
+        "trending now"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#7b8795",
+      "coverTo": "#d4dbe2",
+      "rating": 4,
+      "reviewCount": 1,
+      "saveCount": 0,
+      "viewCount": 0
+    },
+    {
+      "id": "biz-gleam-salon",
+      "slug": "gleam-beauty-salon",
+      "name": "Gleam Beauty Salon",
+      "shortDescription": "A dependable beauty stop for blowouts, nails, and event-ready styling.",
+      "longDescription": "A polished salon experience with strong repeat clientele and a reputation for steady service.",
+      "address": "Megenagna, Addis Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-salons",
+      "neighborhoodId": "hood-megenagna",
+      "features": [],
+      "tags": [
+        "beauty",
+        "appointments",
+        "family-friendly"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#f0bfd4",
+      "coverTo": "#f9e6ef",
+      "rating": 4,
+      "reviewCount": 1,
+      "saveCount": 0,
+      "viewCount": 0
+    },
+    {
+      "id": "biz-atlas-barber",
+      "slug": "atlas-barber-studio",
+      "name": "Atlas Barber Studio",
+      "shortDescription": "Sharp fades, clean lines, and a consistent neighborhood regular crowd.",
+      "longDescription": "A barber shop built around quick service, reliable cuts, and a straightforward booking rhythm.",
+      "address": "Gerji, Addis Ababa",
+      "priceTier": "$",
+      "categoryId": "cat-barbers",
+      "neighborhoodId": "hood-gerji",
+      "features": [],
+      "tags": [
+        "quick service",
+        "affordable",
+        "walk-in friendly"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#737f8c",
+      "coverTo": "#dee5eb",
+      "rating": 5,
+      "reviewCount": 1,
+      "saveCount": 0,
+      "viewCount": 1
+    },
+    {
+      "id": "biz-beteseb-clinic",
+      "slug": "beteseb-family-clinic",
+      "name": "Beteseb Family Clinic",
+      "shortDescription": "A neighborhood clinic known for practical care and clear communication.",
+      "longDescription": "A local clinic focused on general consultations, pediatric care, and dependable daytime service.",
+      "address": "CMC, Addis Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-clinics",
+      "neighborhoodId": "hood-cmc",
+      "features": [],
+      "tags": [
+        "family-friendly",
+        "parking",
+        "healthcare"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#8ec2d5",
+      "coverTo": "#eef8fc",
+      "rating": 4,
+      "reviewCount": 1,
+      "saveCount": 0,
+      "viewCount": 1
+    },
+    {
+      "id": "biz-summit-pharmacy",
+      "slug": "summit-pharmacy",
+      "name": "Summit Pharmacy",
+      "shortDescription": "A trusted pharmacy stop for essentials, prescriptions, and quick advice.",
+      "longDescription": "A practical neighborhood pharmacy with a strong regular customer base and useful late-day convenience.",
+      "address": "Summit, Addis Ababa",
+      "priceTier": "$",
+      "categoryId": "cat-pharmacy",
+      "neighborhoodId": "hood-summit",
+      "features": [],
+      "tags": [
+        "delivery",
+        "healthcare",
+        "affordable"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#7ac4bb",
+      "coverTo": "#e4faf6",
+      "rating": 4,
+      "reviewCount": 1,
+      "saveCount": 0,
+      "viewCount": 0
+    },
+    {
+      "id": "biz-lideta-garage",
+      "slug": "lideta-auto-care",
+      "name": "Lideta Auto Care",
+      "shortDescription": "Straightforward maintenance, diagnostics, and repeat local trust.",
+      "longDescription": "A car service business known for practical fixes, clear explanations, and steady turnaround times.",
+      "address": "Lideta, Addis Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-car-services",
+      "neighborhoodId": "hood-lideta",
+      "features": [],
+      "tags": [
+        "maintenance",
+        "diagnostics",
+        "parking"
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#7b8fa4",
+      "coverTo": "#e3ebf3",
+      "rating": 4,
+      "reviewCount": 1,
+      "saveCount": 0,
+      "viewCount": 0
+    },
+    {
+      "id": "biz-tutu-noodles",
+      "slug": "tutu-noodles",
+      "name": "Tutu Noodles",
+      "shortDescription": "Best noodles in town. Best noodles in town. Best noodles in town. Best noodles in town.",
+      "longDescription": "Best noodles in town. Best noodles in town. Best noodles in town. Best noodles in town.Best noodles in town. Best noodles in town. Best noodles in town. Best noodles in town.",
+      "address": "Bole, Addis Ababa",
+      "googleMapsUrl": "https://www.google.com/maps/dir//TUTU+NOODLES+%7C+Friendship,+behind+Friendship+Hypermarket,+Addis+Ababa/@8.9549131,38.7472896,15z/data=!3m1!4b1!4m8!4m7!1m0!1m5!1m1!1s0x164b85ebd7d4cdb5:0x88657e85c25d18fb!2m2!1d38.7859741!2d8.9893682?entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
+      "priceTier": "$$",
+      "categoryId": "cat-dining",
+      "neighborhoodId": "hood-bole",
+      "features": [
+        "family friendly",
+        "affordable",
+        "takeaway"
+      ],
+      "tags": [],
+      "photoUrls": [],
+      "openingHours": [
+        [
+          "Monday",
+          "7:00 AM - 7:00 PM"
+        ],
+        [
+          "Tuesday",
+          "7:00 AM - 7:00 PM"
+        ],
+        [
+          "Wednesday",
+          "7:00 AM - 7:00 PM"
+        ],
+        [
+          "Thursday",
+          "7:00 AM - 7:00 PM"
+        ],
+        [
+          "Friday",
+          "7:00 AM - 7:00 PM"
+        ],
+        [
+          "Saturday",
+          "8:00 AM - 8:00 PM"
+        ],
+        [
+          "Sunday",
+          "8:00 AM - 6:00 PM"
+        ]
+      ],
+      "services": [
+        {
+          "name": "Vegitable Noodles",
+          "priceEtb": 600,
+          "description": "vegi"
+        },
+        {
+          "name": "Chicken Noodles",
+          "priceEtb": 650,
+          "description": "vegi"
+        }
+      ],
+      "coverFrom": "#1f6d5f",
+      "coverTo": "#9dd8c1",
+      "rating": 0,
+      "reviewCount": 0,
+      "saveCount": 1,
+      "viewCount": 1,
+      "createdAt": "2026-03-19T14:39:04.990Z"
+    },
+    {
+      "id": "biz-hebir-ethiopia",
+      "slug": "hebir-ethiopia",
+      "name": "Hebir Ethiopia",
+      "shortDescription": "The best food in town. Great drinks with good vibes.",
+      "longDescription": "Hebir Ethiopia (also spelled Hibir or Hebir Etiopia) is a well-known multi-concept venue in the Bole area of Addis Ababa, Ethiopia. It is particularly famous for its traditional Ethiopian cuisine, but it also caters to international tastes with a diverse menu and different atmospheres under one roof.",
+      "address": "Bole Friendship, Addis Ababa",
+      "googleMapsUrl": "https://www.google.com/maps?client=safari&rls=en&oe=UTF-8&um=1&ie=UTF-8&fb=1&gl=et&sa=X&geocode=KdGjpwP8hEsWMe7jOQ8ryV3I&daddr=Africa+Avenu+Africa+Ave,+Addis+Ababa",
+      "priceTier": "$$",
+      "categoryId": "cat-dining",
+      "neighborhoodId": "hood-bole",
+      "features": [],
+      "tags": [
+        "good food",
+        "great vibes",
+        "smoking area",
+        "premier league football."
+      ],
+      "photoUrls": [],
+      "openingHours": [],
+      "services": [],
+      "coverFrom": "#1f6d5f",
+      "coverTo": "#9dd8c1",
+      "rating": 0,
+      "reviewCount": 0,
+      "saveCount": 0,
+      "viewCount": 5
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rev-1",
+      "businessId": "biz-tomoca-atlas",
+      "authorName": "Sara M.",
+      "rating": 5,
+      "title": "The pace feels very Addis",
+      "body": "Fast service, great macchiato, and the kind of place that still feels anchored in the city.",
+      "tags": [],
+      "visitDate": "2026-02-12",
+      "createdAt": "2026-02-13T10:00:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-2",
+      "businessId": "biz-tomoca-atlas",
+      "authorName": "Eden T.",
+      "rating": 4,
+      "title": "Reliable stop before meetings",
+      "body": "Easy coffee run with the usual crowd. Beans were fresh and the service moved quickly.",
+      "tags": [],
+      "visitDate": "2026-01-29",
+      "createdAt": "2026-01-30T08:30:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-3",
+      "businessId": "biz-yod",
+      "authorName": "Samuel D.",
+      "rating": 5,
+      "title": "Best for hosting visitors",
+      "body": "The performance element makes it memorable, and the whole experience feels polished.",
+      "tags": [],
+      "visitDate": "2026-02-20",
+      "createdAt": "2026-02-21T18:10:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-4",
+      "businessId": "biz-yod",
+      "authorName": "Helen K.",
+      "rating": 4,
+      "title": "Big energy, a little loud",
+      "body": "Great for a celebratory dinner. Expect a lively room and plan ahead for peak time.",
+      "tags": [],
+      "visitDate": "2026-02-08",
+      "createdAt": "2026-02-09T20:45:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-5",
+      "businessId": "biz-sishu",
+      "authorName": "Abel N.",
+      "rating": 4,
+      "title": "Solid lunch meeting choice",
+      "body": "The menu works for mixed preferences and the setting feels current without trying too hard.",
+      "tags": [],
+      "visitDate": "2026-02-18",
+      "createdAt": "2026-02-19T12:00:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-6",
+      "businessId": "biz-sishu",
+      "authorName": "Mimi A.",
+      "rating": 3,
+      "title": "Good, but timing slipped",
+      "body": "Nice room and friendly team, though service slowed down during the lunch rush.",
+      "tags": [],
+      "visitDate": "2026-01-17",
+      "createdAt": "2026-01-17T14:00:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-7",
+      "businessId": "biz-fendika",
+      "authorName": "Noah G.",
+      "rating": 5,
+      "title": "A real city highlight",
+      "body": "If you want something specific to Addis rather than generic nightlife, this is the kind of place to start.",
+      "tags": [],
+      "visitDate": "2026-02-01",
+      "createdAt": "2026-02-02T19:05:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-8",
+      "businessId": "biz-bilos",
+      "authorName": "Rahel B.",
+      "rating": 4,
+      "title": "Pastries worth repeating",
+      "body": "Simple, easy, and consistently good for a quick catch-up or coffee break.",
+      "tags": [],
+      "visitDate": "2026-02-10",
+      "createdAt": "2026-02-10T09:20:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-9",
+      "businessId": "biz-bilos",
+      "authorName": "Henok W.",
+      "rating": 5,
+      "title": "Morning favorite",
+      "body": "Friendly staff and the kind of bakery that gets recommended by locals for a reason.",
+      "tags": [],
+      "visitDate": "2026-02-11",
+      "createdAt": "2026-02-11T07:40:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-12",
+      "businessId": "biz-skylight",
+      "authorName": "Sara M.",
+      "rating": 5,
+      "title": "Smooth stay for airport access",
+      "body": "Easy for conferences and travel days, with enough amenities to make longer stays comfortable too.",
+      "tags": [],
+      "visitDate": "2026-02-14",
+      "createdAt": "2026-02-15T09:00:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-13",
+      "businessId": "biz-harmony-spa",
+      "authorName": "Eden T.",
+      "rating": 4,
+      "title": "Quiet, polished, and easy to recommend",
+      "body": "Relaxing rooms and a service style that feels calm instead of rushed.",
+      "tags": [],
+      "visitDate": "2026-02-09",
+      "createdAt": "2026-02-10T11:10:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-14",
+      "businessId": "biz-findfine-fitness",
+      "authorName": "Samuel D.",
+      "rating": 4,
+      "title": "Good floor, strong equipment mix",
+      "body": "A gym that feels current and clean, especially if you go outside the busiest evening hour.",
+      "tags": [],
+      "visitDate": "2026-02-05",
+      "createdAt": "2026-02-05T18:00:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-15",
+      "businessId": "biz-gleam-salon",
+      "authorName": "Helen K.",
+      "rating": 4,
+      "title": "Reliable for events and weekends",
+      "body": "Friendly team and a look that stayed polished all day without feeling overly formal.",
+      "tags": [],
+      "visitDate": "2026-02-16",
+      "createdAt": "2026-02-17T08:45:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-16",
+      "businessId": "biz-atlas-barber",
+      "authorName": "Abel N.",
+      "rating": 5,
+      "title": "Quick cut, very solid finish",
+      "body": "Exactly the kind of neighborhood barber you want when you need something clean without a long wait.",
+      "tags": [],
+      "visitDate": "2026-02-07",
+      "createdAt": "2026-02-07T12:20:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-17",
+      "businessId": "biz-beteseb-clinic",
+      "authorName": "Mimi A.",
+      "rating": 4,
+      "title": "Straightforward and reassuring",
+      "body": "Good communication, practical care, and an overall experience that felt organized from start to finish.",
+      "tags": [],
+      "visitDate": "2026-02-03",
+      "createdAt": "2026-02-04T10:35:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-18",
+      "businessId": "biz-summit-pharmacy",
+      "authorName": "Noah G.",
+      "rating": 4,
+      "title": "Helpful late in the day",
+      "body": "A pharmacy that feels useful precisely because it is fast, familiar, and easy to navigate.",
+      "tags": [],
+      "visitDate": "2026-02-12",
+      "createdAt": "2026-02-12T18:40:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-19",
+      "businessId": "biz-lideta-garage",
+      "authorName": "Rahel B.",
+      "rating": 4,
+      "title": "Honest explanations and fair timing",
+      "body": "The team walked through the problem clearly and did not overcomplicate what needed to be fixed.",
+      "tags": [],
+      "visitDate": "2026-02-06",
+      "createdAt": "2026-02-06T16:25:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "rev-20",
+      "businessId": "biz-kaldis-bole",
+      "authorName": "Henok W.",
+      "rating": 4,
+      "title": "Easy place to work for an hour",
+      "body": "Good coffee, decent seating, and the kind of cafe that makes quick meetings very easy to pull off.",
+      "tags": [],
+      "visitDate": "2026-02-18",
+      "createdAt": "2026-02-18T11:15:00.000Z",
+      "photoUrls": []
+    },
+    {
+      "id": "review_8396a054-e3d4-49ef-8697-383242e6b5b4",
+      "businessId": "biz-kaldis-bole",
+      "authorName": "Dagi",
+      "rating": 5,
+      "title": "",
+      "body": "bbbmvkcosdiovjjdfivj",
+      "tags": [],
+      "visitDate": "2026-03-19",
+      "createdAt": "2026-03-19T18:57:13.513Z",
+      "photoUrls": []
+    }
+  ]
+}
