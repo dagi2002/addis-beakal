@@ -1,0 +1,42 @@
+export const BUSINESS_FEATURE_OPTIONS = [
+  "great coffee",
+  "fasting friendly",
+  "halal",
+  "live music",
+  "rooftop",
+  "parking",
+  "delivery",
+  "strong wifi",
+  "outdoor seating",
+  "family friendly",
+  "affordable",
+  "quick service",
+  "walk-in friendly",
+  "appointments",
+  "healthcare",
+  "wellness",
+  "fresh baked",
+  "nightlife",
+  "date spot",
+  "community",
+  "maintenance",
+  "diagnostics",
+  "beauty",
+  "relaxation",
+  "coworking friendly",
+  "group friendly",
+  "event friendly",
+  "kid friendly",
+  "late night",
+  "takeaway"
+] as const;
+
+export const BUSINESS_WEEKDAYS = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday"
+] as const;

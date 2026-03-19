@@ -2,17 +2,22 @@ import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 
 import { submitReport } from "@/features/reports/service";
-import { ensureViewerId } from "@/lib/viewer";
+import { getSessionActor } from "@/lib/viewer";
+import { AuthorizationError } from "@/server/auth/policies";
 
 export async function POST(request: Request) {
   try {
-    const viewerId = await ensureViewerId();
-    await submitReport(await request.json(), viewerId);
+    const actor = await getSessionActor();
+    await submitReport(await request.json(), actor);
 
     return NextResponse.json({
       message: "Report submitted. It is now available for moderation review."
     });
   } catch (error) {
+    if (error instanceof AuthorizationError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
+
     if (error instanceof ZodError) {
       return NextResponse.json({ error: error.issues[0]?.message ?? "Invalid report." }, { status: 400 });
     }

@@ -1,11 +1,256 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { BUSINESS_FEATURE_OPTIONS } from "@/features/businesses/catalog";
 import { buildSeedDatabase } from "@/features/businesses/seed";
-import type { AppDatabase } from "@/features/businesses/types";
+import type {
+  AppDatabase,
+  Business,
+  BusinessClaim,
+  Category,
+  Neighborhood,
+  Report,
+  Review,
+  Save,
+  User
+} from "@/features/businesses/types";
+import { syncAllBusinessMetrics } from "@/features/businesses/logic";
+import { demoUsers } from "@/server/auth/seed-users";
 
 const DATA_DIRECTORY = path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIRECTORY, "app-db.json");
+
+type LegacyReview = Omit<Review, "authorId" | "updatedAt" | "photoUrls" | "tags">;
+type LegacySave = Omit<Save, "userId"> & {
+  viewerId: string;
+};
+type LegacyReport = Omit<Report, "userId"> & {
+  viewerId?: string;
+};
+type LegacyBusinessClaim = Omit<BusinessClaim, "proofFileUrls" | "claimantPhone"> & {
+  claimantPhone?: string;
+  proofFileUrls?: string[];
+};
+
+type RawDatabase = {
+  categories?: Category[];
+  neighborhoods?: Neighborhood[];
+  businesses?: Business[];
+  reviews?: Array<Review | LegacyReview>;
+  saves?: Array<Save | LegacySave>;
+  reports?: Array<Report | LegacyReport>;
+  users?: User[];
+  businessClaims?: Array<BusinessClaim | LegacyBusinessClaim>;
+};
+
+function mergeById<T extends { id: string }>(...collections: T[][]) {
+  const merged = new Map<string, T>();
+
+  for (const collection of collections) {
+    for (const item of collection) {
+      merged.set(item.id, item);
+    }
+  }
+
+  return Array.from(merged.values());
+}
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 36);
+}
+
+function createMigratedUser(displayName: string, index: number): User {
+  const stamp = "2026-03-16T12:00:00.000Z";
+
+  return {
+    id: `user-migrated-${index + 1}`,
+    email: `migrated-${slugify(displayName || "reviewer")}-${index + 1}@addisbeakal.test`,
+    passwordHash: demoUsers[0].passwordHash,
+    displayName: displayName || `Migrated User ${index + 1}`,
+    role: "member",
+    createdAt: stamp,
+    updatedAt: stamp
+  };
+}
+
+function mergeDemoUsers(users: User[]) {
+  const nextUsers = [...users];
+
+  for (const demoUser of demoUsers) {
+    if (!nextUsers.some((user) => user.email === demoUser.email)) {
+      nextUsers.push(demoUser);
+    }
+  }
+
+  return nextUsers;
+}
+
+function normalizeUsers(rawUsers: User[] | undefined, reviews: Array<Review | LegacyReview>) {
+  const nextUsers = rawUsers ? [...rawUsers] : [];
+  const authorIdByName = new Map<string, string>();
+
+  for (const user of nextUsers) {
+    authorIdByName.set(user.displayName, user.id);
+  }
+
+  let migratedIndex = 0;
+  for (const review of reviews) {
+    if ("authorId" in review && review.authorId) {
+      continue;
+    }
+
+    if (authorIdByName.has(review.authorName)) {
+      continue;
+    }
+
+    const user = createMigratedUser(review.authorName, migratedIndex);
+    migratedIndex += 1;
+    nextUsers.push(user);
+    authorIdByName.set(user.displayName, user.id);
+  }
+
+  return mergeDemoUsers(nextUsers);
+}
+
+function normalizeReviews(rawReviews: Array<Review | LegacyReview>, users: User[]): Review[] {
+  return rawReviews.map((review) => {
+    if ("authorId" in review && "updatedAt" in review && "photoUrls" in review) {
+      return {
+        ...review,
+        photoUrls: review.photoUrls ?? [],
+        tags: "tags" in review ? review.tags ?? [] : []
+      };
+    }
+
+    const matchedUser =
+      users.find((user) => user.displayName === review.authorName) ?? createMigratedUser(review.authorName, 0);
+
+    return {
+      ...review,
+      authorId: matchedUser.id,
+      updatedAt: review.createdAt,
+      photoUrls: [],
+      tags: []
+    };
+  });
+}
+
+function normalizeSaves(rawSaves: Array<Save | LegacySave> | undefined): Save[] {
+  if (!rawSaves) {
+    return [];
+  }
+
+  return rawSaves
+    .filter((save): save is Save => "userId" in save && Boolean(save.userId))
+    .map((save) => ({
+      id: save.id,
+      businessId: save.businessId,
+      userId: save.userId,
+      createdAt: save.createdAt
+    }));
+}
+
+function normalizeReports(rawReports: Array<Report | LegacyReport> | undefined): Report[] {
+  if (!rawReports) {
+    return [];
+  }
+
+  return rawReports
+    .filter((report): report is Report => "userId" in report && Boolean(report.userId))
+    .map((report) => ({
+      id: report.id,
+      businessId: report.businessId,
+      reviewId: report.reviewId,
+      userId: report.userId,
+      reason: report.reason,
+      details: report.details,
+      contactEmail: report.contactEmail,
+      createdAt: report.createdAt,
+      status: report.status
+    }));
+}
+
+function normalizeBusinesses(rawBusinesses: Business[] | undefined): Business[] {
+  const knownFeatures = new Set<string>(BUSINESS_FEATURE_OPTIONS);
+
+  return (rawBusinesses ?? []).map((business) => ({
+    ...business,
+    features:
+      business.features?.length
+        ? business.features
+        : business.tags.filter((tag) => knownFeatures.has(tag as (typeof BUSINESS_FEATURE_OPTIONS)[number])),
+    tags: business.tags ?? [],
+    googleMapsUrl: business.googleMapsUrl,
+    bannerImageUrl: business.bannerImageUrl,
+    photoUrls: business.photoUrls ?? [],
+    openingHours: business.openingHours,
+    services: business.services ?? [],
+    createdAt: business.createdAt,
+    createdByUserId: business.createdByUserId,
+    ownerUserId: business.ownerUserId,
+    claimedAt: business.claimedAt
+  }));
+}
+
+function normalizeBusinessClaims(
+  rawBusinessClaims: Array<BusinessClaim | LegacyBusinessClaim> | undefined
+): BusinessClaim[] {
+  if (!rawBusinessClaims) {
+    return [];
+  }
+
+  return rawBusinessClaims.map((claim) => ({
+    ...claim,
+    claimantPhone: claim.claimantPhone,
+    proofFileUrls: claim.proofFileUrls ?? []
+  }));
+}
+
+function mergeBusinesses(seedBusinesses: Business[], currentBusinesses: Business[]) {
+  const currentById = new Map(currentBusinesses.map((business) => [business.id, business]));
+  const merged = seedBusinesses.map((seedBusiness) => {
+    const currentBusiness = currentById.get(seedBusiness.id);
+
+    if (!currentBusiness) {
+      return seedBusiness;
+    }
+
+    return {
+      ...seedBusiness,
+      rating: currentBusiness.rating,
+      reviewCount: currentBusiness.reviewCount,
+      saveCount: currentBusiness.saveCount,
+      ownerUserId: currentBusiness.ownerUserId,
+      claimedAt: currentBusiness.claimedAt
+    };
+  });
+
+  const seededIds = new Set(seedBusinesses.map((business) => business.id));
+  const extraBusinesses = currentBusinesses.filter((business) => !seededIds.has(business.id));
+
+  return [...merged, ...extraBusinesses];
+}
+
+function normalizeDatabase(raw: RawDatabase): AppDatabase {
+  const seed = buildSeedDatabase();
+  const reviews = raw.reviews ?? [];
+  const users = mergeDemoUsers(mergeById(seed.users, normalizeUsers(raw.users, reviews)));
+
+  return syncAllBusinessMetrics({
+    categories: mergeById(raw.categories ?? [], seed.categories),
+    neighborhoods: mergeById(raw.neighborhoods ?? [], seed.neighborhoods),
+    businesses: mergeBusinesses(seed.businesses, normalizeBusinesses(raw.businesses)),
+    reviews: mergeById(seed.reviews, normalizeReviews(reviews, users)),
+    saves: mergeById(seed.saves, normalizeSaves(raw.saves)),
+    reports: mergeById(seed.reports, normalizeReports(raw.reports)),
+    users,
+    businessClaims: normalizeBusinessClaims(raw.businessClaims)
+  });
+}
 
 async function ensureDatabaseFile() {
   await mkdir(DATA_DIRECTORY, { recursive: true });
@@ -19,8 +264,14 @@ async function ensureDatabaseFile() {
 
 export async function readDatabase() {
   await ensureDatabaseFile();
-  const raw = await readFile(DATA_FILE, "utf-8");
-  return JSON.parse(raw) as AppDatabase;
+  const raw = JSON.parse(await readFile(DATA_FILE, "utf-8")) as RawDatabase;
+  const normalized = normalizeDatabase(raw);
+
+  if (JSON.stringify(raw) !== JSON.stringify(normalized)) {
+    await writeDatabase(normalized);
+  }
+
+  return normalized;
 }
 
 export async function writeDatabase(database: AppDatabase) {
@@ -35,6 +286,6 @@ export async function updateDatabase(
 ) {
   const current = await readDatabase();
   const next = await updater(current);
-  await writeDatabase(next);
+  await writeDatabase(syncAllBusinessMetrics(next));
   return next;
 }

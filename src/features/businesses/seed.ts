@@ -1,35 +1,97 @@
 import { syncAllBusinessMetrics } from "@/features/businesses/logic";
-import type { AppDatabase } from "@/features/businesses/types";
+import type { AppDatabase, User } from "@/features/businesses/types";
+import { demoUsers } from "@/server/auth/seed-users";
+
+const reviewerUsers: User[] = [
+  "Sara M.",
+  "Eden T.",
+  "Samuel D.",
+  "Helen K.",
+  "Abel N.",
+  "Mimi A.",
+  "Noah G.",
+  "Rahel B.",
+  "Henok W.",
+  "Moderation Queue",
+  "Removed Review"
+].map((displayName, index) => ({
+  id: `user-reviewer-${index + 1}`,
+  email: `reviewer-${index + 1}@addisbeakal.test`,
+  passwordHash: demoUsers[0].passwordHash,
+  displayName,
+  role: "member",
+  createdAt: "2026-02-01T08:00:00.000Z",
+  updatedAt: "2026-02-01T08:00:00.000Z"
+}));
+
+const reviewAuthorIdByName = Object.fromEntries(
+  reviewerUsers.map((user) => [user.displayName, user.id])
+);
 
 function baseDatabase(): AppDatabase {
   return {
     categories: [
-      { id: "cat-coffee", name: "Coffee", slug: "coffee" },
-      { id: "cat-dining", name: "Dining", slug: "dining" },
-      { id: "cat-culture", name: "Culture", slug: "culture" },
-      { id: "cat-bakery", name: "Bakery", slug: "bakery" }
+      { id: "cat-coffee", name: "Cafes", slug: "cafes" },
+      { id: "cat-dining", name: "Restaurants", slug: "restaurants" },
+      { id: "cat-culture", name: "Bars", slug: "bars" },
+      { id: "cat-bakery", name: "Bakeries", slug: "bakeries" },
+      { id: "cat-hotels", name: "Hotels", slug: "hotels" },
+      { id: "cat-salons", name: "Salons", slug: "salons" },
+      { id: "cat-barbers", name: "Barbers", slug: "barbers" },
+      { id: "cat-gyms", name: "Gyms", slug: "gyms" },
+      { id: "cat-clinics", name: "Clinics", slug: "clinics" },
+      { id: "cat-pharmacy", name: "Pharmacy", slug: "pharmacy" },
+      { id: "cat-spas", name: "Spas", slug: "spas" },
+      { id: "cat-car-services", name: "Car Services", slug: "car-services" }
     ],
     neighborhoods: [
       { id: "hood-bole", name: "Bole", slug: "bole" },
+      { id: "hood-cmc", name: "CMC", slug: "cmc" },
       { id: "hood-kazanchis", name: "Kazanchis", slug: "kazanchis" },
       { id: "hood-piassa", name: "Piassa", slug: "piassa" },
-      { id: "hood-mexico", name: "Mexico", slug: "mexico" }
+      { id: "hood-mexico", name: "Mexico", slug: "mexico" },
+      { id: "hood-sarbet", name: "Sarbet", slug: "sarbet" },
+      { id: "hood-gerji", name: "Gerji", slug: "gerji" },
+      { id: "hood-megenagna", name: "Megenagna", slug: "megenagna" },
+      { id: "hood-lideta", name: "Lideta", slug: "lideta" },
+      { id: "hood-22", name: "22", slug: "22" },
+      { id: "hood-ayat", name: "Ayat", slug: "ayat" },
+      { id: "hood-summit", name: "Summit", slug: "summit" }
     ],
+    users: [...demoUsers, ...reviewerUsers],
     businesses: [
       {
         id: "biz-tomoca-atlas",
-        slug: "tomoca-bole-atlas",
-        name: "Tomoca Bole Atlas",
-        shortDescription: "Classic Addis coffee energy with a fast-moving neighborhood crowd.",
+        slug: "tomoca-coffee",
+        name: "Tomoca Coffee",
+        shortDescription: "Ethiopia's iconic coffee stop with the city rhythm still intact.",
         longDescription:
           "A reliable stop for macchiatos, roasted beans, and that familiar standing-counter rhythm that locals move through every day.",
-        address: "Bole Atlas, Addis Ababa",
+        address: "Wavel Street, Piassa",
         priceTier: "$",
         categoryId: "cat-coffee",
-        neighborhoodId: "hood-bole",
-        tags: ["Macchiato", "Quick stop", "Local staple"],
+        neighborhoodId: "hood-piassa",
+        tags: ["great coffee", "affordable", "quick service", "strong wifi"],
         coverFrom: "#d86e39",
         coverTo: "#f2c078",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
+      },
+      {
+        id: "biz-kaldis-bole",
+        slug: "kaldis-coffee",
+        name: "Kaldi's Coffee",
+        shortDescription: "A polished cafe stop for meetings, catch-ups, and dependable coffee runs.",
+        longDescription:
+          "A familiar Addis cafe format with easy seating, coffee standards people know, and a practical location for everyday routines.",
+        address: "Bole, Addis Ababa",
+        priceTier: "$$",
+        categoryId: "cat-coffee",
+        neighborhoodId: "hood-bole",
+        tags: ["great coffee", "strong wifi", "outdoor seating"],
+        coverFrom: "#7e5946",
+        coverTo: "#d7b29b",
         rating: 0,
         reviewCount: 0,
         saveCount: 0
@@ -45,7 +107,7 @@ function baseDatabase(): AppDatabase {
         priceTier: "$$$",
         categoryId: "cat-dining",
         neighborhoodId: "hood-bole",
-        tags: ["Dinner", "Live music", "Groups"],
+        tags: ["fasting friendly", "halal", "live music", "family friendly"],
         coverFrom: "#1f6d5f",
         coverTo: "#8dd2b6",
         rating: 0,
@@ -63,7 +125,7 @@ function baseDatabase(): AppDatabase {
         priceTier: "$$",
         categoryId: "cat-dining",
         neighborhoodId: "hood-mexico",
-        tags: ["Brunch", "Work-friendly", "Contemporary"],
+        tags: ["outdoor seating", "strong wifi", "family friendly"],
         coverFrom: "#4a5568",
         coverTo: "#b9c2cf",
         rating: 0,
@@ -81,7 +143,7 @@ function baseDatabase(): AppDatabase {
         priceTier: "$$",
         categoryId: "cat-culture",
         neighborhoodId: "hood-kazanchis",
-        tags: ["Art", "Performance", "Night out"],
+        tags: ["live music", "nightlife", "date spot"],
         coverFrom: "#6f3f8f",
         coverTo: "#d7b0f1",
         rating: 0,
@@ -99,181 +161,529 @@ function baseDatabase(): AppDatabase {
         priceTier: "$",
         categoryId: "cat-bakery",
         neighborhoodId: "hood-piassa",
-        tags: ["Pastries", "Takeaway", "Everyday"],
+        tags: ["fresh baked", "great coffee", "affordable"],
         coverFrom: "#d4a947",
         coverTo: "#f6dc8a",
         rating: 0,
         reviewCount: 0,
         saveCount: 0
+      },
+      {
+        id: "biz-skylight",
+        slug: "skylight-hotel-addis",
+        name: "Skylight Hotel Addis",
+        shortDescription: "A polished hotel stay with business-friendly amenities and a wide campus feel.",
+        longDescription:
+          "One of the city's best-known large-format hotels, popular for conferences, airport convenience, and weekend staycations.",
+        address: "Bole International Airport Road, Addis Ababa",
+        priceTier: "$$$$",
+        categoryId: "cat-hotels",
+        neighborhoodId: "hood-bole",
+        tags: ["rooftop", "parking", "strong wifi"],
+        coverFrom: "#7da7c7",
+        coverTo: "#dce9f5",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
+      },
+      {
+        id: "biz-harmony-spa",
+        slug: "harmony-spa-wellness",
+        name: "Harmony Spa & Wellness",
+        shortDescription: "Calm treatment rooms and a softer luxury feel in central Addis.",
+        longDescription:
+          "A spa-focused experience for massages, facials, and quiet reset time without leaving the city.",
+        address: "Kazanchis, Addis Ababa",
+        priceTier: "$$$",
+        categoryId: "cat-spas",
+        neighborhoodId: "hood-kazanchis",
+        tags: ["parking", "family friendly", "relaxation"],
+        coverFrom: "#d7c6bb",
+        coverTo: "#f4ebe4",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
+      },
+      {
+        id: "biz-findfine-fitness",
+        slug: "findfine-fitness",
+        name: "Findfine Fitness",
+        shortDescription: "A brighter gym floor with modern machines and a steady after-work crowd.",
+        longDescription:
+          "Known for approachable trainers, cleaner equipment zones, and convenient class timings for regulars.",
+        address: "Sarbet, Addis Ababa",
+        priceTier: "$$",
+        categoryId: "cat-gyms",
+        neighborhoodId: "hood-sarbet",
+        tags: ["parking", "wellness", "community"],
+        coverFrom: "#7b8795",
+        coverTo: "#d4dbe2",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
+      },
+      {
+        id: "biz-gleam-salon",
+        slug: "gleam-beauty-salon",
+        name: "Gleam Beauty Salon",
+        shortDescription: "A dependable beauty stop for blowouts, nails, and event-ready styling.",
+        longDescription:
+          "A polished salon experience with strong repeat clientele and a reputation for steady service.",
+        address: "Megenagna, Addis Ababa",
+        priceTier: "$$",
+        categoryId: "cat-salons",
+        neighborhoodId: "hood-megenagna",
+        tags: ["beauty", "appointments", "family friendly"],
+        coverFrom: "#f0bfd4",
+        coverTo: "#f9e6ef",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
+      },
+      {
+        id: "biz-atlas-barber",
+        slug: "atlas-barber-studio",
+        name: "Atlas Barber Studio",
+        shortDescription: "Sharp fades, clean lines, and a consistent neighborhood regular crowd.",
+        longDescription:
+          "A barber shop built around quick service, reliable cuts, and a straightforward booking rhythm.",
+        address: "Gerji, Addis Ababa",
+        priceTier: "$",
+        categoryId: "cat-barbers",
+        neighborhoodId: "hood-gerji",
+        tags: ["quick service", "affordable", "walk-in friendly"],
+        coverFrom: "#737f8c",
+        coverTo: "#dee5eb",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0,
+        ownerUserId: reviewAuthorIdByName["Abel N."],
+        claimedAt: "2026-03-12T09:30:00.000Z"
+      },
+      {
+        id: "biz-beteseb-clinic",
+        slug: "beteseb-family-clinic",
+        name: "Beteseb Family Clinic",
+        shortDescription: "A neighborhood clinic known for practical care and clear communication.",
+        longDescription:
+          "A local clinic focused on general consultations, pediatric care, and dependable daytime service.",
+        address: "CMC, Addis Ababa",
+        priceTier: "$$",
+        categoryId: "cat-clinics",
+        neighborhoodId: "hood-cmc",
+        tags: ["family friendly", "parking", "healthcare"],
+        coverFrom: "#8ec2d5",
+        coverTo: "#eef8fc",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
+      },
+      {
+        id: "biz-summit-pharmacy",
+        slug: "summit-pharmacy",
+        name: "Summit Pharmacy",
+        shortDescription: "A trusted pharmacy stop for essentials, prescriptions, and quick advice.",
+        longDescription:
+          "A practical neighborhood pharmacy with a strong regular customer base and useful late-day convenience.",
+        address: "Summit, Addis Ababa",
+        priceTier: "$",
+        categoryId: "cat-pharmacy",
+        neighborhoodId: "hood-summit",
+        tags: ["delivery", "healthcare", "affordable"],
+        coverFrom: "#7ac4bb",
+        coverTo: "#e4faf6",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
+      },
+      {
+        id: "biz-lideta-garage",
+        slug: "lideta-auto-care",
+        name: "Lideta Auto Care",
+        shortDescription: "Straightforward maintenance, diagnostics, and repeat local trust.",
+        longDescription:
+          "A car service business known for practical fixes, clear explanations, and steady turnaround times.",
+        address: "Lideta, Addis Ababa",
+        priceTier: "$$",
+        categoryId: "cat-car-services",
+        neighborhoodId: "hood-lideta",
+        tags: ["maintenance", "diagnostics", "parking"],
+        coverFrom: "#7b8fa4",
+        coverTo: "#e3ebf3",
+        rating: 0,
+        reviewCount: 0,
+        saveCount: 0
       }
     ],
-    reviews: [
+    reviews: ([
       {
         id: "rev-1",
         businessId: "biz-tomoca-atlas",
+        authorId: reviewAuthorIdByName["Sara M."],
         authorName: "Sara M.",
         rating: 5,
         title: "The pace feels very Addis",
         body: "Fast service, great macchiato, and the kind of place that still feels anchored in the city.",
         visitDate: "2026-02-12",
         createdAt: "2026-02-13T10:00:00.000Z",
+        updatedAt: "2026-02-13T10:00:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-2",
         businessId: "biz-tomoca-atlas",
+        authorId: reviewAuthorIdByName["Eden T."],
         authorName: "Eden T.",
         rating: 4,
         title: "Reliable stop before meetings",
         body: "Easy coffee run with the usual crowd. Beans were fresh and the service moved quickly.",
         visitDate: "2026-01-29",
         createdAt: "2026-01-30T08:30:00.000Z",
+        updatedAt: "2026-01-30T08:30:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-3",
         businessId: "biz-yod",
+        authorId: reviewAuthorIdByName["Samuel D."],
         authorName: "Samuel D.",
         rating: 5,
         title: "Best for hosting visitors",
         body: "The performance element makes it memorable, and the whole experience feels polished.",
         visitDate: "2026-02-20",
         createdAt: "2026-02-21T18:10:00.000Z",
+        updatedAt: "2026-02-21T18:10:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-4",
         businessId: "biz-yod",
+        authorId: reviewAuthorIdByName["Helen K."],
         authorName: "Helen K.",
         rating: 4,
         title: "Big energy, a little loud",
         body: "Great for a celebratory dinner. Expect a lively room and plan ahead for peak time.",
         visitDate: "2026-02-08",
         createdAt: "2026-02-09T20:45:00.000Z",
+        updatedAt: "2026-02-09T20:45:00.000Z",
         status: "published",
-        reportCount: 1
+        reportCount: 1,
+        photoUrls: []
       },
       {
         id: "rev-5",
         businessId: "biz-sishu",
+        authorId: reviewAuthorIdByName["Abel N."],
         authorName: "Abel N.",
         rating: 4,
         title: "Solid lunch meeting choice",
         body: "The menu works for mixed preferences and the setting feels current without trying too hard.",
         visitDate: "2026-02-18",
         createdAt: "2026-02-19T12:00:00.000Z",
+        updatedAt: "2026-02-19T12:00:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-6",
         businessId: "biz-sishu",
+        authorId: reviewAuthorIdByName["Mimi A."],
         authorName: "Mimi A.",
         rating: 3,
         title: "Good, but timing slipped",
         body: "Nice room and friendly team, though service slowed down during the lunch rush.",
         visitDate: "2026-01-17",
         createdAt: "2026-01-17T14:00:00.000Z",
+        updatedAt: "2026-01-17T14:00:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-7",
         businessId: "biz-fendika",
+        authorId: reviewAuthorIdByName["Noah G."],
         authorName: "Noah G.",
         rating: 5,
         title: "A real city highlight",
         body: "If you want something specific to Addis rather than generic nightlife, this is the kind of place to start.",
         visitDate: "2026-02-01",
         createdAt: "2026-02-02T19:05:00.000Z",
+        updatedAt: "2026-02-02T19:05:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-8",
         businessId: "biz-bilos",
+        authorId: reviewAuthorIdByName["Rahel B."],
         authorName: "Rahel B.",
         rating: 4,
         title: "Pastries worth repeating",
         body: "Simple, easy, and consistently good for a quick catch-up or coffee break.",
         visitDate: "2026-02-10",
         createdAt: "2026-02-10T09:20:00.000Z",
+        updatedAt: "2026-02-10T09:20:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-9",
         businessId: "biz-bilos",
+        authorId: reviewAuthorIdByName["Henok W."],
         authorName: "Henok W.",
         rating: 5,
         title: "Morning favorite",
         body: "Friendly staff and the kind of bakery that gets recommended by locals for a reason.",
         visitDate: "2026-02-11",
         createdAt: "2026-02-11T07:40:00.000Z",
+        updatedAt: "2026-02-11T07:40:00.000Z",
         status: "published",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-10",
         businessId: "biz-tomoca-atlas",
+        authorId: reviewAuthorIdByName["Moderation Queue"],
         authorName: "Moderation Queue",
         rating: 1,
         title: "Should not count yet",
         body: "This review is pending and intentionally excluded from the public score.",
         visitDate: "2026-02-04",
         createdAt: "2026-02-05T06:10:00.000Z",
+        updatedAt: "2026-02-05T06:10:00.000Z",
         status: "pending",
-        reportCount: 0
+        reportCount: 0,
+        photoUrls: []
       },
       {
         id: "rev-11",
         businessId: "biz-sishu",
+        authorId: reviewAuthorIdByName["Removed Review"],
         authorName: "Removed Review",
         rating: 1,
         title: "Removed review",
         body: "This review exists to prove removed content does not affect ratings.",
         visitDate: "2026-01-12",
         createdAt: "2026-01-13T10:00:00.000Z",
+        updatedAt: "2026-01-13T10:00:00.000Z",
         status: "removed",
-        reportCount: 2
+        reportCount: 2,
+        photoUrls: []
+      },
+      {
+        id: "rev-12",
+        businessId: "biz-skylight",
+        authorId: reviewAuthorIdByName["Sara M."],
+        authorName: "Sara M.",
+        rating: 5,
+        title: "Smooth stay for airport access",
+        body: "Easy for conferences and travel days, with enough amenities to make longer stays comfortable too.",
+        visitDate: "2026-02-14",
+        createdAt: "2026-02-15T09:00:00.000Z",
+        updatedAt: "2026-02-15T09:00:00.000Z",
+        status: "published",
+        reportCount: 0,
+        photoUrls: []
+      },
+      {
+        id: "rev-13",
+        businessId: "biz-harmony-spa",
+        authorId: reviewAuthorIdByName["Eden T."],
+        authorName: "Eden T.",
+        rating: 4,
+        title: "Quiet, polished, and easy to recommend",
+        body: "Relaxing rooms and a service style that feels calm instead of rushed.",
+        visitDate: "2026-02-09",
+        createdAt: "2026-02-10T11:10:00.000Z",
+        updatedAt: "2026-02-10T11:10:00.000Z",
+        status: "published",
+        reportCount: 0,
+        photoUrls: []
+      },
+      {
+        id: "rev-14",
+        businessId: "biz-findfine-fitness",
+        authorId: reviewAuthorIdByName["Samuel D."],
+        authorName: "Samuel D.",
+        rating: 4,
+        title: "Good floor, strong equipment mix",
+        body: "A gym that feels current and clean, especially if you go outside the busiest evening hour.",
+        visitDate: "2026-02-05",
+        createdAt: "2026-02-05T18:00:00.000Z",
+        updatedAt: "2026-02-05T18:00:00.000Z",
+        status: "published",
+        reportCount: 0,
+        photoUrls: []
+      },
+      {
+        id: "rev-15",
+        businessId: "biz-gleam-salon",
+        authorId: reviewAuthorIdByName["Helen K."],
+        authorName: "Helen K.",
+        rating: 4,
+        title: "Reliable for events and weekends",
+        body: "Friendly team and a look that stayed polished all day without feeling overly formal.",
+        visitDate: "2026-02-16",
+        createdAt: "2026-02-17T08:45:00.000Z",
+        updatedAt: "2026-02-17T08:45:00.000Z",
+        status: "published",
+        reportCount: 0,
+        photoUrls: []
+      },
+      {
+        id: "rev-16",
+        businessId: "biz-atlas-barber",
+        authorId: reviewAuthorIdByName["Abel N."],
+        authorName: "Abel N.",
+        rating: 5,
+        title: "Quick cut, very solid finish",
+        body: "Exactly the kind of neighborhood barber you want when you need something clean without a long wait.",
+        visitDate: "2026-02-07",
+        createdAt: "2026-02-07T12:20:00.000Z",
+        updatedAt: "2026-02-07T12:20:00.000Z",
+        status: "published",
+        reportCount: 0,
+        photoUrls: []
+      },
+      {
+        id: "rev-17",
+        businessId: "biz-beteseb-clinic",
+        authorId: reviewAuthorIdByName["Mimi A."],
+        authorName: "Mimi A.",
+        rating: 4,
+        title: "Straightforward and reassuring",
+        body: "Good communication, practical care, and an overall experience that felt organized from start to finish.",
+        visitDate: "2026-02-03",
+        createdAt: "2026-02-04T10:35:00.000Z",
+        updatedAt: "2026-02-04T10:35:00.000Z",
+        status: "published",
+        reportCount: 0,
+        photoUrls: []
+      },
+      {
+        id: "rev-18",
+        businessId: "biz-summit-pharmacy",
+        authorId: reviewAuthorIdByName["Noah G."],
+        authorName: "Noah G.",
+        rating: 4,
+        title: "Helpful late in the day",
+        body: "A pharmacy that feels useful precisely because it is fast, familiar, and easy to navigate.",
+        visitDate: "2026-02-12",
+        createdAt: "2026-02-12T18:40:00.000Z",
+        updatedAt: "2026-02-12T18:40:00.000Z",
+        status: "published",
+        reportCount: 0,
+        photoUrls: []
+      },
+      {
+        id: "rev-19",
+        businessId: "biz-lideta-garage",
+        authorId: reviewAuthorIdByName["Rahel B."],
+        authorName: "Rahel B.",
+        rating: 4,
+        title: "Honest explanations and fair timing",
+        body: "The team walked through the problem clearly and did not overcomplicate what needed to be fixed.",
+        visitDate: "2026-02-06",
+        createdAt: "2026-02-06T16:25:00.000Z",
+        updatedAt: "2026-02-06T16:25:00.000Z",
+        status: "published",
+        reportCount: 0,
+        photoUrls: []
+      },
+      {
+        id: "rev-20",
+        businessId: "biz-kaldis-bole",
+        authorId: reviewAuthorIdByName["Henok W."],
+        authorName: "Henok W.",
+        rating: 4,
+        title: "Easy place to work for an hour",
+        body: "Good coffee, decent seating, and the kind of cafe that makes quick meetings very easy to pull off.",
+        visitDate: "2026-02-18",
+        createdAt: "2026-02-18T11:15:00.000Z",
+        updatedAt: "2026-02-18T11:15:00.000Z",
+        status: "published",
+        reportCount: 0,
+        photoUrls: []
       }
-    ],
+    ] as Array<Omit<AppDatabase["reviews"][number], "tags">>).map((review) => ({
+      ...review,
+      tags: []
+    })),
     saves: [
       {
         id: "save-1",
         businessId: "biz-yod",
-        viewerId: "seed_viewer_1",
+        userId: "user-demo-member",
         createdAt: "2026-02-21T18:20:00.000Z"
       },
       {
         id: "save-2",
         businessId: "biz-yod",
-        viewerId: "seed_viewer_2",
+        userId: reviewAuthorIdByName["Samuel D."],
         createdAt: "2026-02-21T18:30:00.000Z"
       },
       {
         id: "save-3",
         businessId: "biz-tomoca-atlas",
-        viewerId: "seed_viewer_3",
+        userId: reviewAuthorIdByName["Sara M."],
         createdAt: "2026-02-14T09:00:00.000Z"
       },
       {
         id: "save-4",
         businessId: "biz-fendika",
-        viewerId: "seed_viewer_4",
+        userId: reviewAuthorIdByName["Noah G."],
         createdAt: "2026-02-02T19:40:00.000Z"
       },
       {
         id: "save-5",
         businessId: "biz-bilos",
-        viewerId: "seed_viewer_5",
+        userId: reviewAuthorIdByName["Rahel B."],
         createdAt: "2026-02-11T07:50:00.000Z"
       }
     ],
-    reports: []
+    reports: [],
+    businessClaims: [
+      {
+        id: "claim-pending-kaldis-selam",
+        businessId: "biz-kaldis-bole",
+        userId: "user-demo-member",
+        claimantName: "Selam Demo",
+        claimantEmail: "demo@addisbeakal.test",
+        claimantPhone: "+251911002200",
+        proofText:
+          "I manage the Bole branch operations and can provide the renewed trade license plus an official manager confirmation letter.",
+        proofFileUrls: [],
+        status: "pending",
+        createdAt: "2026-03-18T08:15:00.000Z"
+      },
+      {
+        id: "claim-approved-atlas-abel",
+        businessId: "biz-atlas-barber",
+        userId: reviewAuthorIdByName["Abel N."],
+        claimantName: "Abel N.",
+        claimantEmail: "reviewer-5@addisbeakal.test",
+        claimantPhone: "+251933445566",
+        proofText:
+          "I operate Atlas Barber Studio and verified ownership with the business license, tax registration, and storefront identity documents.",
+        proofFileUrls: [],
+        status: "approved",
+        adminNote: "Identity and license details matched the storefront submission.",
+        createdAt: "2026-03-11T10:00:00.000Z",
+        reviewedAt: "2026-03-12T09:30:00.000Z",
+        reviewedByUserId: "user-demo-admin"
+      }
+    ]
   };
 }
 

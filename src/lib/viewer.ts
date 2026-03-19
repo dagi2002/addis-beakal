@@ -1,32 +1,63 @@
-import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-export const VIEWER_COOKIE = "beakal_viewer_id";
+import { createAnonymousActor, createAuthenticatedActor } from "@/server/auth/actor";
+import { getSessionUserId } from "@/server/auth/session";
+import { readDatabase } from "@/server/database";
 
-function createViewerId() {
-  return `viewer_${Math.random().toString(36).slice(2, 10)}`;
+export function buildLoginPath(nextPath: string) {
+  return `/login?next=${encodeURIComponent(nextPath)}`;
 }
 
 export async function getViewerId() {
-  const cookieStore = await cookies();
-  return cookieStore.get(VIEWER_COOKIE)?.value ?? null;
+  return getSessionUserId();
 }
 
-export async function ensureViewerId() {
-  const cookieStore = await cookies();
-  const existing = cookieStore.get(VIEWER_COOKIE)?.value;
-
-  if (existing) {
-    return existing;
+export async function getOptionalSessionUser() {
+  const userId = await getSessionUserId();
+  if (!userId) {
+    return null;
   }
 
-  const viewerId = createViewerId();
-  cookieStore.set(VIEWER_COOKIE, viewerId, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 365
-  });
+  const database = await readDatabase();
+  return database.users.find((user) => user.id === userId) ?? null;
+}
 
-  return viewerId;
+export async function getSessionActor() {
+  const user = await getOptionalSessionUser();
+
+  if (!user) {
+    return createAnonymousActor();
+  }
+
+  const database = await readDatabase();
+  const isOwner = database.businesses.some((business) => business.ownerUserId === user.id);
+
+  return createAuthenticatedActor(user, isOwner);
+}
+
+export async function requireSessionActor(nextPath: string) {
+  const actor = await getSessionActor();
+  if (!actor.userId) {
+    redirect(buildLoginPath(nextPath));
+  }
+
+  return actor;
+}
+
+export async function requireAdminActor(nextPath: string) {
+  const actor = await requireSessionActor(nextPath);
+  if (actor.role !== "admin") {
+    redirect("/");
+  }
+
+  return actor;
+}
+
+export async function requireOwnerActor(nextPath: string) {
+  const actor = await requireSessionActor(nextPath);
+  if (actor.role !== "owner" && actor.role !== "admin") {
+    redirect("/claim-business");
+  }
+
+  return actor;
 }
